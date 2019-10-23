@@ -1,0 +1,36 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/src/server/cave-server.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "serve",
+            "command": "npm",
+            "type": "shell",
+            "args": [
+                "run",
+                "serve"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/src/client"
+            }
+        }
+        // {
+        //     "label": "xunit",
+        //     "command": "dotnet",
+        //     "type": "process",
+        //     "args": [
+        //         "test",
+        //         "${workspaceFolder}/Test/LibraTest.csproj"
+        //     ]
+        // }
+    ]
+}
