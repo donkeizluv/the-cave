@@ -2,7 +2,7 @@ using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace CaveCore.Models
+namespace CaveCore.SchemaModels
 {
     public class Category : ICategory
     {
@@ -15,6 +15,8 @@ namespace CaveCore.Models
         public string Description { get; set; }
         [BsonElement("created")]
         public DateTime Created { get; set; }
+        [BsonElement("creator_id")]
+        public string CreatorId { get; set; }
 
         public Category()
         {
@@ -28,5 +30,6 @@ namespace CaveCore.Models
         string CatName { get; set; }
         string Description { get; set; }
         DateTime Created { get; set; }
+        string CreatorId { get; set; }
     }
 }

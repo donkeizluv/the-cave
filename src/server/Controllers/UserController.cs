@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using CaveCore.DTO;
-using CaveCore.Service;
+using CaveCore.Exceptions;
 using CaveCore.Services;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -27,9 +23,14 @@ namespace cave_server.Controllers
         }
 
         [HttpPost]
-        public async Task<bool> Validate([FromBody]UserDto user)
+        public async Task<IActionResult> Validate([FromBody]UserDto user)
         {
-            return await _service.Validate(user);
+            var result = await _service.Validate(user);
+            if(result.Valid)
+            {
+                return Ok(result.Token);
+            }
+            return Forbid("Invalid username or passwords.");
         }
 
         [HttpPost]

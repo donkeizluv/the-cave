@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using CaveCore.DTO;
-using CaveCore.Models;
-using CaveCore.Service;
 using CaveCore.Services;
-using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace cave_server.Controllers
 {
-
     [ApiController]
+    [Authorize]
     [Route("api/[controller]/[action]")]
     public class CategoryController : ControllerBase
     {
@@ -31,6 +27,7 @@ namespace cave_server.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IEnumerable<CategoryDto>> GetCat()
         {
             var cats = await _service.GetAll();

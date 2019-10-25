@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :value="show" @click:outside="$emit('click:outside');" width="450px">
+  <v-dialog :value="show" @click:outside="$emit('click:outside'); clearAll();" width="450px">
     <v-card>
       <v-card-title>
         <span class="headline">Register</span>
@@ -26,7 +26,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="primary" @click="createUser" :disabled="!canSubmit">Create</v-btn>
-        <v-btn @click="$emit('click:outside');">Cancel</v-btn>
+        <v-btn @click="$emit('click:outside'); clearAll();">Cancel</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -67,6 +67,14 @@ export default {
   },
   methods: {
     ...mapActions([REGISTER]),
+    clearAll() {
+      this.reg = {
+        username: null,
+        email: null,
+        pwd: null,
+        rPwd: null
+      };
+    },
     async createUser() {
       try {
         if (!this.canSubmit) return;

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CaveCore.DTO;
-using CaveCore.Models;
+using CaveCore.SchemaModels;
 
 namespace CaveCore.Services
 {

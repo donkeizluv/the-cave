@@ -2,8 +2,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
 using CaveCore.DTO;
-using CaveCore.Models;
+using CaveCore.Exceptions;
+using CaveCore.SchemaModels;
 using CaveCore.Settings;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace CaveCore.Services
@@ -15,18 +17,23 @@ namespace CaveCore.Services
         private readonly IMongoDatabase _db;
         private readonly IMapper _mapper;
 
-        public CategoryService(IDbSettings settings, IMapper mapper)
+        public CategoryService(IOptions<DbSettings> option, IMapper mapper, IMongoClient dbClient)
         {
-            _settings = settings;
-            _client = new MongoClient(settings.ConnectionString);
+            _settings = option.Value;
+            _client = dbClient;
             _db = _client.GetDatabase(_settings.DatabaseName);
             _mapper = mapper;
         }
 
         public async Task Create(CategoryDto cat)
         {
-            await _db.GetCollection<Category>(_settings.CategoryCollectionName)
-                    .InsertOneAsync(_mapper.Map<Category>(cat));
+            var catCollection = _db.GetCollection<Category>(_settings.CategoryCollectionName);
+            var exist = await catCollection.Find(c => c.CatName == cat.CatName).AnyAsync();
+            if (exist)
+            {
+                throw new BussinessException("Category with same name already existed");
+            }
+            await catCollection.InsertOneAsync(_mapper.Map<Category>(cat));
         }
 
         public async Task<IEnumerable<ICategory>> GetAll()

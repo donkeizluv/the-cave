@@ -1,7 +1,7 @@
 using System;
 using AutoMapper;
 using CaveCore.DTO;
-using CaveCore.Models;
+using CaveCore.SchemaModels;
 
 namespace CaveCore.Profiles
 {
