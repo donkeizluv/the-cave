@@ -1,6 +1,6 @@
 import utilityHelper from "./helper";
 import { AUTHENTICATED, CURRENT_USER } from "../mutations/mutation-types";
-import { LOGIN, REGISTER_LOGIN, VALIDATE_USER } from "../actions/action-types";
+import { LOGIN, REGISTER, VALIDATE_USER } from "../actions/action-types";
 import {
   isAuthenticated,
   isDev,
@@ -42,14 +42,18 @@ const actions = {
     return false;
   },
   [VALIDATE_USER]: async (c, p) => {
-    await axios.post(apis.user_get, {
+    let { data } = await axios.post(apis.validate_user, {
       username: p.username,
       pwd: p.pwd
     });
-    return true;
+    return data;
   },
-  [REGISTER_LOGIN]: async ({ commit }, p) => {
-    await axios.post(apis.user_create, { username: p.username, pwd: p.pwd });
+  [REGISTER]: async ({ commit }, p) => {
+    await axios.post(apis.create_user, {
+      username: p.username,
+      pwd: p.pwd,
+      email: p.email
+    });
     commit(AUTHENTICATED, true);
     commit(CURRENT_USER, p);
     return true;

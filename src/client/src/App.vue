@@ -1,17 +1,20 @@
 <template>
   <v-app>
-    <login-modal :show.sync="showLoginModal" @click:outside="showLoginModal = false;" />
-    <new-cat-modal :show.sync="showNewCat" @click:outside="showNewCat = false;"></new-cat-modal>
+    <login-modal :show.sync="loginModal" @click:outside="loginModal = false;" />
+    <register-modal :show.sync="regModal" @click:outside="regModal = false;" />
+    <new-cat-modal :show.sync="catModal" @click:outside="catModal = false;"></new-cat-modal>
     <v-app-bar flat app clipped-left>
       <v-toolbar-title>The Cave</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon large @click="userProfileClick">
+      <!-- <v-btn icon large @click="userProfileClick">
         <v-icon>mdi-account-circle-outline</v-icon>
-      </v-btn>
+      </v-btn>-->
+      <v-btn @click="loginModal = true;" class="ma-2" depressed>Log in</v-btn>
+      <v-btn @click="regModal = true;" class="ma-2" depressed>Register</v-btn>
       <v-menu left bottom>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
-            <v-icon>mdi-dots-vertical</v-icon>
+            <v-icon>mdi-account-circle-outline</v-icon>
           </v-btn>
         </template>
         <v-list>
@@ -39,33 +42,7 @@
             </v-card>
           </v-col>
           <v-col cols="2">
-            <v-card class="mx-auto" outlined>
-              <v-list-item three-line>
-                <v-list-item-content>
-                  <div class="overline mb-8">
-                    Categories
-                    <v-btn class="mb-1" small icon @click="showNewCat = true;">
-                      <v-icon>mdi-plus</v-icon>
-                    </v-btn>
-                  </div>
-                </v-list-item-content>
-              </v-list-item>
-              <v-divider class="mx-4"></v-divider>
-
-              <v-list-item class="text-center">
-                <v-list-item-content>
-                  <span>Category X</span>
-                </v-list-item-content>
-              </v-list-item>
-
-              <v-divider class="mx-4"></v-divider>
-
-              <v-list-item class="text-center">
-                <v-list-item-content>
-                  <span>Category Y</span>
-                </v-list-item-content>
-              </v-list-item>
-            </v-card>
+            <cat-panel :categories="categories" @click:newcat="catModal = true;" />
           </v-col>
         </v-row>
       </v-container>
@@ -82,24 +59,38 @@
 
 <script>
 import LoginModal from "./components/LoginModal";
+import RegisterModal from "./components/RegModal";
 import NewCatModal from "./components/NewCatModal";
+import CatPanel from "./components/CatPanel";
 
 export default {
   name: "App",
   components: {
     LoginModal,
-    NewCatModal
+    NewCatModal,
+    RegisterModal,
+    CatPanel
   },
   created() {
     // this.$vuetify.theme.dark = true;
   },
   data: () => ({
-    showLoginModal: false,
-    showNewCat: false
+    categories: [
+      { id: 1, name: "catA" },
+      { id: 2, name: "catB" },
+      { id: 3, name: "catC" },
+      { id: 4, name: "catD" }
+    ],
+    loginModal: false,
+    regModal: false,
+    catModal: false
   }),
   methods: {
-    userProfileClick() {
-      this.showLoginModal = true;
+    showLoginModal() {
+      this.loginModal = true;
+    },
+    showCatModal() {
+      this.catModal = true;
     }
   }
 };

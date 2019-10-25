@@ -5,20 +5,14 @@
         <span class="headline">Create new category</span>
       </v-card-title>
       <v-card-text>
-        <v-layout row>
-          <v-flex xs12>
-            <v-text-field v-model="catName" label="Name"></v-text-field>
-          </v-flex>
-        </v-layout>
-        <v-layout row>
-          <v-flex xs12>
-            <v-text-field v-model="desc" label="Description"></v-text-field>
-          </v-flex>
-        </v-layout>
+        <v-form>
+          <v-text-field v-model="catName" label="Name"></v-text-field>
+          <v-text-field v-model="desc" label="Description"></v-text-field>
+        </v-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn>Create</v-btn>
+        <v-btn color="primary">Create</v-btn>
         <v-btn @click="$emit('click:outside');">Cancel</v-btn>
       </v-card-actions>
     </v-card>
@@ -43,7 +37,7 @@ export default {
   data: function name() {
     return {
       catName: "",
-      desc: "",
+      desc: ""
     };
   },
   methods: {

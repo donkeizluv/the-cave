@@ -2,28 +2,18 @@
   <v-dialog :value="show" @click:outside="$emit('click:outside');" max-width="350px" width="350px">
     <v-card>
       <v-card-title>
-        <span class="headline">Login</span>
+        <span class="headline">Log in</span>
       </v-card-title>
       <v-card-text>
-        <v-layout row>
-          <v-flex xs12>
-            <v-text-field v-model="username" label="Username" @keyup.enter.native="login"></v-text-field>
-          </v-flex>
-        </v-layout>
-        <v-layout row>
-          <v-flex xs12>
-            <v-text-field
-              label="Password"
-              v-model="pwd"
-              @keyup.enter.native="login"
-              type="password"
-            ></v-text-field>
-          </v-flex>
-        </v-layout>
+        <v-form>
+          <v-text-field v-model="username" label="Username" @keyup.enter.native="login"></v-text-field>
+          <v-text-field label="Password" v-model="pwd" @keyup.enter.native="login" type="password"></v-text-field>
+        </v-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="login" :disabled="!canLogin">Login</v-btn>
+        <v-btn color="primary" @click="login" :disabled="!canLogin">Login</v-btn>
+        <v-btn @click="$emit('click:outside');">Cancel</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
