@@ -14,7 +14,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
-namespace cave_server
+namespace CaveServer
 {
     public class Startup
     {
@@ -46,8 +46,6 @@ namespace cave_server
             // add settings
             services.Configure<DbSettings>(
                 Configuration.GetSection(nameof(DbSettings)));
-            // services.AddSingleton<IDbSettings>(sp =>
-            //     sp.GetRequiredService<IOptions<DbSettings>>().Value);
 
             // add conventions
             SetupMongoConvention();

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace cave_server.Controllers
+namespace CaveServer.Controllers
 {
     [ApiController]
     [Authorize]

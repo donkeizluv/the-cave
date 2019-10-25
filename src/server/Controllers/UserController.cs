@@ -5,14 +5,12 @@ using CaveCore.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace cave_server.Controllers
+namespace CaveServer.Controllers
 {
-
     [ApiController]
     [Route("api/[controller]/[action]")]
     public class UserController : ControllerBase
     {
-
         private readonly IUserService _service;
         private readonly ILogger<UserController> _logger;
 
@@ -26,7 +24,7 @@ namespace cave_server.Controllers
         public async Task<IActionResult> Validate([FromBody]UserDto user)
         {
             var result = await _service.Validate(user);
-            if(result.Valid)
+            if (result.Valid)
             {
                 return Ok(result.Token);
             }
@@ -34,9 +32,17 @@ namespace cave_server.Controllers
         }
 
         [HttpPost]
-        public async Task Create([FromBody]UserDto user)
+        public async Task<IActionResult> Create([FromBody]UserDto user)
         {
-            await _service.Create(user);
+            try
+            {
+                await _service.Create(user);
+                return Ok();
+            }
+            catch (BussinessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }
