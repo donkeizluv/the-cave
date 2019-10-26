@@ -1,32 +1,35 @@
 <template>
-  <v-dialog :value="show" @click:outside="$emit('click:outside'); clearAll();" width="450px">
+  <v-dialog :value="show" @click:outside="hideModal" width="450px">
     <v-card>
       <v-card-title>
         <span class="headline">Register</span>
       </v-card-title>
       <v-card-text>
         <v-form>
-          <v-text-field v-model="reg.username" label="Username" autocomplete="off"></v-text-field>
+          <v-text-field v-model="reg.username" label="Username" :disabled="isLoading"></v-text-field>
           <v-text-field
             v-model="reg.email"
             label="Email"
             type="email"
             :rules="emailRules"
-            autocomplete="off"
+            :disabled="isLoading"
           ></v-text-field>
           <v-text-field label="Password" v-model="reg.pwd" type="password" autocomplete="off"></v-text-field>
           <v-text-field
             label="Retype password"
             v-model="reg.rPwd"
             type="password"
-            autocomplete="off"
+            :disabled="isLoading"
           ></v-text-field>
         </v-form>
+        <div v-if="dialogMessage" :class="[isError ? 'red--text' : 'green--text', ' text-center']">
+          <span>{{dialogMessage}}</span>
+        </div>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" @click="createUser" :disabled="!canSubmit">Create</v-btn>
-        <v-btn @click="$emit('click:outside'); clearAll();">Cancel</v-btn>
+        <v-btn color="primary" @click="createUser" :disabled="!canSubmit || isLoading">Create</v-btn>
+        <v-btn @click="hideModal" :disabled="isLoading">Cancel</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -62,28 +65,48 @@ export default {
         email: null,
         pwd: null,
         rPwd: null
-      }
+      },
+      isError: false,
+      dialogMessage: null,
+      isLoading: false
     };
   },
   methods: {
     ...mapActions([REGISTER]),
     clearAll() {
-      this.reg = {
+      this.cred = {
         username: null,
         email: null,
         pwd: null,
         rPwd: null
       };
+      this.isError = false;
+      this.dialogMessage = null;
+    },
+    hideModal() {
+      this.clearAll();
+      this.$emit("click:outside");
     },
     async createUser() {
       try {
         if (!this.canSubmit) return;
+        this.isLoading = true;
         await this.REGISTER(this.reg);
-        this.username = "";
-        this.pwd = "";
+        this.isError = false;
+        this.dialogMessage = "Register successfully.";
+        this.timedSelfClose(2000);
       } catch (error) {
-        // reg fail
+        this.isLoading = false;
+        this.isError = true;
+        this.dialogMessage = error.response.data || "Register failed.";
       }
+    },
+    timedSelfClose(timeout) {
+      let vm = this;
+      setTimeout(() => {
+        vm.isLoading = false;
+        vm.hideModal();
+      }, timeout);
     }
   }
 };

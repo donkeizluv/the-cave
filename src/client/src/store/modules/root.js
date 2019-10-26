@@ -1,6 +1,11 @@
 import utilityHelper from "./helper";
 import { AUTHENTICATED, CURRENT_USER } from "../mutations/mutation-types";
-import { LOGIN, REGISTER, VALIDATE_USER } from "../actions/action-types";
+import {
+  LOGIN,
+  REGISTER,
+  LOGOUT,
+  VALIDATE_USER
+} from "../actions/action-types";
 import {
   isAuthenticated,
   isDev,
@@ -63,6 +68,10 @@ const actions = {
     commit(AUTHENTICATED, true);
     commit(CURRENT_USER, p);
     return true;
+  },
+  [LOGOUT]: async ({ commit }, p) => {
+    commit(AUTHENTICATED, false);
+    commit(CURRENT_USER, null);
   },
   ...utilityHelper.actions
 };

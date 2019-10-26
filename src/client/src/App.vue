@@ -9,8 +9,9 @@
       <!-- <v-btn icon large @click="userProfileClick">
         <v-icon>mdi-account-circle-outline</v-icon>
       </v-btn>-->
-      <v-btn @click="loginModal = true;" class="ma-2" depressed>Log in</v-btn>
-      <v-btn @click="regModal = true;" class="ma-2" depressed>Register</v-btn>
+      <v-btn v-if="!isAuthenticated" @click="loginModal = true;" class="ma-2" depressed>Log in</v-btn>
+      <v-btn v-if="!isAuthenticated" @click="regModal = true;" class="ma-2" depressed>Register</v-btn>
+      <v-btn v-if="isAuthenticated" @click="LOGOUT" class="ma-2" depressed>Log out</v-btn>
       <v-menu left bottom>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
@@ -62,6 +63,10 @@ import LoginModal from "./components/LoginModal";
 import RegisterModal from "./components/RegModal";
 import NewCatModal from "./components/NewCatModal";
 import CatPanel from "./components/CatPanel";
+import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
+import { isAuthenticated } from "./store/getters/getter-types";
+import { LOGOUT } from "./store/actions/action-types";
 
 export default {
   name: "App",
@@ -70,6 +75,9 @@ export default {
     NewCatModal,
     RegisterModal,
     CatPanel
+  },
+  computed: {
+    ...mapGetters([isAuthenticated])
   },
   created() {
     // this.$vuetify.theme.dark = true;
@@ -86,6 +94,7 @@ export default {
     catModal: false
   }),
   methods: {
+    ...mapActions([LOGOUT]),
     showLoginModal() {
       this.loginModal = true;
     },

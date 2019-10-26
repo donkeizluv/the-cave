@@ -1,6 +1,8 @@
+var endpoint = process.env.VUE_APP_API_ENDPOINT;
+
 export default {
-  get_all_categories: "api/category/all",
-  create_categories: "api/category/create",
-  validate_user: "api/user/validate",
-  create_user: "api/user/create"
+  get_all_categories: endpoint + "/api/category/all",
+  create_categories: endpoint + "/api/category/create",
+  validate_user: endpoint + "/api/user/validate",
+  create_user: endpoint + "/api/user/create"
 };
