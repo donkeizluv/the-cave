@@ -2,25 +2,27 @@
   <v-dialog :value="show" @click:outside="hideDialog" max-width="350px" width="350px">
     <v-card>
       <v-card-title>
-        <span class="headline mb-4">Log in</span>
+        <span class="headline mb-4">Profile</span>
       </v-card-title>
       <v-card-text>
         <v-form>
           <v-text-field
-            v-model.trim="cred.username"
+            v-model.trim="profile.username"
             label="Username"
             prepend-icon="mdi-account"
-            @keyup.enter.native="doLogin"
-            :disabled="isLoading"
             class="input-group--focused mb-4"
           ></v-text-field>
           <v-text-field
             label="Password"
             prepend-icon="mdi-lock"
-            v-model.trim="cred.pwd"
-            @keyup.enter.native="doLogin"
+            v-model.trim="profile.pwd"
             type="password"
-            :disabled="isLoading"
+          ></v-text-field>
+          <v-text-field
+            v-model.trim="profile.email"
+            label="Email"
+            prepend-icon="mdi-email"
+            class="input-group--focused mb-4"
           ></v-text-field>
         </v-form>
         <div v-if="errorMessage" class="red--text text-center">
@@ -29,8 +31,8 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="primary" @click="doLogin" :disabled="!canLogin || isLoading">Login</v-btn>
-        <v-btn @click="hideDialog" :disabled="isLoading">Cancel</v-btn>
+        <v-btn color="primary">Update</v-btn>
+        <v-btn @click="hideDialog">Cancel</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -40,47 +42,30 @@
 import { LOGIN } from "../store/actions/action-types";
 import { mapActions } from "vuex";
 export default {
-  name: "LoginModal",
+  name: "ProfileModal",
   props: {
     show: {
       required: true
     }
   },
   computed: {
-    canLogin() {
-      return this.cred.username && this.cred.pwd;
-    }
   },
   data: function name() {
     return {
-      cred: {
-        username: "",
-        pwd: ""
+      profile: {
+        username: "abc",
+        pwd: "abc",
+        email: "email@gmail.com"
       },
       errorMessage: null,
       isLoading: false
     };
   },
   methods: {
-    ...mapActions([LOGIN]),
-    async doLogin() {
-      if (!this.canLogin) return;
-      try {
-        this.isLoading = true;
-        let result = await this.LOGIN(this.cred);
-        if (result) {
-          this.hideDialog();
-          return;
-        }
-        this.errorMessage = "Username or password is not valid.";
-      } finally {
-        this.isLoading = false;
-      }
-    },
     clearAll() {
       this.username = null;
       this.pwd = null;
-      this.errorMessage = null;
+      this.email = null;
     },
     hideDialog() {
       this.clearAll();

@@ -6,7 +6,8 @@
       </v-card-title>
       <v-card-text>
         <v-form v-model="formValid">
-          <v-text-field v-model.trim="cat.catName" maxlength="24" :rules="rules.name" label="Name"></v-text-field>
+          <v-text-field v-model.trim="cat.catName" maxlength="24" :rules="rules.name" label="Name">
+          </v-text-field>
           <v-text-field
             v-model.trim="cat.description"
             maxlength="64"
