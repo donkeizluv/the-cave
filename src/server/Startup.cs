@@ -1,15 +1,18 @@
+using System.Text;
 using AutoMapper;
 using CaveCore.Profiles;
 using CaveCore.Service;
 using CaveCore.Service.Impl;
 using CaveCore.Services;
 using CaveCore.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
@@ -27,8 +30,22 @@ namespace CaveServer
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // services.AddCors();
             services.AddControllers();
-            services.AddScoped<ITestService, CaveCoreTestService>();
+            // add auth
+            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:JwtSecret").Value);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
+                });
+            // routing conventions
             services.AddRouting(o =>
                 {
                     o.LowercaseUrls = true;
@@ -46,13 +63,16 @@ namespace CaveServer
             // add settings
             services.Configure<DbSettings>(
                 Configuration.GetSection(nameof(DbSettings)));
+            services.Configure<AppSettings>(
+            Configuration.GetSection(nameof(AppSettings)));
 
             // add conventions
             SetupMongoConvention();
             // add db instance
-             services.AddSingleton<IMongoClient>(
-                s => new MongoClient(Configuration.GetConnectionString("default")));
+            services.AddSingleton<IMongoClient>(
+               s => new MongoClient(Configuration.GetConnectionString("default")));
             // add services
+            services.AddScoped<ITestService, CaveCoreTestService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<ICategoryService, CategoryService>();
         }
@@ -80,7 +100,9 @@ namespace CaveServer
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {

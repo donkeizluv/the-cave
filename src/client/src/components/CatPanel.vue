@@ -4,17 +4,23 @@
       <v-list-item-content>
         <div class="overline mb-8">
           Categories
-          <v-btn class="mb-1" small icon @click="$emit('click:newcat')">
+          <v-btn
+            class="mb-1"
+            small
+            icon
+            :disabled="!isAuthenticated"
+            @click="$emit('click:newcat')"
+          >
             <v-icon>mdi-plus</v-icon>
           </v-btn>
         </div>
       </v-list-item-content>
     </v-list-item>
-    <v-divider class="mx-4"></v-divider>
+    <!-- <v-divider class="mx-4"></v-divider> -->
     <template v-for="cat in categories">
       <v-list-item :key="cat.id" class="text-center">
         <v-list-item-content>
-          <span>{{cat.name}}</span>
+          <span>{{cat.catName}}</span>
         </v-list-item-content>
       </v-list-item>
       <v-divider class="mx-4" :key="cat.id"></v-divider>
@@ -23,18 +29,23 @@
 </template>
 
 <script>
+import moduleNames from "../store/modules/module-names";
+import { isAuthenticated } from "../store/getters/getter-types";
+import { mapGetters } from "vuex";
+import { categories } from "../store/getters/category/getter-types";
+// import { CREATE } from "../store/actions/category/action-types";
 export default {
   name: "CatPanel",
-  props: {
-    categories: {
-      type: Array,
-      required: true
-    }
+  props: {},
+  computed: {
+    ...mapGetters([isAuthenticated]),
+    ...mapGetters(moduleNames.category, [categories])
   },
-  computed: {},
   data: function name() {
     return {};
   },
-  methods: {}
+  methods: {
+    // ...mapActions(moduleNames.category, [CREATE])
+  }
 };
 </script>

@@ -1,15 +1,15 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import rootStore from "./modules/root";
-// import chatboxStore from "./modules/chatbox";
+import categoryStore from "./modules/category";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   strict: true,
-  // modules: {
-  //   chatbox: chatboxStore
-  // },
+  modules: {
+    category: categoryStore
+  },
   state: rootStore.state,
   getters: rootStore.getters,
   mutations: rootStore.mutations,

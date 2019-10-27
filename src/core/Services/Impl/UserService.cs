@@ -44,8 +44,10 @@ namespace CaveCore.Services
             {
                 throw new BussinessException("User with same infomation already existed");
             }
+            var userModel = _mapper.Map<User>(user);
+            userModel.Roles = new List<UserRoles>() { UserRoles.User };
             await _db.GetCollection<User>(_dbSettings.UserCollectionName)
-                    .InsertOneAsync(_mapper.Map<User>(user));
+                    .InsertOneAsync(userModel);
         }
 
         public async Task<IEnumerable<UserDto>> GetAll()

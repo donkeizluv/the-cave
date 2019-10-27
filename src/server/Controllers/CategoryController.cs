@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using CaveCore.DTO;
+using CaveCore.Exceptions;
 using CaveCore.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,8 +10,9 @@ using Microsoft.Extensions.Logging;
 
 namespace CaveServer.Controllers
 {
-    [ApiController]
+
     [Authorize]
+    [ApiController]
     [Route("api/[controller]/[action]")]
     public class CategoryController : ControllerBase
     {
@@ -27,7 +29,6 @@ namespace CaveServer.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public async Task<IEnumerable<CategoryDto>> GetCat()
         {
             var cats = await _service.GetAll();
@@ -35,9 +36,17 @@ namespace CaveServer.Controllers
         }
 
         [HttpPost]
-        public async Task Create([FromBody]CategoryDto cat)
+        public async Task<IActionResult> Create([FromBody]CategoryDto cat)
         {
-            await _service.Create(cat);
+            try
+            {
+                return Ok(await _service.Create(cat));
+            }
+            catch (BussinessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
     }
 }

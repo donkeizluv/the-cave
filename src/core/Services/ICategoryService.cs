@@ -7,7 +7,7 @@ namespace CaveCore.Services
 {
     public interface ICategoryService
     {
-        Task Create(CategoryDto category);
+        Task<string> Create(CategoryDto category);
         Task<IEnumerable<ICategory>> GetAll();
     }
 }

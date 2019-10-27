@@ -28,7 +28,7 @@ namespace CaveServer.Controllers
             {
                 return Ok(result.Token);
             }
-            return Forbid("Invalid username or passwords.");
+            return Unauthorized("Invalid username or passwords.");
         }
 
         [HttpPost]

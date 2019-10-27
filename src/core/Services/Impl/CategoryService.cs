@@ -25,7 +25,7 @@ namespace CaveCore.Services
             _mapper = mapper;
         }
 
-        public async Task Create(CategoryDto cat)
+        public async Task<string> Create(CategoryDto cat)
         {
             var catCollection = _db.GetCollection<Category>(_settings.CategoryCollectionName);
             var exist = await catCollection.Find(c => c.CatName == cat.CatName).AnyAsync();
@@ -33,7 +33,9 @@ namespace CaveCore.Services
             {
                 throw new BussinessException("Category with same name already existed");
             }
-            await catCollection.InsertOneAsync(_mapper.Map<Category>(cat));
+            var newCat = _mapper.Map<Category>(cat);
+            await catCollection.InsertOneAsync(newCat);
+            return newCat.Id;
         }
 
         public async Task<IEnumerable<ICategory>> GetAll()

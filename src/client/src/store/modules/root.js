@@ -69,7 +69,7 @@ const actions = {
     commit(CURRENT_USER, p);
     return true;
   },
-  [LOGOUT]: async ({ commit }, p) => {
+  [LOGOUT]: async ({ commit }) => {
     commit(AUTHENTICATED, false);
     commit(CURRENT_USER, null);
   },

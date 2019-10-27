@@ -2,23 +2,41 @@
   <v-dialog :value="show" @click:outside="hideModal" width="450px">
     <v-card>
       <v-card-title>
-        <span class="headline">Register</span>
+        <span class="headline mb-4">Register</span>
       </v-card-title>
       <v-card-text>
-        <v-form>
-          <v-text-field v-model="reg.username" label="Username" :disabled="isLoading"></v-text-field>
+        <v-form v-model="formValid">
           <v-text-field
-            v-model="reg.email"
-            label="Email"
-            type="email"
-            :rules="emailRules"
+            dense
+            maxlength="24"
+            class="input-group--focused mb-4 pb-4"
+            v-model.trim="reg.username"
+            :rules="rules.username"
+            label="Username"
+            prepend-icon="mdi-account"
             :disabled="isLoading"
           ></v-text-field>
-          <v-text-field label="Password" v-model="reg.pwd" type="password" autocomplete="off"></v-text-field>
           <v-text-field
-            label="Retype password"
-            v-model="reg.rPwd"
-            type="password"
+            dense
+            maxlength="24"
+            class="input-group--focused mb-4 pb-4"
+            label="Password"
+            prepend-icon="mdi-lock"
+            :append-icon="showPwd ? 'mdi-eye-off' : 'mdi-eye'"
+            v-model.trim="reg.pwd"
+            :rules="rules.passwords"
+            :type="showPwd ? 'text' : 'password'"
+            @click:append="showPwd = !showPwd"
+          ></v-text-field>
+          <v-text-field
+            dense
+            maxlength="36"
+            class="input-group--focused"
+            v-model.trim="reg.email"
+            label="Email"
+            prepend-icon="mdi-email"
+            type="email"
+            :rules="rules.email"
             :disabled="isLoading"
           ></v-text-field>
         </v-form>
@@ -38,6 +56,8 @@
 <script>
 import { REGISTER } from "../store/actions/action-types";
 import { mapActions } from "vuex";
+import validationRules from "./shared/validation-rules";
+
 export default {
   name: "RegModal",
   props: {
@@ -47,25 +67,38 @@ export default {
   },
   computed: {
     canSubmit() {
-      return true;
+      return this.formValid;
     }
   },
   data() {
     return {
-      emailRules: [
-        value => !!value || "Required.",
-        value => (value || "").length <= 20 || "Max 20 characters",
-        value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "Invalid e-mail.";
-        }
-      ],
+      rules: {
+        username: [
+          value => validationRules.requiredValue(value),
+          value => validationRules.noSpecial(value),
+          value => validationRules.minCharacter(value, 6),
+          value => validationRules.maxCharacter(value, 24)
+        ],
+        passwords: [
+          value => validationRules.requiredValue(value),
+          value => validationRules.minCharacter(value, 6),
+          value => validationRules.maxCharacter(value, 24)
+        ],
+        email: [
+          value => validationRules.requiredValue(value),
+          value => validationRules.maxCharacter(value, 36),
+          value => validationRules.email(value)
+        ]
+      },
+
       reg: {
         username: null,
         email: null,
         pwd: null,
         rPwd: null
       },
+      showPwd: false,
+      formValid: null,
       isError: false,
       dialogMessage: null,
       isLoading: false

@@ -1,8 +1,14 @@
 <template>
   <v-app>
+    <v-snackbar
+      top
+      v-model="snackbar.show"
+      :color="snackbar.color"
+      :timeout="2000"
+    >{{ snackbar.text }}</v-snackbar>
     <login-modal :show.sync="loginModal" @click:outside="loginModal = false;" />
     <register-modal :show.sync="regModal" @click:outside="regModal = false;" />
-    <new-cat-modal :show.sync="catModal" @click:outside="catModal = false;"></new-cat-modal>
+    <new-cat-modal :show.sync="catModal" @click:outside="catModal = false;" />
     <v-app-bar flat app clipped-left>
       <v-toolbar-title>The Cave</v-toolbar-title>
       <v-spacer></v-spacer>
@@ -11,7 +17,12 @@
       </v-btn>-->
       <v-btn v-if="!isAuthenticated" @click="loginModal = true;" class="ma-2" depressed>Log in</v-btn>
       <v-btn v-if="!isAuthenticated" @click="regModal = true;" class="ma-2" depressed>Register</v-btn>
-      <v-btn v-if="isAuthenticated" @click="LOGOUT" class="ma-2" depressed>Log out</v-btn>
+      <v-btn
+        v-if="isAuthenticated"
+        @click="LOGOUT(); showSnackbar('success', 'Log out successfully.')"
+        class="ma-2"
+        depressed
+      >Log out</v-btn>
       <v-menu left bottom>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
@@ -83,6 +94,11 @@ export default {
     // this.$vuetify.theme.dark = true;
   },
   data: () => ({
+    snackbar: {
+      show: false,
+      color: "success",
+      text: null
+    },
     categories: [
       { id: 1, name: "catA" },
       { id: 2, name: "catB" },
@@ -100,6 +116,11 @@ export default {
     },
     showCatModal() {
       this.catModal = true;
+    },
+    showSnackbar(color, text) {
+      this.snackbar.show = true;
+      this.snackbar.color = color;
+      this.snackbar.text = text;
     }
   }
 };
