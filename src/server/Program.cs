@@ -22,7 +22,7 @@ namespace CaveServer
             Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
-                config.AddEnvironmentVariables(ENV_VARS_PREFIX);
+                config.AddEnvironmentVariables();
             })
             .ConfigureWebHostDefaults(webBuilder =>
             {
