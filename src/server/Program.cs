@@ -22,10 +22,13 @@ namespace CaveServer
             Host.CreateDefaultBuilder(args)
             .ConfigureAppConfiguration((hostingContext, config) =>
             {
-                config.AddEnvironmentVariables(prefix: ENV_VARS_PREFIX);
+                config.AddEnvironmentVariables();
             })
             .ConfigureWebHostDefaults(webBuilder =>
             {
+                var port = Environment.GetEnvironmentVariable("PORT");
+                if (!string.IsNullOrEmpty(port) && int.TryParse(port, out int portInt))
+                    webBuilder.UseUrls($"http://*:{port}");
                 webBuilder.UseStartup<Startup>();
             });
     }
