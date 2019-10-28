@@ -38,7 +38,7 @@ namespace CaveCore.Services
             return newCat.Id;
         }
 
-        public async Task<IEnumerable<ICategory>> GetAll()
+        public async Task<IEnumerable<ICategory>> GetAllCates()
         {
             return await _db.GetCollection<Category>(_settings.CategoryCollectionName)
                             .Find(u => true)
