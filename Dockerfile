@@ -23,4 +23,5 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.0
 WORKDIR /app
 COPY --from=dotnet-build /app/server/publish .
 COPY --from=node-build /app/dist ./wwwroot
-ENTRYPOINT ["dotnet", "cave-server.dll"]
+# ENTRYPOINT dotnet cave-server.dll
+CMD ["dotnet", "cave-server.dll"]
