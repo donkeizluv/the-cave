@@ -5,6 +5,7 @@ using CaveCore.Service;
 using CaveCore.Service.Impl;
 using CaveCore.Services;
 using CaveCore.Settings;
+using CaveServer.Extentions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,12 +22,14 @@ namespace CaveServer
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            CurrentEnvironment = env;
         }
 
         public IConfiguration Configuration { get; }
+        private IWebHostEnvironment CurrentEnvironment { get; set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -60,32 +63,18 @@ namespace CaveServer
             services.AddSingleton(mapper);
             // add context
             services.AddHttpContextAccessor();
-            // add settings
-            services.Configure<DbSettings>(
-                Configuration.GetSection(nameof(DbSettings)));
-            services.Configure<AppSettings>(
-            Configuration.GetSection(nameof(AppSettings)));
-
-            // add conventions
-            SetupMongoConvention();
-            // add db instance
-            services.AddSingleton<IMongoClient>(
-               s => new MongoClient(Configuration.GetConnectionString("default")));
+            // add settings & db
+            services.AddMongoDbInstance(CurrentEnvironment, Configuration)
+                .AddAppSettings(CurrentEnvironment, Configuration);
             // add services
             services.AddScoped<ITestService, CaveCoreTestService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<ICategoryService, CategoryService>();
             services.AddSingleton<IPostService, PostService>();
         }
-        private void SetupMongoConvention()
-        {
-            // Set up MongoDB conventions
-            var pack = new ConventionPack
-            {
-                new EnumRepresentationConvention(BsonType.String)
-            };
-            ConventionRegistry.Register("EnumStringConvention", pack, t => true);
-        }
+       
+      
+
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors(b => b.AllowAnyHeader()
@@ -99,10 +88,11 @@ namespace CaveServer
 
             // app.UseHttpsRedirection();
 
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
+            app.UseRouting()
+                .UseDefaultFiles()
+                .UseStaticFiles()
+                .UseAuthentication()
+                .UseAuthorization();
 
 
             app.UseEndpoints(endpoints =>

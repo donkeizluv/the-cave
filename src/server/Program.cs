@@ -11,6 +11,8 @@ namespace CaveServer
 {
     public class Program
     {
+        public const string ENV_VARS_PREFIX = "ASPNETCORE_";
+
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
@@ -18,9 +20,16 @@ namespace CaveServer
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+            .ConfigureAppConfiguration((hostingContext, config) =>
+            {
+                config.AddEnvironmentVariables();
+            })
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                var port = Environment.GetEnvironmentVariable("PORT");
+                if (!string.IsNullOrEmpty(port) && int.TryParse(port, out int portInt))
+                    webBuilder.UseUrls($"http://*:{port}");
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }

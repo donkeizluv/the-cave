@@ -1,4 +1,4 @@
-var endpoint = process.env.VUE_APP_API_ENDPOINT;
+var endpoint = process.env.VUE_APP_API_ENDPOINT || "";
 
 export default {
   get_all_categories: endpoint + "/api/category/all",
