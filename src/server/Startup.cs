@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Text;
 using AutoMapper;
 using CaveCore.Profiles;
@@ -9,6 +10,7 @@ using CaveServer.Extentions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,6 +36,18 @@ namespace CaveServer
         public void ConfigureServices(IServiceCollection services)
         {
             // services.AddCors();
+            services.AddResponseCompression(options =>
+            {
+                ResponseCompressionDefaults.MimeTypes.Concat(
+                    new[] { "text/css",
+                            "text/html",
+                            "text/plain",
+                            "text/xml",
+                            "font/woff2",
+                            "image/x-icon",
+                            "image/svg+xml",
+                            "image/png"});
+            });
             services.AddControllers();
             // add auth
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:JwtSecret").Value);
@@ -72,11 +86,12 @@ namespace CaveServer
             services.AddSingleton<ICategoryService, CategoryService>();
             services.AddSingleton<IPostService, PostService>();
         }
-       
-      
+
+
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseResponseCompression();
             app.UseCors(b => b.AllowAnyHeader()
                             .AllowAnyOrigin()
                             .AllowAnyMethod());
