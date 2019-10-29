@@ -7,9 +7,9 @@ namespace CaveCore.DTO
     public class LandingDto
     {
 
-        public IEnumerable<CategoryDto> listCate { get; set; }
+        public IEnumerable<CategoryDto> Categories { get; set; }
 
-        public IEnumerable<PostDto> listPost { get; set; }
+        public IEnumerable<PostDto> TrendingPost { get; set; }
 
     }
 }

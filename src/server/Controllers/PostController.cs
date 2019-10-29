@@ -40,8 +40,8 @@ namespace CaveServer.Controllers
         public async Task<IEnumerable<PostDto>> GetAllPost()
         {
 
-                var posts = await _service.GetAllPost();
-                return _mapper.Map<IEnumerable<PostDto>>(posts);       
+            var posts = await _service.GetAllPost();
+            return _mapper.Map<IEnumerable<PostDto>>(posts);
         }
 
         [HttpGet]
@@ -54,9 +54,12 @@ namespace CaveServer.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]PostDto post)
         {
-            try{
+            try
+            {
                 return Ok(await _service.Create(post));
-            }catch  (BussinessException ex){
+            }
+            catch (BussinessException ex)
+            {
                 return BadRequest(ex.Message);
             }
         }
@@ -64,12 +67,15 @@ namespace CaveServer.Controllers
         [HttpPost]
         public async Task<IActionResult> DeletePost(string postId)
         {
-            try{
+            try
+            {
                 return Ok(await _service.DeletePost(postId));
-            }catch(BussinessException ex){
+            }
+            catch (BussinessException ex)
+            {
                 return BadRequest(ex.Message);
             }
-            
+
         }
 
     }
