@@ -70,6 +70,7 @@ namespace CaveServer
             services.AddScoped<ITestService, CaveCoreTestService>();
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<ICategoryService, CategoryService>();
+            services.AddSingleton<IPostService, PostService>();
         }
        
       

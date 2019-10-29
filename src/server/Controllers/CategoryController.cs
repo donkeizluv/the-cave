@@ -29,9 +29,9 @@ namespace CaveServer.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<CategoryDto>> GetCat()
+        public async Task<IEnumerable<CategoryDto>> GetCates()
         {
-            var cats = await _service.GetAll();
+            var cats = await _service.GetAllCates();
             return _mapper.Map<IEnumerable<CategoryDto>>(cats);
         }
 

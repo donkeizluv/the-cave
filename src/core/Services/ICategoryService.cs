@@ -8,6 +8,6 @@ namespace CaveCore.Services
     public interface ICategoryService
     {
         Task<string> Create(CategoryDto category);
-        Task<IEnumerable<ICategory>> GetAll();
+        Task<IEnumerable<ICategory>> GetAllCates();
     }
 }
