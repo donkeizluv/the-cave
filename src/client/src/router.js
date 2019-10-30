@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './App.vue';
+import Trending from './components/TrendingPanel.vue';
+import CreatePost from './components/CreatePostPanel.vue';
 
 Vue.use(Router);
 
@@ -10,8 +11,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: Home
+      name: 'Trending',
+      component: Trending
+    },
+    {
+      path: '/CreatePost',
+      name: 'CreatePost',
+      component: CreatePost
     }
     // {
     //   path: '/about',
