@@ -69,7 +69,8 @@ namespace CaveCore.Services
                 // throw new BussinessException("Invalid user credentials");
                 return new UserValidateResult()
                 {
-                    Valid = false
+                    Valid = false,
+                    Message = "Invalid username or password"
                 };
             }
             // authentication successful so generate jwt token

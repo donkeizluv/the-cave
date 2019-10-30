@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
+using AutoMapper;
 using CaveCore.DTO;
 using CaveCore.Exceptions;
+using CaveCore.Models;
 using CaveCore.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,22 +15,20 @@ namespace CaveServer.Controllers
     {
         private readonly IUserService _service;
         private readonly ILogger<UserController> _logger;
+        private readonly IMapper _mapper;
 
-        public UserController(ILogger<UserController> logger, IUserService service)
+        public UserController(ILogger<UserController> logger, IUserService service, IMapper mapper)
         {
             _logger = logger;
             _service = service;
+            _mapper = mapper;
         }
 
         [HttpPost]
         public async Task<IActionResult> Validate([FromBody]UserDto user)
         {
             var result = await _service.Validate(user);
-            if (result.Valid)
-            {
-                return Ok(result.Token);
-            }
-            return Unauthorized("Invalid username or passwords.");
+            return Ok(_mapper.Map<UserValidateResultDto>(result));
         }
 
         [HttpPost]

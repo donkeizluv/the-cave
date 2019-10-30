@@ -38,26 +38,22 @@ const mutations = {
 };
 const actions = {
   [LOGIN]: async ({ dispatch, commit }, p) => {
-    let token = await dispatch(VALIDATE_USER, p);
-    if (token) {
+    let result = await dispatch(VALIDATE_USER, p);
+    if (result.valid) {
       // set axios bearer
-      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${result.token}`;
       commit(AUTHENTICATED, true);
       commit(CURRENT_USER, p);
-      return true;
+      return { valid: true, message: result.message };
     }
-    return false;
+    return { valid: false, message: result.message };
   },
   [VALIDATE_USER]: async (c, p) => {
-    try {
-      let { data } = await axios.post(apis.validate_user, {
-        username: p.username,
-        pwd: p.pwd
-      });
-      return data;
-    } catch (error) {
-      return null;
-    }
+    let { data } = await axios.post(apis.validate_user, {
+      username: p.username,
+      pwd: p.pwd
+    });
+    return data;
   },
   [REGISTER]: async ({ commit }, p) => {
     await axios.post(apis.create_user, {

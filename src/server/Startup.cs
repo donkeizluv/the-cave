@@ -35,7 +35,7 @@ namespace CaveServer
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // services.AddCors();
+            services.AddCors();
             services.AddResponseCompression(options =>
             {
                 ResponseCompressionDefaults.MimeTypes.Concat(
@@ -101,19 +101,16 @@ namespace CaveServer
                 app.UseDeveloperExceptionPage();
             }
 
-            // app.UseHttpsRedirection();
-
-            app.UseRouting()
+            app.UseHttpsRedirection()
+                .UseRouting()
                 .UseDefaultFiles()
                 .UseStaticFiles()
                 .UseAuthentication()
-                .UseAuthorization();
-
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+                .UseAuthorization()
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                });
         }
     }
 }

@@ -39,8 +39,8 @@
 </template>
 
 <script>
-import { LOGIN } from "../store/actions/action-types";
-import { mapActions } from "vuex";
+// import { LOGIN } from "../store/actions/action-types";
+// import { mapActions } from "vuex";
 export default {
   name: "ProfileModal",
   props: {
@@ -48,9 +48,8 @@ export default {
       required: true
     }
   },
-  computed: {
-  },
-  data: function name() {
+  computed: {},
+  data() {
     return {
       profile: {
         username: "abc",

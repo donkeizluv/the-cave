@@ -68,11 +68,11 @@ export default {
       try {
         this.isLoading = true;
         let result = await this.LOGIN(this.cred);
-        if (result) {
-          this.hideDialog();
+        if (!result.valid) {
+          this.errorMessage = result.message;
           return;
         }
-        this.errorMessage = "Username or password is not valid.";
+        this.hideDialog();
       } finally {
         this.isLoading = false;
       }

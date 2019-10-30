@@ -1,6 +1,7 @@
 using System;
 using AutoMapper;
 using CaveCore.DTO;
+using CaveCore.Models;
 using CaveCore.SchemaModels;
 
 namespace CaveCore.Profiles
@@ -19,6 +20,7 @@ namespace CaveCore.Profiles
             CreateMap<PostDto, Post>()
                 .ForMember(dto => dto.Created, opt => opt.AddTransform(s => s == default(DateTime) ? DateTime.UtcNow : s));
             CreateMap<IPost, PostDto>();
+            CreateMap<IUserValidateResult, UserValidateResultDto>();
         }
     }
 }
