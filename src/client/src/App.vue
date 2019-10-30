@@ -97,50 +97,8 @@
             </v-card>
           </v-col>
           <v-col cols="7" class="shrink">
-            <v-card class="mx-auto" outlined>
-              <v-list-item three-line>
-                <v-list-item-content>
-                  <div class="overline mb-8">Trending</div>
-                    <v-card class="d-inline-block mx-auto" @click="caveModal = true;">
-                      <v-container>
-                        <v-row justify="space-between">
-                          <v-col cols="auto">
-                            <v-img
-                              height="200"
-                              width="200"
-                              src="https://cdn.vuetifyjs.com/images/cards/store.jpg"
-                            ></v-img>
-                          </v-col>
-                          <v-col cols="auto">
-                            <v-card-text>This is the trending cave</v-card-text>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-card>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item three-line>
-                <v-list-item-content>
-                  <div class="overline mb-8">Other Caves</div>
-                    <v-card class="d-inline-block mx-auto" @click="caveModal = true;">
-                      <v-container>
-                        <v-row justify="space-between">
-                          <v-col cols="auto">
-                            <v-img
-                              height="200"
-                              width="200"
-
-                            ></v-img>
-                          </v-col>
-                          <v-col cols="auto">
-                            <v-card-text>Other cave</v-card-text>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-card>
-                </v-list-item-content>
-              </v-list-item>
-            </v-card>
+            <router-view>            
+            </router-view>
           </v-col>
           <v-col cols="2">
             <cat-panel :categories="categories" @click:newcat="catModal = true;" />
