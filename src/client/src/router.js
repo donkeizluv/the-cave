@@ -1,27 +1,27 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Trending from './components/TrendingPanel.vue';
-import CreatePost from './components/CreatePostPanel.vue';
+import Vue from "vue";
+import Router from "vue-router";
+import Trending from "./components/TrendingPanel.vue";
+import CreatePost from "./components/CreatePostPanel.vue";
 
 Vue.use(Router);
 
 export default new Router({
-  mode: 'history',
+  mode: "history",
   base: process.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'home',
+      path: "/",
+      name: "default",
       component: Trending
     },
     {
-      path: '/post/create',
-      name: 'create_post',
+      path: "/post/create",
+      name: "create_post",
       component: CreatePost
     },
     {
-      path: '/cate/:cate',
-      name: 'category',
+      path: "/cate/:cate",
+      name: "category",
       component: Trending,
       props: r => r.params
     }

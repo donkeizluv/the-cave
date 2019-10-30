@@ -2,7 +2,7 @@
   <v-card class="mx-auto" outlined>
     <v-list-item three-line>
       <v-list-item-content>
-        <div class="overline mb-8">{{isHome ? 'Trending' : `Trending of ${cate}`}}</div>
+        <div class="overline mb-8">{{isDefault ? 'Trending' : `Trending of ${cate}`}}</div>
         <v-card class="d-inline-block mx-auto">
           <v-container>
             <v-row justify="space-between">
@@ -28,13 +28,13 @@ export default {
   props: {
     cate: {
       type: String,
-      default: ""
+      default: null
     }
   },
   computed: {
-    isHome() {
+    isDefault() {
       console.log(this.$router.currentRoute);
-      return this.$router.currentRoute.name === "home";
+      return this.$router.currentRoute.name === "default";
     }
   },
   data() {

@@ -13,7 +13,7 @@
     <cave-modal :show.sync="caveModal" @click:outside="caveModal = false;" />
     <v-app-bar flat app clipped-left>
       <v-toolbar-title>
-        <v-btn link text large rounded :ripple="false" @click="$router.push('/')">{{appName}}</v-btn>
+        <v-btn link text large rounded :ripple="false" @click="$router.push({ name: 'default'})">{{appName}}</v-btn>
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-if="!isAuthenticated" @click="loginModal = true;" class="ma-2" depressed>Log in</v-btn>
@@ -47,7 +47,7 @@
         <v-row align="start" justify="start">
           <v-col cols="3"></v-col>
           <v-col cols="7" class="shrink">
-            <router-view></router-view>
+            <router-view :key="$route.path"></router-view>
           </v-col>
           <v-col cols="2">
             <cat-panel :categories="categories" @click:newcat="catModal = true;" />

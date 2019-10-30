@@ -70,7 +70,7 @@ export default {
         name: [
           value => validationRules.requiredValue(value),
           value => validationRules.noSpecial(value),
-          value => validationRules.minCharacter(value, 6),
+          value => validationRules.minCharacter(value, 4),
           value => validationRules.maxCharacter(value, 24)
         ],
         desc: [value => validationRules.maxCharacter(value, 64)]

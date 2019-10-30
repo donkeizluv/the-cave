@@ -26,7 +26,7 @@
             text
             color="primary"
             small
-            @click="$router.push({ name: 'category', params: { cate: cat.catName } })"
+            @click="$router.push({ name: 'category', params: { cate: cat.catName }})"
           >{{cat.catName}}</v-btn>
         </v-list-item-content>
       </v-list-item>
