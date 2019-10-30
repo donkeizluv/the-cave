@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import { LOGIN } from "../store/actions/action-types";
-import { mapActions } from "vuex";
+// import { LOGIN } from "../store/actions/action-types";
+// import { mapActions } from "vuex";
 export default {
   name: "CaveModal",
   props: {
@@ -47,7 +47,7 @@ export default {
   },
   computed: {
   },
-  data: function name() {
+  data() {
     return {
       cave: {
         title: "A Very Funny Folk",

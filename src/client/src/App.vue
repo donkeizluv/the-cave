@@ -46,7 +46,8 @@
     <v-content>
       <v-container fluid>
         <v-row align="start" justify="start">
-          <v-col cols="3">
+          <v-col cols="3"></v-col>
+          <!-- <v-col cols="3">
             <v-card class="mx-auto" outlined>
               <v-card
                 class="mx-auto"
@@ -95,7 +96,7 @@
                 </v-card-actions>
               </v-card>
             </v-card>
-          </v-col>
+          </v-col> -->
           <v-col cols="7" class="shrink">
             <v-card class="mx-auto" outlined>
               <v-list-item three-line>
@@ -165,8 +166,8 @@ import LoginModal from "./components/LoginModal";
 import RegisterModal from "./components/RegModal";
 import NewCatModal from "./components/NewCatModal";
 import CatPanel from "./components/CatPanel";
-import ProfileModal from "./components/ProfileModal"
-import CaveModal from "./components/CaveModal"
+import ProfileModal from "./components/ProfileModal";
+import CaveModal from "./components/CaveModal";
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
 import { isAuthenticated } from "./store/getters/getter-types";
