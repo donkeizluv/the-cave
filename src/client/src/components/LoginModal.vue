@@ -1,8 +1,14 @@
 <template>
-  <v-dialog :value="show" @click:outside="hideDialog" max-width="350px" width="350px">
+  <v-dialog :value="show" max-width="350px" width="350px" persistent>
     <v-card>
       <v-card-title>
         <span class="headline mb-4">Log in</span>
+        <v-spacer></v-spacer>
+        <span class="mb-4">
+          <v-btn icon @click="hideModal">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </span>
       </v-card-title>
       <v-card-text>
         <v-form>
@@ -27,10 +33,14 @@
           <span>{{errorMessage}}</span>
         </div>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="primary" @click="doLogin" :disabled="!canLogin || isLoading">Login</v-btn>
-        <v-btn @click="hideDialog" :disabled="isLoading">Cancel</v-btn>
+      <v-card-actions class="pa-0 justify-center">
+        <v-btn
+          color="primary"
+          :loading="isLoading"
+          class="mb-6"
+          @click="doLogin"
+          :disabled="!canLogin || isLoading"
+        >Login</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -72,7 +82,9 @@ export default {
           this.errorMessage = result.message;
           return;
         }
-        this.hideDialog();
+        this.hideModal();
+      } catch (ex) {
+        this.errorMessage = "Login failed.";
       } finally {
         this.isLoading = false;
       }
@@ -82,7 +94,7 @@ export default {
       this.pwd = null;
       this.errorMessage = null;
     },
-    hideDialog() {
+    hideModal() {
       this.clearAll();
       this.$emit("click:outside");
     }

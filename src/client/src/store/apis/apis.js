@@ -6,5 +6,6 @@ export default {
   validate_user: endpoint + "/api/user/validate",
   create_user: endpoint + "/api/user/create",
   get_all_caves: endpoint + "/api/cave/all",
-  create_cave: endpoint + "/api/cave/create"
+  create_cave: endpoint + "/api/cave/create",
+  get_landing: endpoint + "/api/landing"
 };

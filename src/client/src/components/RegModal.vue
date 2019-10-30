@@ -1,8 +1,14 @@
 <template>
-  <v-dialog :value="show" @click:outside="hideModal" width="450px">
+  <v-dialog :value="show" persistent width="450px" max-width="450px">
     <v-card>
       <v-card-title>
         <span class="headline mb-4">Register</span>
+        <v-spacer></v-spacer>
+        <span class="mb-4">
+          <v-btn icon @click="hideModal">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </span>
       </v-card-title>
       <v-card-text>
         <v-form v-model="formValid">
@@ -44,10 +50,14 @@
           <span>{{dialogMessage}}</span>
         </div>
       </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="primary" @click="createUser" :disabled="!canSubmit || isLoading">Create</v-btn>
-        <v-btn @click="hideModal" :disabled="isLoading">Cancel</v-btn>
+      <v-card-actions class="pa-0 justify-center">
+        <v-btn
+          color="primary"
+          class="mb-6"
+          :loading="isLoading"
+          @click="createUser"
+          :disabled="!canSubmit || isLoading"
+        >Create</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

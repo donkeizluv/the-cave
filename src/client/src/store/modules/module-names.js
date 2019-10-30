@@ -1,1 +1,1 @@
-export default { category: "category", helper: "helper", cave: "cave" };
+export default { category: "category", helper: "helper", post: "post" };

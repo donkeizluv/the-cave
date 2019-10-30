@@ -33,7 +33,6 @@ import moduleNames from "../store/modules/module-names";
 import { isAuthenticated } from "../store/getters/getter-types";
 import { mapGetters } from "vuex";
 import { categories } from "../store/getters/category/getter-types";
-// import { CREATE } from "../store/actions/category/action-types";
 export default {
   name: "CatPanel",
   props: {},

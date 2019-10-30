@@ -1,10 +1,14 @@
 import utilityHelper from "./helper";
 import { AUTHENTICATED, CURRENT_USER } from "../mutations/mutation-types";
+import moduleNames from "./module-names";
+import { SET_POSTS } from "../mutations/post/mutation-types";
+import { SET_CATEGORIES } from "../mutations/category/mutation-types";
 import {
   LOGIN,
   REGISTER,
   LOGOUT,
-  VALIDATE_USER
+  VALIDATE_USER,
+  REFRESH_LANDING
 } from "../actions/action-types";
 import {
   isAuthenticated,
@@ -68,6 +72,11 @@ const actions = {
   [LOGOUT]: async ({ commit }) => {
     commit(AUTHENTICATED, false);
     commit(CURRENT_USER, null);
+  },
+  [REFRESH_LANDING]: async ({ commit }) => {
+    let { data } = await axios.get(apis.get_landing);
+    commit(`${moduleNames.post}/${SET_POSTS}`, data.trendingPosts);
+    commit(`${moduleNames.category}/${SET_CATEGORIES}`, data.categories);
   },
   ...utilityHelper.actions
 };
