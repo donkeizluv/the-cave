@@ -11,13 +11,19 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Trending',
+      name: 'home',
       component: Trending
     },
     {
-      path: '/CreatePost',
-      name: 'CreatePost',
+      path: '/post/create',
+      name: 'create_post',
       component: CreatePost
+    },
+    {
+      path: '/cate/:cate',
+      name: 'category',
+      component: Trending,
+      props: r => r.params
     }
     // {
     //   path: '/about',

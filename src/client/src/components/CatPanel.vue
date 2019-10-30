@@ -20,10 +20,17 @@
     <template v-for="cat in categories">
       <v-list-item :key="cat.id" class="text-center">
         <v-list-item-content>
-          <span>{{cat.catName}}</span>
+          <v-btn
+            class="no-texttransform cate-name"
+            link
+            text
+            color="primary"
+            small
+            @click="$router.push({ name: 'category', params: { cate: cat.catName } })"
+          >{{cat.catName}}</v-btn>
         </v-list-item-content>
       </v-list-item>
-      <v-divider class="mx-4" :key="cat.id"></v-divider>
+      <v-divider class="mx-4" :key="`${cat.id}1`"></v-divider>
     </template>
   </v-card>
 </template>
@@ -48,3 +55,6 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+@import "../styles/modules/cat-panel.scss";
+</style>

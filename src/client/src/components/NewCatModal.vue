@@ -69,7 +69,7 @@ export default {
       rules: {
         name: [
           value => validationRules.requiredValue(value),
-          value => validationRules.noSpecialButSpace(value),
+          value => validationRules.noSpecial(value),
           value => validationRules.minCharacter(value, 6),
           value => validationRules.maxCharacter(value, 24)
         ],

@@ -12,7 +12,9 @@
     <profile-modal :show.sync="profileModal" @click:outside="profileModal = false;" />
     <cave-modal :show.sync="caveModal" @click:outside="caveModal = false;" />
     <v-app-bar flat app clipped-left>
-      <v-toolbar-title>The Cave</v-toolbar-title>
+      <v-toolbar-title>
+        <v-btn link text large rounded :ripple="false" @click="$router.push('/')">{{appName}}</v-btn>
+      </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn v-if="!isAuthenticated" @click="loginModal = true;" class="ma-2" depressed>Log in</v-btn>
       <v-btn v-if="!isAuthenticated" @click="regModal = true;" class="ma-2" depressed>Register</v-btn>
@@ -75,7 +77,7 @@ import CaveModal from "./components/CaveModal";
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
 import { isAuthenticated } from "./store/getters/getter-types";
-import { LOGOUT, REFRESH_LANDING} from "./store/actions/action-types";
+import { LOGOUT, REFRESH_LANDING } from "./store/actions/action-types";
 
 export default {
   name: "App",
@@ -94,6 +96,7 @@ export default {
     await this.REFRESH_LANDING();
   },
   data: () => ({
+    appName: "The Cave",
     snackbar: {
       show: false,
       color: "success",
