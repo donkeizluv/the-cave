@@ -52,12 +52,26 @@ namespace CaveServer.Controllers
             var post = await _service.GetPostById(postId);
             return _mapper.Map<PostDto>(post);
         }
+
         [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody]PostDto post)
         {
             try
             {
                 return Ok(await _service.Create(post));
+            }
+            catch (BussinessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("update")]
+        public async Task<IActionResult> Update([FromBody]PostDto post)
+        {
+            try
+            {
+                return Ok(await _service.Update(post));
             }
             catch (BussinessException ex)
             {
@@ -105,6 +119,19 @@ namespace CaveServer.Controllers
             try
             {
                 var id = await _service.AddComment(comment);
+                return Ok(id);
+            }
+            catch (BussinessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("updatecomment")]
+        public async Task<IActionResult> UpdateComment([FromBody]CommentDto comment)
+        {
+            try
+            {
+                var id = await _service.UpdateComment(comment);
                 return Ok(id);
             }
             catch (BussinessException ex)

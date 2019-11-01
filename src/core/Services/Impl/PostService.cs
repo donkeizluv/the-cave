@@ -43,6 +43,13 @@ namespace CaveCore.Services.Impl
             return newPost.Id;
         }
 
+        public async Task<string> Update(PostDto post)
+        {
+            var update = Builders<Post>.Update.Set(p => p.Content, post.Content).Set(p => p.Title, post.Title);
+            await _collection.UpdateOneAsync(p => p.Id == post.Id, update);
+            return post.Id;
+        }
+
         public async Task<IEnumerable<IPost>> GetPostsByCateId(string cateId, int? order)
         {
             return order switch
@@ -156,6 +163,14 @@ namespace CaveCore.Services.Impl
             await _collection.UpdateOneAsync(p => p.Id == reqPosId, update);
 
             return newComment.Id;
+        }
+
+        public async Task<string> UpdateComment(CommentDto comment)
+        {
+            var update = Builders<Post>.Update.Set(p => p.Comments.First().Content, comment.Content);
+            await _collection.UpdateOneAsync(p => p.Comments.Any(c => c.Id == comment.Id), update);
+
+            return comment.Id;
         }
     }
 }
