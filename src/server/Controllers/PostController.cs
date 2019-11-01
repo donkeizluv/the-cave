@@ -79,5 +79,12 @@ namespace CaveServer.Controllers
 
         }
 
+        [HttpGet("search")]
+        [AllowAnonymous]
+        public async Task<IEnumerable<PostDto>> GetPostsByTilte([FromQuery]string cateId, [FromQuery]string searchText)
+        {
+            var posts = await _service.SearchPostWithCateId(cateId, searchText);
+            return _mapper.Map<IEnumerable<PostDto>>(posts);
+        }
     }
 }

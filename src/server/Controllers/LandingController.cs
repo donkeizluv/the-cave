@@ -43,18 +43,5 @@ namespace CaveServer.Controllers
             return postAndCate;
         }
 
-        [HttpGet("search")]
-        [AllowAnonymous]
-        public async Task<LandingDto> GetPostsByTilte([FromQuery]string cateId, [FromQuery]string searchText)
-        {
-            var posts = await _postService.SearchPostWithCateId(cateId, searchText);
-            var cates = await _cateService.GetCateById(cateId);
-            return new LandingDto
-            {
-                TrendingPosts = _mapper.Map<IEnumerable<PostDto>>(posts),
-                Categories = _mapper.Map<IEnumerable<CategoryDto>>(cates)
-            };
-        }
-
     }
 }

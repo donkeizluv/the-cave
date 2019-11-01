@@ -90,7 +90,8 @@ namespace CaveCore.Services.Impl
         public async Task<IEnumerable<IPost>> SearchPostWithCateId(string cateId, string searchText)
         {
             var builder = Builders<Post>.Filter;
-            var filter = builder.Eq(p => p.Id, cateId) & builder.Regex(p => p.Title, searchText);
+            var filter = builder.Regex(p => p.Title, searchText);
+            if (cateId != null) filter &= builder.Eq(p => p.CateId, cateId);
             return await _collection.Find(filter).ToListAsync();
         }
         public async Task<IEnumerable<IPost>> SearchAllCate(string searchText)
