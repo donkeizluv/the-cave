@@ -24,6 +24,10 @@
   </v-card>
 </template>
 <script>
+// import { REGISTER } from "../store/actions/action-types";
+import { posts } from "../store/getters/post/getter-types";
+import moduleNames from "../store/modules/module-names";
+import { mapGetters } from "vuex";
 export default {
   props: {
     cate: {
@@ -32,8 +36,8 @@ export default {
     }
   },
   computed: {
+    ...mapGetters(moduleNames.post, [posts]),
     isDefault() {
-      console.log(this.$router.currentRoute);
       return this.$router.currentRoute.name === "default";
     }
   },

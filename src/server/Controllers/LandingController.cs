@@ -11,8 +11,7 @@ namespace CaveServer.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/[controller]/[action]")]
-    [Route("api/[controller]/")]
+    [Route("api/[controller]")]
     public class LandingController : ControllerBase
     {
 
@@ -32,11 +31,11 @@ namespace CaveServer.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("")]
+        [HttpGet]
         [AllowAnonymous]
         public async Task<LandingDto> GetTrending()
         {
-            var posts = await _postService.GetAllPost();
+            var posts = await _postService.GetAllPosts();
             var cates = await _cateService.GetAllCates();
             var postAndCate = new LandingDto();
             postAndCate.TrendingPosts = _mapper.Map<IEnumerable<PostDto>>(posts);

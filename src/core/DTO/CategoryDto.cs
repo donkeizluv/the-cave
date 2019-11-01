@@ -9,7 +9,7 @@ namespace CaveCore.DTO
         public string Id { get; set; }
 
         [Required]
-        public string CatName { get; set; }
+        public string CateName { get; set; }
 
         // [Required]
         public string Description { get; set; }

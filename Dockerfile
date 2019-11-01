@@ -7,21 +7,19 @@ RUN npm run build
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0 AS dotnet-build
 WORKDIR /app
-RUN mkdir core
-RUN mkdir server
-COPY /src/server/*.csproj ./server
-COPY /src/core/*.csproj ./core
-WORKDIR /app/server
+
+COPY *.sln .
+COPY /src/server/*.csproj ./src/server/
+COPY /src/core/*.csproj ./src/core/
 RUN dotnet restore
-WORKDIR /app
-COPY /src/server/. ./server
-COPY /src/core/. ./core
-WORKDIR /app/server
+
+COPY /src/server/. ./src/server/
+COPY /src/core/. ./src/core/
 RUN dotnet publish -c Release -o publish
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.0
 WORKDIR /app
-COPY --from=dotnet-build /app/server/publish .
+COPY --from=dotnet-build /app/publish .
 COPY --from=node-build /app/dist ./wwwroot
 # ENTRYPOINT dotnet cave-server.dll
 CMD ["dotnet", "cave-server.dll"]

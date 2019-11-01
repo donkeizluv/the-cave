@@ -1,24 +1,22 @@
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using AutoMapper;
 using CaveCore.Profiles;
 using CaveCore.Service;
 using CaveCore.Service.Impl;
 using CaveCore.Services;
-using CaveCore.Settings;
+using CaveCore.Services.Impl;
 using CaveServer.Extentions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Conventions;
-using MongoDB.Driver;
 
 namespace CaveServer
 {
@@ -77,6 +75,10 @@ namespace CaveServer
             services.AddSingleton(mapper);
             // add context
             services.AddHttpContextAccessor();
+            // add user principle
+            // avoid injecting IHttpContextAccessor in services other than server itself to avoid leaky abstractions
+            services.AddTransient<ClaimsPrincipal>(s =>
+                s.GetService<IHttpContextAccessor>().HttpContext.User);
             // add settings & db
             services.AddMongoDbInstance(CurrentEnvironment, Configuration)
                 .AddAppSettings(CurrentEnvironment, Configuration);
@@ -86,8 +88,6 @@ namespace CaveServer
             services.AddSingleton<ICategoryService, CategoryService>();
             services.AddSingleton<IPostService, PostService>();
         }
-
-
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {

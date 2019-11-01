@@ -9,9 +9,9 @@ namespace CaveCore.Services
     {
         Task<string> Create(PostDto post);
 
-        Task<IEnumerable<IPost>> GetAllPostByCateId(string cateId);
+        Task<IEnumerable<IPost>> GetPostsByCateId(string cateId);
 
-        Task<IEnumerable<IPost>> GetAllPost();
+        Task<IEnumerable<IPost>> GetAllPosts();
         
         Task<IPost> GetPostById(string postId);
 

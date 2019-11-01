@@ -12,9 +12,9 @@
       </v-card-title>
       <v-card-text>
         <v-form v-model="formValid">
-          <v-text-field v-model.trim="cat.catName" maxlength="24" :rules="rules.name" label="Name"></v-text-field>
+          <v-text-field v-model.trim="cate.cateName" maxlength="24" :rules="rules.name" label="Name"></v-text-field>
           <v-text-field
-            v-model.trim="cat.description"
+            v-model.trim="cate.description"
             maxlength="64"
             :rules="rules.desc"
             label="Description"
@@ -30,7 +30,7 @@
       </div>
       <v-card-actions class="pa-0 justify-center">
         <v-btn
-          @click="createCat"
+          @click="createCate"
           :loading="isLoading"
           class="mb-6"
           color="primary"
@@ -62,8 +62,8 @@ export default {
   },
   data: function name() {
     return {
-      cat: {
-        catName: null,
+      cate: {
+        cateName: null,
         description: null
       },
       rules: {
@@ -84,7 +84,7 @@ export default {
   methods: {
     ...mapActions(moduleNames.category, [CREATE]),
     clearAll() {
-      this.cat = { catName: null, description: null };
+      this.cate = { cateName: null, description: null };
       this.isError = false;
       this.dialogMessage = null;
     },
@@ -92,11 +92,11 @@ export default {
       this.clearAll();
       this.$emit("click:outside");
     },
-    async createCat() {
+    async createCate() {
       if (!this.canSubmit) return;
       try {
         this.isLoading = true;
-        await this.CREATE(this.cat);
+        await this.CREATE(this.cate);
         this.hideModal();
         //NYI: go to this cat
       } catch (error) {

@@ -33,7 +33,7 @@
     </v-card>
 </template>
 <script>
-import { mapActions } from "vuex";
+// import { mapActions } from "vuex";
 //import moduleNames from "../store/modules/module-names";
 //import { CREATE_POST } from "../store/actions/createPost/action-types";
 

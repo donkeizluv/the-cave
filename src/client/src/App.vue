@@ -8,9 +8,8 @@
     >{{ snackbar.text }}</v-snackbar>
     <login-modal :show.sync="loginModal" @click:outside="loginModal = false;" />
     <register-modal :show.sync="regModal" @click:outside="regModal = false;" />
-    <new-cat-modal :show.sync="catModal" @click:outside="catModal = false;" />
+    <new-cate-modal :show.sync="cateModal" @click:outside="cateModal = false;" />
     <profile-modal :show.sync="profileModal" @click:outside="profileModal = false;" />
-    <cave-modal :show.sync="caveModal" @click:outside="caveModal = false;" />
     <v-app-bar flat app clipped-left>
       <v-toolbar-title>
         <v-btn link text large rounded :ripple="false" @click="$router.push({ name: 'default'})">{{appName}}</v-btn>
@@ -50,7 +49,7 @@
             <router-view :key="$route.path"></router-view>
           </v-col>
           <v-col cols="2">
-            <cat-panel :categories="categories" @click:newcat="catModal = true;" />
+            <cate-panel :categories="categories" @click:newcat="cateModal = true;" />
           </v-col>
         </v-row>
       </v-container>
@@ -70,10 +69,10 @@
 <script>
 import LoginModal from "./components/LoginModal";
 import RegisterModal from "./components/RegModal";
-import NewCatModal from "./components/NewCatModal";
-import CatPanel from "./components/CatPanel";
+import NewCateModal from "./components/NewCateModal";
+import CatePanel from "./components/CatePanel";
 import ProfileModal from "./components/ProfileModal";
-import CaveModal from "./components/CaveModal";
+// import Post from "./components/Post";
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
 import { isAuthenticated } from "./store/getters/getter-types";
@@ -83,11 +82,11 @@ export default {
   name: "App",
   components: {
     LoginModal,
-    NewCatModal,
+    NewCateModal,
     RegisterModal,
-    CatPanel,
-    ProfileModal,
-    CaveModal
+    CatePanel,
+    ProfileModal
+    // Post
   },
   computed: {
     ...mapGetters([isAuthenticated])
@@ -110,9 +109,8 @@ export default {
     ],
     loginModal: false,
     regModal: false,
-    catModal: false,
-    profileModal: false,
-    caveModal: false
+    cateModal: false,
+    profileModal: false
   }),
   methods: {
     ...mapActions([LOGOUT, REFRESH_LANDING]),

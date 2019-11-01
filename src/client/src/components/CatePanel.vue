@@ -17,8 +17,8 @@
       </v-list-item-content>
     </v-list-item>
     <!-- <v-divider class="mx-4"></v-divider> -->
-    <template v-for="cat in categories">
-      <v-list-item :key="cat.id" class="text-center">
+    <template v-for="cate in categories">
+      <v-list-item :key="cate.id" class="text-center">
         <v-list-item-content>
           <v-btn
             class="no-texttransform cate-name"
@@ -26,11 +26,11 @@
             text
             color="primary"
             small
-            @click="$router.push({ name: 'category', params: { cate: cat.catName }})"
-          >{{cat.catName}}</v-btn>
+            @click="$router.push({ name: 'category', params: { cate: cate.cateName }})"
+          >{{cate.cateName}}</v-btn>
         </v-list-item-content>
       </v-list-item>
-      <v-divider class="mx-4" :key="`${cat.id}1`"></v-divider>
+      <v-divider class="mx-4" :key="`${cate.id}1`"></v-divider>
     </template>
   </v-card>
 </template>
@@ -41,7 +41,7 @@ import { isAuthenticated } from "../store/getters/getter-types";
 import { mapGetters } from "vuex";
 import { categories } from "../store/getters/category/getter-types";
 export default {
-  name: "CatPanel",
+  name: "CatePanel",
   props: {},
   computed: {
     ...mapGetters([isAuthenticated]),

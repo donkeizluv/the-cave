@@ -49,6 +49,7 @@ namespace CaveServer.Extentions
             if (env.IsProduction())
             {
                 services.Configure<DbSettings>(s => {
+                    // TODO: check variable availablity
                     s.UserCollectionName = config.GetValue(typeof(string), "USER_COLLECTION_NAME").ToString();
                     s.CategoryCollectionName = config.GetValue(typeof(string), "CATEGORY_COLLECTION_NAME").ToString();
                     s.DatabaseName = config.GetValue(typeof(string), "DATABASE_NAME").ToString();

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 namespace CaveServer.Controllers
 {
     [ApiController]
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _service;
@@ -24,10 +24,10 @@ namespace CaveServer.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Validate([FromBody]UserDto user)
+        [HttpPost("validate")]
+        public async Task<IActionResult> Validate([FromBody]ValidateUserDto user)
         {
-            var result = await _service.Validate(user);
+            var result = await _service.Validate(_mapper.Map<UserDto>(user));
             return Ok(_mapper.Map<UserValidateResultDto>(result));
         }
 
