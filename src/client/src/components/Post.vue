@@ -1,11 +1,11 @@
 <template>
-    <v-card>
+    <v-card v-if="selectedPost != null">
       <v-card-title>
-          {{ title }}
+          {{ selectedPost.title }}
       </v-card-title>
-      <v-card-subtitle> {{ created }} </v-card-subtitle>
+      <v-card-subtitle> {{ selectedPost.created }} </v-card-subtitle>
       <v-card-text>
-        {{ c }}
+        {{ selectedPost.content }}
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -53,33 +53,15 @@
 
 <script>
 // import { LOGIN } from "../store/actions/action-types";
-// import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
+import moduleNames from "../store/modules/module-names";
+import { selectedPost } from '../store/getters/post/getter-types';
 export default {
   name: "Post",
   props: {
-    title: {
-      type: String, 
-      default: "Dummy"
-    },
-    content: {
-      type: String,
-      default: "Hello World"
-    },
-    comments : {
-      type: Array
-    },
-    upVotes: {
-      default: 0
-    },
-    downVotes: {
-      default: 0
-    },
-    created: {
-      type: Date,
-      default: "00/00/0000"
-    }
   },
   computed: {
+    ...mapGetters(moduleNames.post, [selectedPost])
   },
   data() {
     return {
@@ -87,6 +69,7 @@ export default {
     };
   },
   methods: {
+
   }
 };
 </script>

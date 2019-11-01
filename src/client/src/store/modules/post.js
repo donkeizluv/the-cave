@@ -1,14 +1,10 @@
-<<<<<<< Updated upstream
-import { CREATE, GET_ALL, NEW_COMMENT } from "../actions/post/action-types";
-=======
-import { CREATE, GET_ALL, GET_POSTS_BY_CATE, GET_SELECTED_POST } from "../actions/post/action-types";
->>>>>>> Stashed changes
+import { CREATE, GET_ALL, GET_POSTS_BY_CATE, GET_SELECTED_POST, NEW_COMMENT } from "../actions/post/action-types";
 import {
   SET_POSTS,
   ADD_POST,
   SET_SELECTED_POST
 } from "../mutations/post/mutation-types";
-import { posts } from "../getters/post/getter-types";
+import { posts, selectedPost } from "../getters/post/getter-types";
 import axios from "axios";
 import apis from "../apis/apis";
 
@@ -18,7 +14,8 @@ const state = {
 };
 
 const getters = {
-  [posts]: s => s.posts
+  [posts]: s => s.posts,
+  [selectedPost]: s => s.selectedPost
 };
 
 const mutations = {
@@ -40,19 +37,14 @@ const actions = {
       content: p.text,
       cateID: p.cateID
     };
-    console.log(post);
-    console.log(apis.create_post);
     let data = await axios.post(apis.create_post, post);
-    alert(data);
   },
 
   [GET_ALL]: async () => {
-<<<<<<< Updated upstream
     return true;
   },
   [NEW_COMMENT]: async (c, p) => {
     return true;
-=======
   },
   
   [GET_POSTS_BY_CATE]: async ({ commit }, payload) => {
@@ -64,7 +56,6 @@ const actions = {
   [GET_SELECTED_POST]: async ({ commit }, payload) => {
     let data = await axios.post(apis.get_selected_post, payload);
     commit(`${SET_SELECTED_POST}`, data.selectedPost);
->>>>>>> Stashed changes
   }
 };
 
