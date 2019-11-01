@@ -1,11 +1,11 @@
-import { CREATE, GET_ALL } from "../actions/post/action-types";
+import { CREATE, GET_ALL, NEW_COMMENT } from "../actions/post/action-types";
 import {
   SET_POSTS,
   ADD_POST
 } from "../mutations/post/mutation-types";
 import { posts } from "../getters/post/getter-types";
-// import axios from "axios";
-// import apis from "../apis/apis";
+import axios from "axios";
+import apis from "../apis/apis";
 
 const state = {
   posts: []
@@ -27,16 +27,20 @@ const mutations = {
 const actions = {
   [CREATE]: async ({ commit }, p) => {
     let post = {
-      postTitle: p.title,
+      title: p.title,
       content: p.text,
-      cateId: p.comments
+      cateID: p.cateID
     };
-    // let { data } = await axios.post(apis.create_cave, cave);
-    // cave.id = data;
-    commit(ADD_POST, post);
+    console.log(post);
+    console.log(apis.create_post);
+    let data = await axios.post(apis.create_post, post);
+    alert(data);
   },
 
   [GET_ALL]: async () => {
+    return true;
+  },
+  [NEW_COMMENT]: async (c, p) => {
     return true;
   }
 };
