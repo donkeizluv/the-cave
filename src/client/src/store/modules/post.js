@@ -1,4 +1,4 @@
-import { CREATE, GET_ALL, GET_POSTS_BY_CATE, GET_SELECTED_POST, NEW_COMMENT, ADD_COMMENT } from "../actions/post/action-types";
+import { CREATE, GET_ALL, REFRESH_POSTS_BY_CATE, GET_SELECTED_POST, NEW_COMMENT, ADD_COMMENT } from "../actions/post/action-types";
 import {
   SET_POSTS,
   ADD_POST
@@ -45,8 +45,8 @@ const actions = {
     return true;
   },
 
-  [GET_POSTS_BY_CATE]: async ({ commit }, payload) => {
-    let data = await axios.post(apis.get_posts_by_cate, payload);
+  [REFRESH_POSTS_BY_CATE]: async ({ commit }, payload) => {
+    let data = await axios.get(`${apis.get_posts_by_cate}/${payload}`);
     console.log(data);
     commit(`${SET_POSTS}`, data.listOfPosts);
   },
