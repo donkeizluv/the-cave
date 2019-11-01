@@ -25,12 +25,16 @@ const mutations = {
 };
 
 const actions = {
-  [CREATE]: async (p) => {
+  [CREATE]: async ({ commit }, p) => {
     let post = {
-      postTitle: p.title,
-      content: p.text
+      title: p.title,
+      content: p.text,
+      cateID: p.cateID
     };
-    await axios.post(apis.create_post, post);
+    console.log(post);
+    console.log(apis.create_post);
+    let data = await axios.post(apis.create_post, post);
+    alert(data);
   },
 
   [GET_ALL]: async () => {

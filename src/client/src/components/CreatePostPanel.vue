@@ -94,6 +94,9 @@ import { CREATE } from "../store/actions/post/action-types";
 export default {
   name: "CreatePostPanel",
   props: {
+    cateID: {
+      default: "123123123123123123123125"
+    }
   },
   computed: {
   },
@@ -102,7 +105,8 @@ export default {
       post: {
         title: "",
         text: "",
-        imgData: ""
+        imgData: "",
+        cateID: ""
       },
       imageData: null   
     };
@@ -113,6 +117,8 @@ export default {
     },
     ...mapActions(moduleNames.post, [CREATE]),
     async create() {
+      this.post.cateID = this.cateID;
+      console.log(this.post);
       await this.CREATE(this.post);
     },
     chooseImage () {
