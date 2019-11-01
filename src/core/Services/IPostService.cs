@@ -16,5 +16,7 @@ namespace CaveCore.Services
         Task<IPost> GetPostById(string postId);
 
         Task<string> DeletePost(string postId);
+        
+        Task<IPost> AddVote(VoteRequestDto voteRequest);
     }
 }

@@ -84,9 +84,9 @@ namespace CaveServer
                 .AddAppSettings(CurrentEnvironment, Configuration);
             // add services
             services.AddScoped<ITestService, CaveCoreTestService>();
-            services.AddSingleton<IUserService, UserService>();
-            services.AddSingleton<ICategoryService, CategoryService>();
-            services.AddSingleton<IPostService, PostService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IPostService, PostService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

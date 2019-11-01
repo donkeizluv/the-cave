@@ -10,6 +10,7 @@ using CaveCore.Service.Impl;
 using CaveCore.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using System.Linq;
 
 namespace CaveCore.Services.Impl
 {
@@ -74,6 +75,37 @@ namespace CaveCore.Services.Impl
             }
             await postCollection.DeleteOneAsync(p => p.Id == post.Id);
             return post.Id;
+        }
+
+        public async Task<IPost> AddVote(VoteRequestDto voteRequest)
+        {
+            
+            var reqPosId = voteRequest.PostId;
+            var reqVoteType = voteRequest.VoteType;
+
+            var collection =  _db.GetCollection<Post>(_settings.PostCollectionName);
+
+            var post = await collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
+            if (post != null)
+            {
+                var votes = post.Votes != null ? post.Votes.ToList(): new List<Vote>(); 
+                var foundVote = votes.Where(v => v.CreatorId == CurrentId).FirstOrDefault();
+                if(foundVote != null){
+                    votes.Remove(votes.Where( o => o.CreatorId == CurrentId).FirstOrDefault());        
+                } else
+                {
+                    var newVote = new Vote();
+                    newVote.PostId= reqPosId;
+                    newVote.VoteType = reqVoteType;
+                    newVote.CreatorId = CurrentId;
+                    votes.Add(newVote);
+                }
+                post.Votes = votes;
+                var update = Builders<Post>.Update
+                                            .Set(p => p.Votes, votes);
+                await collection.UpdateOneAsync(p => p.Id == reqPosId, update);
+            }
+            return await collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
         }
     }
 }

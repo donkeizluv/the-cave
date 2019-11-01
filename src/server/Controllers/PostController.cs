@@ -52,7 +52,7 @@ namespace CaveServer.Controllers
             var post = await _service.GetPostById(postId);
             return _mapper.Map<PostDto>(post);
         }
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody]PostDto post)
         {
             try
@@ -77,6 +77,20 @@ namespace CaveServer.Controllers
                 return BadRequest(ex.Message);
             }
 
+        }
+
+        [HttpPost("addvote")]
+        public async Task<IActionResult> AddVote([FromBody]VoteRequestDto voteReq)
+        {
+            try
+            {
+                var post = await _service.AddVote(voteReq);
+                return Ok(_mapper.Map<PostDto>(post));
+            }
+            catch (BussinessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }
