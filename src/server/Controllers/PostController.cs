@@ -30,18 +30,18 @@ namespace CaveServer.Controllers
 
         [HttpGet("cate/{cateId}")]
         [AllowAnonymous]
-        public async Task<IEnumerable<PostDto>> GetPostsByCateId(string cateId)
+        public async Task<IEnumerable<PostDto>> GetPostsByCateId(string cateId, int? order)
         {
-            var posts = await _service.GetPostsByCateId(cateId);
+            var posts = await _service.GetPostsByCateId(cateId, order);
             return _mapper.Map<IEnumerable<PostDto>>(posts);
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IEnumerable<PostDto>> GetAllPost()
+        public async Task<IEnumerable<PostDto>> GetAllPost(int? order)
         {
 
-            var posts = await _service.GetAllPosts();
+            var posts = await _service.GetAllPosts(order);
             return _mapper.Map<IEnumerable<PostDto>>(posts);
         }
 
