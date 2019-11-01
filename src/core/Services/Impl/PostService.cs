@@ -106,23 +106,25 @@ namespace CaveCore.Services.Impl
         }
         public async Task<IPost> AddVote(VoteRequestDto voteRequest)
         {
-            
+
             var reqPosId = voteRequest.PostId;
             var reqVoteType = voteRequest.VoteType;
 
-            var collection =  _db.GetCollection<Post>(_settings.PostCollectionName);
+            var collection = _db.GetCollection<Post>(_settings.PostCollectionName);
 
             var post = await collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
             if (post != null)
             {
-                var votes = post.Votes != null ? post.Votes.ToList(): new List<Vote>(); 
+                var votes = post.Votes != null ? post.Votes.ToList() : new List<Vote>();
                 var foundVote = votes.Where(v => v.CreatorId == CurrentId).FirstOrDefault();
-                if(foundVote != null){
-                    votes.Remove(votes.Where( o => o.CreatorId == CurrentId).FirstOrDefault());        
-                } else
+                if (foundVote != null)
+                {
+                    votes.Remove(votes.Where(o => o.CreatorId == CurrentId).FirstOrDefault());
+                }
+                else
                 {
                     var newVote = new Vote();
-                    newVote.PostId= reqPosId;
+                    newVote.PostId = reqPosId;
                     newVote.VoteType = reqVoteType;
                     newVote.CreatorId = CurrentId;
                     votes.Add(newVote);
@@ -133,5 +135,27 @@ namespace CaveCore.Services.Impl
                 await collection.UpdateOneAsync(p => p.Id == reqPosId, update);
             }
             return await collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
-        }    }
+        }
+
+        public async Task<string> AddComment(CommentDto comment)
+        {
+            var reqPosId = comment.PostId;
+            var post = await _collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
+            var comments = post.Comments != null ? post.Comments.ToList() : new List<Comment>();
+
+            var newComment = new Comment
+            {
+                PostId = reqPosId,
+                ParentId = comment.ParentId,
+                CreatorId = CurrentId,
+                Username = CurrentUsername,
+                Content = comment.Content
+            };
+            comments.Add(newComment);
+            var update = Builders<Post>.Update.Set(p => p.Comments, comments);
+            await _collection.UpdateOneAsync(p => p.Id == reqPosId, update);
+
+            return newComment.Id;
+        }
+    }
 }

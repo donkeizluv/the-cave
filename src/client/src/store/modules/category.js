@@ -1,18 +1,21 @@
 import { CREATE, GET_ALL } from "../actions/category/action-types";
 import {
   SET_CATEGORIES,
-  ADD_CATEGORY
+  ADD_CATEGORY,
+  SET_SELECTED_CATE
 } from "../mutations/category/mutation-types";
-import { categories } from "../getters/category/getter-types";
+import { categories, selectedCate } from "../getters/category/getter-types";
 import axios from "axios";
 import apis from "../apis/apis";
 
 const state = {
-  categories: []
+  categories: [],
+  selectedCate: null
 };
 
 const getters = {
-  [categories]: s => s.categories
+  [categories]: s => s.categories,
+  selectedCate: s => s.selectedCate
 };
 
 const mutations = {
@@ -21,6 +24,9 @@ const mutations = {
   },
   [ADD_CATEGORY]: (s, v) => {
     s.categories.push(v);
+  },
+  [SET_SELECTED_CATE]: (s, v) => {
+    s.selectedCate = v;
   }
 };
 

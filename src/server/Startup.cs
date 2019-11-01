@@ -111,6 +111,7 @@ namespace CaveServer
                 .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
+                    endpoints.MapFallbackToFile("index.html");
                     endpoints.MapControllers();
                 });
         }

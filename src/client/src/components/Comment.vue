@@ -13,12 +13,7 @@
       <v-row dense></v-row>
       <v-row dense>
         <v-col>
-          <v-btn
-            @click="showReply = !showReply; newComment= null;"
-            small
-            icon
-            class="comment-actions ma-2"
-          >
+          <v-btn @click="showReply = !showReply" small icon class="comment-actions ma-2">
             <v-icon>mdi-message</v-icon>
           </v-btn>
           <v-btn small icon class="comment-actions ma-2">
@@ -31,73 +26,41 @@
           <span>0</span>
         </v-col>
       </v-row>
-      <template v-if="showReply">
-        <v-row dense>
-          <v-col cols="10">
-            <v-row dense>
-              <v-col>
-                <div class="ma-2 comment-text-area comment-textarea-border">
-                  <v-textarea
-                    v-model="newComment"
-                    :label="`Replying to ${item.data.username}`"
-                    clear-icon
-                    dense
-                    auto-grow
-                    flat
-                    solo
-                    full-width
-                    persistent-hint
-                  ></v-textarea>
-                </div>
-              </v-col>
-            </v-row>
-            <v-row dense>
-              <v-col align="end">
-                <v-btn small text @click="showReply = false; newComment= null;">Cancel</v-btn>
-                <v-btn
-                  small
-                  text
-                  color="primary"
-                  :disabled="!canSubmit"
-                  @click="submitNewComment"
-                >OK</v-btn>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-row>
-      </template>
+      <new-comment-textbox @submit="submit" v-if="showReply" :to="item.data.username" />
     </div>
   </v-container>
 </template>
 <script>
-import { NEW_COMMENT } from "../store/actions/post/action-types";
+import NewCommentTextbox from "./NewCommentTextbox.vue";
 import moduleNames from "../store/modules/module-names";
 import { mapActions } from "vuex";
 
 export default {
   name: "Comment",
+  components: {
+    NewCommentTextbox
+  },
   props: {
     item: {
       type: Object,
       required: true
+    },
+    closeNewCommentOnSubmit: {
+      type: Boolean,
+      default: true
     }
   },
-  computed: {
-    canSubmit() {
-      return !!this.newComment;
-    }
-  },
+  computed: {},
   data: () => ({
-    newComment: null,
     showReply: false
   }),
   methods: {
-    ...mapActions(moduleNames.post, [NEW_COMMENT]),
-    async submitNewComment() {
-      await this.NEW_COMMENT({
-        parentId: this.item.data.parentId,
-        content: this.newComment
+    async submit(content) {
+      this.$emit("submit", {
+        parentId: this.item.data.id,
+        content: content
       });
+      if (this.closeNewCommentOnSubmit) this.showReply = false;
     }
   }
 };

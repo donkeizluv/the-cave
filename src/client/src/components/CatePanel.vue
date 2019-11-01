@@ -1,21 +1,11 @@
 <template>
   <v-card class="mx-auto" outlined>
-    <v-list-item three-line>
-      <v-list-item-content>
-        <div class="overline mb-8">
-          Categories
-          <v-btn
-            class="mb-1"
-            small
-            icon
-            :disabled="!isAuthenticated"
-            @click="$emit('click:newcat')"
-          >
-            <v-icon>mdi-plus</v-icon>
-          </v-btn>
-        </div>
-      </v-list-item-content>
-    </v-list-item>
+    <div class="overline ma-4">
+      Categories
+      <v-btn class="mb-1" small icon :disabled="!isAuthenticated" @click="$emit('click:newcat')">
+        <v-icon>mdi-plus</v-icon>
+      </v-btn>
+    </div>
     <!-- <v-divider class="mx-4"></v-divider> -->
     <template v-for="cate in categories">
       <v-list-item :key="cate.id" class="text-center">

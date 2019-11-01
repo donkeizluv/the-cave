@@ -30,6 +30,8 @@ namespace CaveCore.SchemaModels
         [BsonElement("creator_id")]
         public string CreatorId { get; set; }
 
+        [BsonElement("comments")]
+        public IEnumerable<Comment> Comments { get; set; }
         public Post()
         {
             Created = DateTime.UtcNow;
@@ -42,7 +44,8 @@ namespace CaveCore.SchemaModels
         string Title { get; set; }
         string Content { get; set; }
         string CateId {get; set;}
-        IEnumerable<Vote> Votes {get; set;}
+        IEnumerable<Vote> Votes {get; set; }
+        IEnumerable<Comment> Comments { get; set; }
         DateTime Created { get; set; }
         string CreatorId { get; set; }
 

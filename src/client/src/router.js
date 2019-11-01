@@ -3,7 +3,6 @@ import Router from "vue-router";
 import Trending from "./components/TrendingPanel.vue";
 import CreatePost from "./components/CreatePostPanel.vue";
 import Post from "./components/Post.vue";
-import CommentTree from "./components/CommentTree.vue";
 
 Vue.use(Router);
 
@@ -28,9 +27,10 @@ export default new Router({
       props: r => r.params
     }, 
     {
-      path: "/post/info",
+      path: "/post/:postId",
       name: "post",
-      component: Post
+      component: Post,
+      props: r => r.params
     }
     // {
     //   path: '/about',
