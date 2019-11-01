@@ -33,16 +33,15 @@ namespace CaveServer.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<LandingDto> GetTrending()
+        public async Task<LandingDto> GetTrending([FromQuery]int? order)
         {
-            var posts = await _postService.GetAllPosts();
+            var posts = await _postService.GetAllPosts(order);
             var cates = await _cateService.GetAllCates();
             var postAndCate = new LandingDto();
             postAndCate.TrendingPosts = _mapper.Map<IEnumerable<PostDto>>(posts);
             postAndCate.Categories = _mapper.Map<IEnumerable<CategoryDto>>(cates);
             return postAndCate;
         }
-
 
     }
 }

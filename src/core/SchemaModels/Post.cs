@@ -1,6 +1,7 @@
 using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic; 
 
 namespace CaveCore.SchemaModels
 {
@@ -19,11 +20,9 @@ namespace CaveCore.SchemaModels
         [BsonElement("cate_id")]
         public string CateId { get; set; }
 
-        [BsonElement("up_votes")]
-        public long UpVotes { get; set; }        
+        [BsonElement("votes")]
+        public IEnumerable<Vote> Votes {get; set;}     
 
-        [BsonElement("down_votes")]
-        public long DownVotes { get; set; }        
 
         [BsonElement("created")]
         public DateTime Created { get; set; }
@@ -43,8 +42,7 @@ namespace CaveCore.SchemaModels
         string Title { get; set; }
         string Content { get; set; }
         string CateId {get; set;}
-        long UpVotes {get; set;}
-        long DownVotes {get; set;}
+        IEnumerable<Vote> Votes {get; set;}
         DateTime Created { get; set; }
         string CreatorId { get; set; }
 
