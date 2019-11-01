@@ -1,75 +1,90 @@
 <template>
-    <v-card v-if="selectedPost != null">
-      <v-card-title>
-          {{ selectedPost.title }}
-      </v-card-title>
-      <v-card-subtitle> {{ selectedPost.created }} </v-card-subtitle>
-      <v-card-text>
-        {{ selectedPost.content }}
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn icon>
-          <v-icon>mdi-heart</v-icon>
-        </v-btn>
-        <v-btn icon>
-          <v-icon>mdi-heart-broken</v-icon>
-        </v-btn>
-      </v-card-actions>
-      <v-card v-for="comment in comments" width="auto" v-bind:key="comment.id">
-        <v-list-item>
-          <v-list-item-content>
-            <div class="overline mb-4">{{ comment.name }}</div>
-            <v-list-item-subtitle>
-              {{ comment.content }}
-              <v-btn icon style="float:right;">
-                <v-icon>mdi-heart-broken</v-icon>
-              </v-btn>
-              <v-btn icon style="float:right;">
-                <v-icon>mdi-heart</v-icon>
-              </v-btn>
-              <v-card-text>
-                <v-text-field
-                autocomplete=""
-                label="Comment"
-                v-model="newComment"
-                ></v-text-field>
-              </v-card-text>
-            </v-list-item-subtitle>
-          </v-list-item-content>
-        </v-list-item>
-      </v-card>
-      <v-card>
-        <v-card-text>
-          <v-text-field
-          autocomplete=""
-          label="Comment"
-          v-model="newComment"
-          ></v-text-field>
-        </v-card-text>
-      </v-card>
-    </v-card>
+  <v-card v-if="post">
+    <v-card-title>{{ post.title }}</v-card-title>
+    <v-card-subtitle>{{ post.created }}</v-card-subtitle>
+    <v-card-text>{{ post.content }}</v-card-text>
+    <v-container>
+      <v-row dense>
+        <v-col>
+          <new-comment-textbox @submit="submitCommentRoot" />
+        </v-col>
+      </v-row>
+      <v-row dense>
+        <v-col>
+          <comment-tree
+            :openall="true"
+            @submit="submitCommentChild"
+            :comments="post.comments"
+            :root="true"
+          />
+        </v-col>
+      </v-row>
+    </v-container>
+    <!-- <v-btn icon>
+        <v-icon>mdi-heart</v-icon>
+      </v-btn>
+      <v-btn icon>
+        <v-icon>mdi-heart-broken</v-icon>
+    </v-btn>-->
+  </v-card>
+  <v-card v-else>
+    <v-card-title>Unable to display post :(</v-card-title>
+  </v-card>
 </template>
 
 <script>
-// import { LOGIN } from "../store/actions/action-types";
-import { mapGetters } from "vuex";
+import NewCommentTextbox from "./NewCommentTextbox.vue";
+import {
+  GET_SELECTED_POST,
+  ADD_COMMENT
+} from "../store/actions/post/action-types";
+import { mapGetters, mapActions } from "vuex";
 import moduleNames from "../store/modules/module-names";
-import { selectedPost } from '../store/getters/post/getter-types';
+import CommentTree from "./CommentTree.vue";
 export default {
   name: "Post",
-  props: {
+  components: {
+    CommentTree,
+    NewCommentTextbox
   },
-  computed: {
-    ...mapGetters(moduleNames.post, [selectedPost])
+  async mounted() {
+    this.post = await this.GET_SELECTED_POST(this.postId);
+  },
+
+  props: {
+    postId: {
+      type: String,
+      required: true
+    }
   },
   data() {
     return {
-      newComment: ""
+      post: null
     };
   },
   methods: {
-
-  }
+    ...mapActions(moduleNames.post, [GET_SELECTED_POST, ADD_COMMENT]),
+    async submitCommentRoot(content) {
+      let comment = {
+        postId: this.postId,
+        content: content,
+        parentId: null
+      };
+      comment.id = await this.ADD_COMMENT(comment);
+      this.post.comments.push(comment);
+    },
+    async submitCommentChild(childComment) {
+      let comment = {
+        postId: this.postId,
+        content: childComment.content,
+        parentId: childComment.parentId
+      };
+      console.log(comment);
+      comment.id = await this.ADD_COMMENT(comment);
+      // let childCommentIndex = this.post.comments.findIndex(c => c.id === childComment.parentId);
+      this.post.comments.push(comment);
+    }
+  },
+  computed: {}
 };
 </script>

@@ -9,5 +9,6 @@ export default {
   create_post: endpoint + "/api/post/create",
   get_landing: endpoint + "/api/landing",
   get_posts_by_cate: endpoint + "/api/post/getPostsByCate",
-  get_selected_post: endpoint + "/api/post/getSelectedPost"
+  get_selected_post: endpoint + "/api/post",
+  add_comment: endpoint + "/api/post/addcomment"
 };
