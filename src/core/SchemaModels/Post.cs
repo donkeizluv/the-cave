@@ -17,18 +17,26 @@ namespace CaveCore.SchemaModels
         [BsonElement("content")]
         public string Content { get; set; }
 
+        [BsonElement("image")]
+        public BsonBinaryData Image { get; set; }
+
         [BsonElement("cate_id")]
         public string CateId { get; set; }
 
-        [BsonElement("votes")]
-        public IEnumerable<Vote> Votes {get; set;}     
+        [BsonElement("cate_name")]
+        public string CateName { get; set; }
 
+        [BsonElement("votes")]
+        public IEnumerable<Vote> Votes {get; set;}
 
         [BsonElement("created")]
         public DateTime Created { get; set; }
 
         [BsonElement("creator_id")]
         public string CreatorId { get; set; }
+
+        [BsonElement("creator_name")]
+        public string CreatorName { get; set; }
 
         [BsonElement("comments")]
         public IEnumerable<Comment> Comments { get; set; }
@@ -43,12 +51,15 @@ namespace CaveCore.SchemaModels
         string Id { get; set; }
         string Title { get; set; }
         string Content { get; set; }
-        string CateId {get; set;}
+        BsonBinaryData Image { get; set; }
+        string CateId { get; set; }
+        string CateName { get; set; }
         IEnumerable<Vote> Votes {get; set; }
         IEnumerable<Comment> Comments { get; set; }
         DateTime Created { get; set; }
         string CreatorId { get; set; }
+        string CreatorName { get; set; }
 
- 
+
     }
 }
