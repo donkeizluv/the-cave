@@ -4,8 +4,8 @@ import {
   ADD_POST
 } from "../mutations/post/mutation-types";
 import { posts } from "../getters/post/getter-types";
-// import axios from "axios";
-// import apis from "../apis/apis";
+import axios from "axios";
+import apis from "../apis/apis";
 
 const state = {
   posts: []
@@ -25,15 +25,12 @@ const mutations = {
 };
 
 const actions = {
-  [CREATE]: async ({ commit }, p) => {
+  [CREATE]: async (p) => {
     let post = {
       postTitle: p.title,
-      content: p.text,
-      cateId: p.comments
+      content: p.text
     };
-    // let { data } = await axios.post(apis.create_cave, cave);
-    // cave.id = data;
-    commit(ADD_POST, post);
+    await axios.post(apis.create_post, post);
   },
 
   [GET_ALL]: async () => {
