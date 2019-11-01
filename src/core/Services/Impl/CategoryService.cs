@@ -44,5 +44,11 @@ namespace CaveCore.Services.Impl
                             .Find(u => true)
                             .ToListAsync();
         }
+        public async Task<IEnumerable<ICategory>> GetCateById(string cateId)
+        {
+            return await _db.GetCollection<Category>(_settings.CategoryCollectionName)
+                            .Find(u => u.Id == cateId)
+                            .ToListAsync();
+        }
     }
 }

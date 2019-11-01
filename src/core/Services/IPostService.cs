@@ -9,14 +9,15 @@ namespace CaveCore.Services
     {
         Task<string> Create(PostDto post);
 
-        Task<IEnumerable<IPost>> GetPostsByCateId(string cateId);
+        Task<IEnumerable<IPost>> GetPostsByCateId(string cateId, int? order);
 
-        Task<IEnumerable<IPost>> GetAllPosts();
+        Task<IEnumerable<IPost>> GetAllPosts(int? order);
         
         Task<IPost> GetPostById(string postId);
 
         Task<string> DeletePost(string postId);
-        
-        Task<IPost> AddVote(VoteRequestDto voteRequest);
+
+        Task<IEnumerable<IPost>> SearchAllCate(string searchText);
+		Task<IPost> AddVote(VoteRequestDto voteRequest);
     }
 }

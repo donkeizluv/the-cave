@@ -7,6 +7,11 @@
             Create Your Post
         </v-card-title>
         <v-card-text class="text--primary">
+            <v-text-field
+              v-model.trim="post.title"
+              label="Title"
+              class="input-group--focused mb-4"
+            ></v-text-field>
             <v-textarea
             autocomplete=""
             label="Post"
@@ -46,6 +51,7 @@ export default {
   data: function name() {
     return {
       post: {
+        title: "",
         text: ""
       }
     };
