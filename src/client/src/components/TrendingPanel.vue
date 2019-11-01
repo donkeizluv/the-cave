@@ -1,5 +1,5 @@
 <template>
-  <v-card outlined v-if="posts.length > 0">
+  <v-card outlined>
     <v-row>
       <v-col class="ml-auto">
         <div class=" overline mb-3" >
@@ -17,7 +17,7 @@
       </v-col>
     </v-row>
     
-    <v-card outlined class="overline mb-8" v-for="post in posts" v-bind:key="post.ID">
+    <v-card outlined class="overline mb-8" v-if="posts.length > 0" v-for="post in posts" v-bind:key="post.ID" >
       <v-list-item>
       <!-- <--<v-list-item-avatar color="grey"></v-list-item-avatar>--> 
         <v-list-item-content>
