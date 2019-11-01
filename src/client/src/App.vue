@@ -25,7 +25,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div class="ma-4 pt-4">
-        <v-text-field  color="white" small append-icon="mdi-magnify"></v-text-field>
+        <v-text-field color="white" small append-icon="mdi-magnify"></v-text-field>
       </div>
 
       <v-btn v-if="!isAuthenticated" @click="loginModal = true;" class="ma-2" depressed>Log in</v-btn>
@@ -65,7 +65,12 @@
                   <router-view :key="$route.path"></router-view>
                 </v-col>
                 <v-col class="pr-2 ma-0" cols="3">
-                  <cate-panel :categories="categories" @click:newcat="cateModal = true;" />
+                  <div class="mb-4">
+                    <cate-info />
+                  </div>
+                  <div>
+                    <cate-panel :categories="categories" @click:newcat="cateModal = true;" />
+                  </div>
                 </v-col>
               </v-row>
             </v-container>
@@ -95,6 +100,7 @@ import LoginModal from "./components/LoginModal";
 import RegisterModal from "./components/RegModal";
 import NewCateModal from "./components/NewCateModal";
 import CatePanel from "./components/CatePanel";
+import CateInfo from "./components/CateInfo";
 import ProfileModal from "./components/ProfileModal";
 // import Post from "./components/Post";
 import { mapActions } from "vuex";
@@ -109,8 +115,8 @@ export default {
     NewCateModal,
     RegisterModal,
     CatePanel,
-    ProfileModal
-    // Post
+    ProfileModal,
+    CateInfo
   },
   computed: {
     ...mapGetters([isAuthenticated])
@@ -119,7 +125,7 @@ export default {
     await this.REFRESH_LANDING();
   },
   data: () => ({
-    appName: "The Cave",
+    appName: "KMS Cave",
     snackbar: {
       show: false,
       color: "success",
