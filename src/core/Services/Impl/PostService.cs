@@ -21,26 +21,39 @@ namespace CaveCore.Services.Impl
         private readonly IMongoDatabase _db;
         private readonly IMapper _mapper;
         private readonly IMongoCollection<Post> _collection;
+        private readonly ICategoryService _cateservice;
 
         public PostService(IOptions<DbSettings> option,
                             IMapper mapper,
                             IMongoClient dbClient,
-                            ClaimsPrincipal claimsPrincipal) : base(claimsPrincipal)
+                            ClaimsPrincipal claimsPrincipal,
+                            ICategoryService service) : base(claimsPrincipal)
         {
             _settings = option.Value;
             _client = dbClient;
             _db = _client.GetDatabase(_settings.DatabaseName);
             _mapper = mapper;
             _collection = _db.GetCollection<Post>(_settings.PostCollectionName);
+            _cateservice = service;
         }
 
         public async Task<string> Create(PostDto post)
         {
             var postCollection = _db.GetCollection<Post>(_settings.PostCollectionName);
             var newPost = _mapper.Map<Post>(post);
+            ICategory cate = await _cateservice.GetCateById(post.CateId);
             newPost.CreatorId = CurrentId;
+            newPost.CreatorName = CurrentUsername;
+            newPost.CateName = cate.CateName;
             await postCollection.InsertOneAsync(_mapper.Map<Post>(newPost));
             return newPost.Id;
+        }
+
+        public async Task<string> Update(PostDto post)
+        {
+            var update = Builders<Post>.Update.Set(p => p.Content, post.Content).Set(p => p.Title, post.Title);
+            await _collection.UpdateOneAsync(p => p.Id == post.Id, update);
+            return post.Id;
         }
 
         public async Task<IEnumerable<IPost>> GetPostsByCateId(string cateId, int? order)
@@ -156,6 +169,14 @@ namespace CaveCore.Services.Impl
             await _collection.UpdateOneAsync(p => p.Id == reqPosId, update);
 
             return newComment.Id;
+        }
+
+        public async Task<string> UpdateComment(CommentDto comment)
+        {
+            var update = Builders<Post>.Update.Set(p => p.Comments.Where(c => c.Id == comment.Id).First().Content, comment.Content);
+            await _collection.UpdateOneAsync(p => p.Id == comment.PostId, update);
+
+            return comment.Id;
         }
     }
 }

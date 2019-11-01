@@ -9,6 +9,6 @@ namespace CaveCore.Services
     {
         Task<string> Create(CategoryDto category);
         Task<IEnumerable<ICategory>> GetAllCates();
-        Task<IEnumerable<ICategory>> GetCateById(string cateId);
+        Task<ICategory> GetCateById(string cateId);
     }
 }

@@ -8,6 +8,7 @@ namespace CaveCore.Services
     public interface IPostService
     {
         Task<string> Create(PostDto post);
+        Task<string> Update(PostDto post);
 
         Task<IEnumerable<IPost>> GetPostsByCateId(string cateId, int? order);
 
@@ -23,6 +24,7 @@ namespace CaveCore.Services
         Task<IEnumerable<IPost>> SearchPostWithCateId(string cateId, string searchText);
 
         Task<string> AddComment(CommentDto comment);
+        Task<string> UpdateComment(CommentDto comment);
 
     }
 }
