@@ -9,8 +9,8 @@ namespace CaveCore.SchemaModels
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        [BsonElement("catName")]
-        public string CatName { get; set; }
+        [BsonElement("cateName")]
+        public string CateName { get; set; }
         [BsonElement("desc")]
         public string Description { get; set; }
         [BsonElement("created")]
@@ -27,7 +27,7 @@ namespace CaveCore.SchemaModels
     public interface ICategory
     {
         string Id { get; set; }
-        string CatName { get; set; }
+        string CateName { get; set; }
         string Description { get; set; }
         DateTime Created { get; set; }
         string CreatorId { get; set; }

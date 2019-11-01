@@ -10,8 +10,8 @@ namespace CaveCore.SchemaModels
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
         
-        [BsonElement("postTitle")]
-        public string PostTitle { get; set; }
+        [BsonElement("title")]
+        public string Title { get; set; }
 
         [BsonElement("content")]
         public string Content { get; set; }
@@ -40,7 +40,7 @@ namespace CaveCore.SchemaModels
     public interface IPost
     {
         string Id { get; set; }
-        string PostTitle { get; set; }
+        string Title { get; set; }
         string Content { get; set; }
         string CateId {get; set;}
         long UpVotes {get; set;}

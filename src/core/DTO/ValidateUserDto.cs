@@ -5,7 +5,7 @@ using CaveCore.SchemaModels;
 
 namespace CaveCore.DTO
 {
-    public class UserDto
+    public class ValidateUserDto
     {
         public string Id { get; set; }
 
@@ -14,12 +14,5 @@ namespace CaveCore.DTO
 
         [Required]
         public string Pwd { get; set; }
-
-        [Required]
-        public string Email { get; set; }
-
-        public IEnumerable<UserRoles> Roles { get; set; }
-
-        public DateTime Created { get; set; }
     }
 }

@@ -12,26 +12,27 @@ namespace CaveServer.Controllers
 {
     [ApiController]
     [Authorize]
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     public class PostController : ControllerBase
     {
-
         private readonly IPostService _service;
         private readonly ILogger<PostController> _logger;
         private readonly IMapper _mapper;
 
-        public PostController(ILogger<PostController> logger, IPostService service, IMapper mapper)
+        public PostController(ILogger<PostController> logger,
+                            IPostService service,
+                            IMapper mapper)
         {
             _logger = logger;
             _service = service;
             _mapper = mapper;
         }
 
-        [HttpGet]
+        [HttpGet("cate/{cateId}")]
         [AllowAnonymous]
-        public async Task<IEnumerable<PostDto>> GetAllPostWithCateId(string cateId)
+        public async Task<IEnumerable<PostDto>> GetPostsByCateId(string cateId)
         {
-            var posts = await _service.GetAllPostByCateId(cateId);
+            var posts = await _service.GetPostsByCateId(cateId);
             return _mapper.Map<IEnumerable<PostDto>>(posts);
         }
 
@@ -40,11 +41,11 @@ namespace CaveServer.Controllers
         public async Task<IEnumerable<PostDto>> GetAllPost()
         {
 
-            var posts = await _service.GetAllPost();
+            var posts = await _service.GetAllPosts();
             return _mapper.Map<IEnumerable<PostDto>>(posts);
         }
 
-        [HttpGet]
+        [HttpGet("{postId}")]
         [AllowAnonymous]
         public async Task<PostDto> GetPostById(string postId)
         {
@@ -64,8 +65,8 @@ namespace CaveServer.Controllers
             }
         }
 
-        [HttpPost]
-        public async Task<IActionResult> DeletePost(string postId)
+        [HttpDelete("{postId}")]
+        public async Task<IActionResult> Delete(string postId)
         {
             try
             {

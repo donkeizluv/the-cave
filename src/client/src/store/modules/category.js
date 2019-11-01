@@ -26,14 +26,14 @@ const mutations = {
 
 const actions = {
   [CREATE]: async ({ commit }, p) => {
-    let cat = {
+    let cate = {
       id: null,
-      catName: p.catName,
+      cateName: p.cateName,
       description: p.description
     };
-    let { data } = await axios.post(apis.create_categories, cat);
-    cat.id = data;
-    commit(ADD_CATEGORY, cat);
+    let { data } = await axios.post(apis.create_categories, cate);
+    cate.id = data;
+    commit(ADD_CATEGORY, cate);
   },
 
   [GET_ALL]: async () => {

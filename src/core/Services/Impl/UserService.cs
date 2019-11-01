@@ -14,7 +14,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 
-namespace CaveCore.Services
+namespace CaveCore.Services.Impl
 {
     public class UserService : IUserService
     {

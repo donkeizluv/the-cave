@@ -1,15 +1,20 @@
 <template>
-  <v-dialog :value="show" @click:outside="hideModal" width="400px">
+  <v-dialog :value="show" persistent width="400px">
     <v-card>
       <v-card-title>
         <span class="headline">Create new category</span>
+        <v-spacer></v-spacer>
+        <span class="mb-4">
+          <v-btn icon @click="hideModal">
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+        </span>
       </v-card-title>
       <v-card-text>
         <v-form v-model="formValid">
-          <v-text-field v-model.trim="cat.catName" maxlength="24" :rules="rules.name" label="Name">
-          </v-text-field>
+          <v-text-field v-model.trim="cate.cateName" maxlength="24" :rules="rules.name" label="Name"></v-text-field>
           <v-text-field
-            v-model.trim="cat.description"
+            v-model.trim="cate.description"
             maxlength="64"
             :rules="rules.desc"
             label="Description"
@@ -23,10 +28,14 @@
       >
         <span>{{dialogMessage}}</span>
       </div>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn @click="createCat" color="primary" :disabled="!canSubmit">Create</v-btn>
-        <v-btn @click="hideModal">Cancel</v-btn>
+      <v-card-actions class="pa-0 justify-center">
+        <v-btn
+          @click="createCate"
+          :loading="isLoading"
+          class="mb-6"
+          color="primary"
+          :disabled="!canSubmit"
+        >Create</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -53,15 +62,15 @@ export default {
   },
   data: function name() {
     return {
-      cat: {
-        catName: null,
+      cate: {
+        cateName: null,
         description: null
       },
       rules: {
         name: [
           value => validationRules.requiredValue(value),
-          value => validationRules.noSpecialButSpace(value),
-          value => validationRules.minCharacter(value, 6),
+          value => validationRules.noSpecial(value),
+          value => validationRules.minCharacter(value, 4),
           value => validationRules.maxCharacter(value, 24)
         ],
         desc: [value => validationRules.maxCharacter(value, 64)]
@@ -75,7 +84,7 @@ export default {
   methods: {
     ...mapActions(moduleNames.category, [CREATE]),
     clearAll() {
-      this.cat = { catName: null, description: null };
+      this.cate = { cateName: null, description: null };
       this.isError = false;
       this.dialogMessage = null;
     },
@@ -83,11 +92,11 @@ export default {
       this.clearAll();
       this.$emit("click:outside");
     },
-    async createCat() {
+    async createCate() {
       if (!this.canSubmit) return;
       try {
         this.isLoading = true;
-        await this.CREATE(this.cat);
+        await this.CREATE(this.cate);
         this.hideModal();
         //NYI: go to this cat
       } catch (error) {

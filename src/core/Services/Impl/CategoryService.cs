@@ -8,7 +8,7 @@ using CaveCore.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace CaveCore.Services
+namespace CaveCore.Services.Impl
 {
     public class CategoryService : ICategoryService
     {
@@ -25,17 +25,17 @@ namespace CaveCore.Services
             _mapper = mapper;
         }
 
-        public async Task<string> Create(CategoryDto cat)
+        public async Task<string> Create(CategoryDto cate)
         {
             var catCollection = _db.GetCollection<Category>(_settings.CategoryCollectionName);
-            var exist = await catCollection.Find(c => c.CatName == cat.CatName).AnyAsync();
+            var exist = await catCollection.Find(c => c.CateName == cate.CateName).AnyAsync();
             if (exist)
             {
                 throw new BussinessException("Category with same name already existed");
             }
-            var newCat = _mapper.Map<Category>(cat);
-            await catCollection.InsertOneAsync(newCat);
-            return newCat.Id;
+            var newCate = _mapper.Map<Category>(cate);
+            await catCollection.InsertOneAsync(newCate);
+            return newCate.Id;
         }
 
         public async Task<IEnumerable<ICategory>> GetAllCates()

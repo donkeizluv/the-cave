@@ -16,11 +16,11 @@ namespace CaveCore.Profiles
             CreateMap<CategoryDto, Category>()
                 .ForMember(dto => dto.Created, opt => opt.AddTransform(s => s == default(DateTime) ? DateTime.UtcNow : s));
             CreateMap<ICategory, CategoryDto>();
-
             CreateMap<PostDto, Post>()
                 .ForMember(dto => dto.Created, opt => opt.AddTransform(s => s == default(DateTime) ? DateTime.UtcNow : s));
             CreateMap<IPost, PostDto>();
             CreateMap<IUserValidateResult, UserValidateResultDto>();
+            CreateMap<ValidateUserDto, UserDto>();
         }
     }
 }

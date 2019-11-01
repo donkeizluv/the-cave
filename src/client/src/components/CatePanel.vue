@@ -17,13 +17,20 @@
       </v-list-item-content>
     </v-list-item>
     <!-- <v-divider class="mx-4"></v-divider> -->
-    <template v-for="cat in categories">
-      <v-list-item :key="cat.id" class="text-center">
+    <template v-for="cate in categories">
+      <v-list-item :key="cate.id" class="text-center">
         <v-list-item-content>
-          <span>{{cat.catName}}</span>
+          <v-btn
+            class="no-texttransform cate-name"
+            link
+            text
+            color="primary"
+            small
+            @click="$router.push({ name: 'category', params: { cate: cate.cateName }})"
+          >{{cate.cateName}}</v-btn>
         </v-list-item-content>
       </v-list-item>
-      <v-divider class="mx-4" :key="cat.id"></v-divider>
+      <v-divider class="mx-4" :key="`${cate.id}1`"></v-divider>
     </template>
   </v-card>
 </template>
@@ -33,9 +40,8 @@ import moduleNames from "../store/modules/module-names";
 import { isAuthenticated } from "../store/getters/getter-types";
 import { mapGetters } from "vuex";
 import { categories } from "../store/getters/category/getter-types";
-// import { CREATE } from "../store/actions/category/action-types";
 export default {
-  name: "CatPanel",
+  name: "CatePanel",
   props: {},
   computed: {
     ...mapGetters([isAuthenticated]),
@@ -49,3 +55,6 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+@import "../styles/modules/cat-panel.scss";
+</style>

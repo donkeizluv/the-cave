@@ -9,7 +9,7 @@ namespace CaveCore.DTO
         public string Id { get; set; }
 
         [Required]
-        public string PostTitle { get; set; }
+        public string Title { get; set; }
 
         [Required]
         public string Content { get; set; }
