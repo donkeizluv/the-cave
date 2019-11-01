@@ -7,5 +7,7 @@ export default {
   create_user: endpoint + "/api/user",
   get_all_posts: endpoint + "/api/post",
   create_post: endpoint + "/api/post/create",
-  get_landing: endpoint + "/api/landing"
+  get_landing: endpoint + "/api/landing",
+  get_posts_by_cate: endpoint + "/api/post/getPostsByCate",
+  get_selected_post: endpoint + "/api/post/getSelectedPost"
 };
