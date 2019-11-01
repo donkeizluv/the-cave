@@ -67,6 +67,7 @@ import moduleNames from "../store/modules/module-names";
 import { mapGetters } from "vuex";
 import router from '../router';
 export default {
+  name: "TrendingPanel",
   props: {
     cate: {
       type: String,

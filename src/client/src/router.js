@@ -3,6 +3,7 @@ import Router from "vue-router";
 import Trending from "./components/TrendingPanel.vue";
 import CreatePost from "./components/CreatePostPanel.vue";
 import Post from "./components/Post.vue";
+import CommentTree from "./components/CommentTree.vue";
 
 Vue.use(Router);
 

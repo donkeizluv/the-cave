@@ -100,6 +100,7 @@ namespace CaveServer
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseDeveloperExceptionPage();
 
             app.UseHttpsRedirection()
                 .UseRouting()

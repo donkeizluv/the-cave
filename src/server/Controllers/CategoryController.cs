@@ -46,7 +46,6 @@ namespace CaveServer.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
         }
     }
 }

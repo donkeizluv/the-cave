@@ -50,9 +50,10 @@ namespace CaveServer.Extentions
             {
                 services.Configure<DbSettings>(s => {
                     // TODO: check variable availablity
+                    s.DatabaseName = config.GetValue(typeof(string), "DATABASE_NAME").ToString();
                     s.UserCollectionName = config.GetValue(typeof(string), "USER_COLLECTION_NAME").ToString();
                     s.CategoryCollectionName = config.GetValue(typeof(string), "CATEGORY_COLLECTION_NAME").ToString();
-                    s.DatabaseName = config.GetValue(typeof(string), "DATABASE_NAME").ToString();
+                    s.PostCollectionName = config.GetValue(typeof(string), "POST_COLLECTION_NAME").ToString();
                 });
                 services.Configure<AppSettings>(s => {
                     s.JwtSecret = config.GetValue(typeof(string), "JWTSECRET").ToString();

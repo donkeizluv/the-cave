@@ -1,4 +1,4 @@
-import { CREATE, GET_ALL } from "../actions/post/action-types";
+import { CREATE, GET_ALL, NEW_COMMENT } from "../actions/post/action-types";
 import {
   SET_POSTS,
   ADD_POST
@@ -38,6 +38,9 @@ const actions = {
   },
 
   [GET_ALL]: async () => {
+    return true;
+  },
+  [NEW_COMMENT]: async (c, p) => {
     return true;
   }
 };
