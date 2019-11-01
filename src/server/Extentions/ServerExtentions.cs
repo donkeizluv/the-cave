@@ -1,3 +1,4 @@
+using System.Text;
 using CaveCore.Settings;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -22,8 +23,8 @@ namespace CaveServer.Extentions
             // use env vars
             if (env.IsProduction())
             {
-                 services.AddSingleton<IMongoClient>(
-                           s => new MongoClient(config.GetEnvDbConnection()));
+                services.AddSingleton<IMongoClient>(
+                          s => new MongoClient(config.GetEnvDbConnection()));
             }
             // add conventions
             // Set up MongoDB conventions
@@ -48,20 +49,33 @@ namespace CaveServer.Extentions
             // use env vars
             if (env.IsProduction())
             {
-                services.Configure<DbSettings>(s => {
+                services.Configure<DbSettings>(s =>
+                {
                     // TODO: check variable availablity
                     s.DatabaseName = config.GetValue(typeof(string), "DATABASE_NAME").ToString();
                     s.UserCollectionName = config.GetValue(typeof(string), "USER_COLLECTION_NAME").ToString();
                     s.CategoryCollectionName = config.GetValue(typeof(string), "CATEGORY_COLLECTION_NAME").ToString();
                     s.PostCollectionName = config.GetValue(typeof(string), "POST_COLLECTION_NAME").ToString();
                 });
-                services.Configure<AppSettings>(s => {
+                services.Configure<AppSettings>(s =>
+                {
                     s.JwtSecret = config.GetValue(typeof(string), "JWTSECRET").ToString();
                 });
             }
             return services;
         }
-
+        public static byte[] GetSigningKey(IWebHostEnvironment env, IConfiguration config)
+        {
+            if (env.IsDevelopment())
+            {
+                return Encoding.ASCII.GetBytes(config.GetSection("AppSettings:JwtSecret").Value);
+            }
+            if (env.IsProduction())
+            {
+                return Encoding.ASCII.GetBytes(config.GetValue(typeof(string), "JWTSECRET").ToString());
+            }
+            return null;
+        }
         private static string GetEnvDbConnection(this IConfiguration config)
         {
             return config.GetValue(typeof(string), "CONNSTR").ToString();

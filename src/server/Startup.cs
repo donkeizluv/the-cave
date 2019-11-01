@@ -48,7 +48,7 @@ namespace CaveServer
             });
             services.AddControllers();
             // add auth
-            var key = Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:JwtSecret").Value);
+            var key = ServerExtentions.GetSigningKey(CurrentEnvironment, Configuration);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -57,7 +57,8 @@ namespace CaveServer
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey = new SymmetricSecurityKey(key),
                         ValidateIssuer = false,
-                        ValidateAudience = false
+                        ValidateAudience = false,
+                        ValidateActor = false
                     };
                 });
             // routing conventions
