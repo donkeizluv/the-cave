@@ -19,5 +19,8 @@ namespace CaveCore.Services
 
         Task<IEnumerable<IPost>> SearchAllCate(string searchText);
 		Task<IPost> AddVote(VoteRequestDto voteRequest);
+
+        Task<IEnumerable<IPost>> SearchPostWithCateId(string cateId, string searchText);
+        
     }
 }
