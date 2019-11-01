@@ -2,6 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import Trending from "./components/TrendingPanel.vue";
 import CreatePost from "./components/CreatePostPanel.vue";
+import Post from "./components/Post.vue";
 
 Vue.use(Router);
 
@@ -24,6 +25,11 @@ export default new Router({
       name: "category",
       component: Trending,
       props: r => r.params
+    }, 
+    {
+      path: "/post/info",
+      name: "post",
+      component: Post
     }
     // {
     //   path: '/about',

@@ -30,18 +30,18 @@ namespace CaveServer.Controllers
 
         [HttpGet("cate/{cateId}")]
         [AllowAnonymous]
-        public async Task<IEnumerable<PostDto>> GetPostsByCateId(string cateId)
+        public async Task<IEnumerable<PostDto>> GetPostsByCateId(string cateId, int? order)
         {
-            var posts = await _service.GetPostsByCateId(cateId);
+            var posts = await _service.GetPostsByCateId(cateId, order);
             return _mapper.Map<IEnumerable<PostDto>>(posts);
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IEnumerable<PostDto>> GetAllPost()
+        public async Task<IEnumerable<PostDto>> GetAllPost(int? order)
         {
 
-            var posts = await _service.GetAllPosts();
+            var posts = await _service.GetAllPosts(order);
             return _mapper.Map<IEnumerable<PostDto>>(posts);
         }
 
@@ -52,7 +52,7 @@ namespace CaveServer.Controllers
             var post = await _service.GetPostById(postId);
             return _mapper.Map<PostDto>(post);
         }
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody]PostDto post)
         {
             try
@@ -79,5 +79,24 @@ namespace CaveServer.Controllers
 
         }
 
-    }
+        [HttpGet("search")]
+        [AllowAnonymous]
+        public async Task<IEnumerable<PostDto>> GetPostsByTilte([FromQuery]string cateId, [FromQuery]string searchText)
+        {
+            var posts = await _service.SearchPostWithCateId(cateId, searchText);
+            return _mapper.Map<IEnumerable<PostDto>>(posts);
+        }
+        [HttpPost("addvote")]
+        public async Task<IActionResult> AddVote([FromBody]VoteRequestDto voteReq)
+        {
+            try
+            {
+                var post = await _service.AddVote(voteReq);
+                return Ok(_mapper.Map<PostDto>(post));
+            }
+            catch (BussinessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }    }
 }

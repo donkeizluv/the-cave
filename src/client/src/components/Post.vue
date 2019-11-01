@@ -1,5 +1,4 @@
 <template>
-  <v-dialog :value="show" @click:outside="hideDialog" max-width="700px" width="700px" height="1090px">
     <v-card>
       <v-card-title>
         <span class="headline mb-4">{{ cave.title }}</span>
@@ -20,30 +19,43 @@
         <v-list-item>
           <v-list-item-content>
             <div class="overline mb-4">{{ comment.name }}</div>
-            <v-list-item-subtitle>{{ comment.content }}
+            <v-list-item-subtitle>
+              {{ comment.content }}
               <v-btn icon style="float:right;">
                 <v-icon>mdi-heart-broken</v-icon>
               </v-btn>
               <v-btn icon style="float:right;">
                 <v-icon>mdi-heart</v-icon>
               </v-btn>
+              <v-card-text>
+                <v-text-field
+                autocomplete=""
+                label="Comment"
+                v-model="newComment"
+                ></v-text-field>
+              </v-card-text>
             </v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
       </v-card>
+      <v-card>
+        <v-card-text>
+          <v-text-field
+          autocomplete=""
+          label="Comment"
+          v-model="newComment"
+          ></v-text-field>
+        </v-card-text>
+      </v-card>
     </v-card>
-  </v-dialog>
 </template>
 
 <script>
 // import { LOGIN } from "../store/actions/action-types";
 // import { mapActions } from "vuex";
 export default {
-  name: "CaveModal",
+  name: "Post",
   props: {
-    show: {
-      required: true
-    }
   },
   computed: {
   },
@@ -63,19 +75,11 @@ export default {
           name: "Annonymousse",
           content: "Negative Comments"
         }]
-      }
+      },
+      newComment: ""
     };
   },
   methods: {
-    clearAll() {
-      this.title = null;
-      this.text = null;
-      this.comments = null;
-    },
-    hideDialog() {
-      this.clearAll();
-      this.$emit("click:outside");
-    }
   }
 };
 </script>
