@@ -15,7 +15,7 @@ const state = {
 
 const getters = {
   [categories]: s => s.categories,
-  selectedCate: s => s.selectedCate
+  [selectedCate]: s => s.selectedCate
 };
 
 const mutations = {

@@ -1,7 +1,6 @@
 export const CREATE = "CREATE";
 export const ADD = "ADD";
 export const GET_ALL = "GET_ALL";
-export const NEW_COMMENT = "NEW_COMMENT";
 export const REFRESH_POSTS_BY_CATE = "REFRESH_POSTS_BY_CATE";
 export const GET_SELECTED_POST = "GET_SELECTED_POST";
 export const ADD_COMMENT = "ADD_COMMENT";

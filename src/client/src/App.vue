@@ -10,11 +10,24 @@
     <register-modal :show.sync="regModal" @click:outside="regModal = false;" />
     <new-cate-modal :show.sync="cateModal" @click:outside="cateModal = false;" />
     <profile-modal :show.sync="profileModal" @click:outside="profileModal = false;" />
-    <v-app-bar flat app clipped-left>
+    <v-app-bar flat app clipped-left color="primary">
       <v-toolbar-title>
-        <v-btn link text large rounded :ripple="false" @click="$router.push({ name: 'default'})">{{appName}}</v-btn>
+        <v-btn
+          link
+          text
+          large
+          rounded
+          :ripple="false"
+          color="white"
+          class="app-name"
+          @click="$router.push({ name: 'default'})"
+        >{{appName}}</v-btn>
       </v-toolbar-title>
       <v-spacer></v-spacer>
+      <div class="ma-4 pt-4">
+        <v-text-field  color="white" small append-icon="mdi-magnify"></v-text-field>
+      </div>
+
       <v-btn v-if="!isAuthenticated" @click="loginModal = true;" class="ma-2" depressed>Log in</v-btn>
       <v-btn v-if="!isAuthenticated" @click="regModal = true;" class="ma-2" depressed>Register</v-btn>
       <v-btn
@@ -26,7 +39,7 @@
       <v-menu left bottom>
         <template v-slot:activator="{ on }">
           <v-btn icon v-on="on">
-            <v-icon>mdi-account-circle-outline</v-icon>
+            <v-icon color="white">mdi-account-circle</v-icon>
           </v-btn>
         </template>
         <v-list>
@@ -43,14 +56,21 @@
 
     <v-content>
       <v-container fluid>
-        <v-row align="start" justify="start">
-          <v-col cols="3"></v-col>
-          <v-col cols="7" class="shrink">
-            <router-view :key="$route.path"></router-view>
+        <v-row dense align="start" justify="start">
+          <v-col cols="2"></v-col>
+          <v-col cols="8" class="shrink">
+            <v-container fluid>
+              <v-row>
+                <v-col class="pl-2 ma-0" cols="9">
+                  <router-view :key="$route.path"></router-view>
+                </v-col>
+                <v-col class="pr-2 ma-0" cols="3">
+                  <cate-panel :categories="categories" @click:newcat="cateModal = true;" />
+                </v-col>
+              </v-row>
+            </v-container>
           </v-col>
-          <v-col cols="2">
-            <cate-panel :categories="categories" @click:newcat="cateModal = true;" />
-          </v-col>
+          <v-col cols="2"></v-col>
         </v-row>
       </v-container>
     </v-content>
@@ -64,6 +84,10 @@
 </template>
 
 <style scoped>
+.app-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
 </style>
 
 <script>
