@@ -98,5 +98,19 @@ namespace CaveServer.Controllers
             {
                 return BadRequest(ex.Message);
             }
-        }    }
+        }
+        [HttpPost("addcomment")]
+        public async Task<IActionResult> AddComment([FromBody]CommentDto comment)
+        {
+            try
+            {
+                var id = await _service.AddComment(comment);
+                return Ok(id);
+            }
+            catch (BussinessException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    }
 }

@@ -1,6 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using CaveCore.SchemaModels;
+using System.Collections.Generic;
 
 namespace CaveCore.DTO
 {
@@ -13,13 +13,15 @@ namespace CaveCore.DTO
 
         [Required]
         public string Content { get; set; }
-        
+
         [Required]
-        public string CateId {get;set;}
+        public string CateId { get; set; }
 
-        public long UpVotes {get;set;}
+        public long UpVotes { get; set; }
 
-        public long DownVotes {get; set;}
+        public long DownVotes { get; set; }
+
+        public IEnumerable<CommentDto> Comments {get; set;}
 
         public DateTime Created { get; set; }
 
