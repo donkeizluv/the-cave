@@ -30,19 +30,19 @@ namespace CaveServer.Controllers
 
         [HttpGet("{cateId}")]
         [AllowAnonymous]
-        public async Task<IEnumerable<PostDto>> GetPostsByCateId([FromQuery]string cateId, int? order)
+        public async Task<IEnumerable<PostListDto>> GetPostsByCateId([FromQuery]string cateId, int? order)
         {
             var posts = await _service.GetPostsByCateId(cateId, order);
-            return _mapper.Map<IEnumerable<PostDto>>(posts);
+            return _mapper.Map<IEnumerable<PostListDto>>(posts);
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IEnumerable<PostDto>> GetAllPost(int? order)
+        public async Task<IEnumerable<PostListDto>> GetAllPost(int? order)
         {
 
             var posts = await _service.GetAllPosts(order);
-            return _mapper.Map<IEnumerable<PostDto>>(posts);
+            return _mapper.Map<IEnumerable<PostListDto>>(posts);
         }
 
         [HttpGet("{postId}")]
@@ -95,10 +95,10 @@ namespace CaveServer.Controllers
 
         [HttpGet("search")]
         [AllowAnonymous]
-        public async Task<IEnumerable<PostDto>> GetPostsByTilte([FromQuery]string cateId, [FromQuery]string searchText)
+        public async Task<IEnumerable<PostListDto>> GetPostsByTilte([FromQuery]string cateId, [FromQuery]string searchText)
         {
             var posts = await _service.SearchPostWithCateId(cateId, searchText);
-            return _mapper.Map<IEnumerable<PostDto>>(posts);
+            return _mapper.Map<IEnumerable<PostListDto>>(posts);
         }
         [HttpPost("addvote")]
         public async Task<IActionResult> AddVote([FromBody]VoteRequestDto voteReq)
