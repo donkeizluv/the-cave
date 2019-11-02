@@ -31,9 +31,11 @@ const actions = {
   [CREATE]: async (_, p) => {
     let post = {
       title: p.title,
-      content: p.text,
-      cateID: p.cateID
+      content: p.content,
+      cateId: '5dbc104dd9264400045aaafd',
+      image: !p.imgData ? null : p.imgData.split(',')[1]
     };
+    console.log(post);
     let { data } = await axios.post(apis.create_post, post);
     return data;
   },
@@ -45,7 +47,7 @@ const actions = {
   [REFRESH_POSTS_BY_CATE]: async ({ commit }, payload) => {
     let data = await axios.get(`${apis.get_posts_by_cate}/${payload}`);
     console.log(data);
-    commit(`${SET_POSTS}`, data.listOfPosts);
+    commit(`${SET_POSTS}`, data);
   },
 
   [GET_SELECTED_POST]: async (_, payload) => {

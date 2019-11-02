@@ -17,7 +17,7 @@
           <v-text-field small append-icon="mdi-magnify"></v-text-field>
         </div>
       </v-row>
-    </v-col> -->
+    </v-col>-->
     <v-col class="pa-0 ma-0">
       <v-row dense v-for="post in posts" v-bind:key="post.ID">
         <v-card :width="'100%'" flat outlined class="overline mb-4">
