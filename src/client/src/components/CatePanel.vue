@@ -49,10 +49,7 @@ export default {
     ...mapActions(moduleNames.category, [REFRESH_SELECTED_CATEGORY]),
     onSelectCate(cate) {
       console.log(cate);
-<<<<<<< Updated upstream
-=======
       this.REFRESH_SELECTED_CATEGORY(cate.id);
->>>>>>> Stashed changes
       this.REFRESH_POSTS_BY_CATE(cate.id);
       this.$router.push({ name: 'category', params: { cate: cate.cateName }});
     }
