@@ -1,17 +1,27 @@
 <template>
   <v-card v-if="post">
     <v-card-subtitle class="overline pb-2">Posted By {{ post.createdBy }} {{ createdTimeAgo }}</v-card-subtitle>
-    <v-card-title class="display-1 pt-0 font-weight-bold">{{ post.title }}</v-card-title>
+    <v-card-title class="headline pt-0">{{ post.title }}</v-card-title>
     <v-card-text class="black--text diaplay">
-      <span v-html="post.content" />
+      <span class="white--text" v-html="post.content" />
     </v-card-text>
     <v-container>
       <v-row justify="end" dense>
-        <v-btn @click="addVote(post.id, 1)" icon v-ripple="{ class: 'red--text' }">
+        <v-btn
+          @click="addVote(post.id, 1)"
+          icon
+          v-ripple="{ class: 'red--text' }"
+          :disabled="!isAuthenticated"
+        >
           <v-icon color="red lighten-2">mdi-heart</v-icon>
         </v-btn>
         <span class="overline mt-2">{{post.upVotes}}</span>
-        <v-btn @click="addVote(post.id, 2)" icon v-ripple="{ class: 'red--text' }">
+        <v-btn
+          @click="addVote(post.id, 2)"
+          icon
+          v-ripple="{ class: 'red--text' }"
+          :disabled="!isAuthenticated"
+        >
           <v-icon color="red lighten-2">mdi-heart-broken</v-icon>
         </v-btn>
         <span class="overline mt-2">{{post.downVotes}}</span>
@@ -50,7 +60,8 @@ import {
   ADD_COMMENT,
   ADD_VOTE
 } from "../store/actions/post/action-types";
-import { mapActions } from "vuex";
+import { isAuthenticated } from "../store/getters/getter-types";
+import { mapActions, mapGetters } from "vuex";
 import moduleNames from "../store/modules/module-names";
 import CommentTree from "./CommentTree.vue";
 export default {
@@ -70,6 +81,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([isAuthenticated]),
     createdTimeAgo() {
       return timeAgo.format(new Date(this.post.created));
     }

@@ -1,3 +1,3 @@
 export const SET_CATEGORIES = "SET_CATEGORIES";
 export const ADD_CATEGORY = "ADD_CATEGORY";
-export const SET_SELECTED_CATE = "SET_SELECTED_CATE";
+export const SELECTED_CATE = "SELECTED_CATE";

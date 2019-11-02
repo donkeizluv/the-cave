@@ -37,7 +37,7 @@ const actions = {
     let post = {
       title: p.title,
       content: p.content,
-      cateId: '5dbba8f82f5db91bf8cfd010',
+      cateId: p.cateID,
       image: !p.imgData ? null : p.imgData.split(',')[1]
     };
     console.log(post);
@@ -50,7 +50,7 @@ const actions = {
   },
 
   [REFRESH_POSTS_BY_CATE]: async ({ commit }, payload) => {
-    let { data } = await axios.get(`${apis.get_posts_by_cate}/${payload}`);
+    let { data } = await axios.get(`${apis.refresh_posts_by_cate}/${payload}`);
     commit(`${SET_POSTS}`, data);
   },
 

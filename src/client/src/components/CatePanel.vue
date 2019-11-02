@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-auto" outlined>
     <div class="overline ma-4">
-      Categories
+      Caves
       <v-btn class="mb-1" small icon :disabled="!isAuthenticated" @click="$emit('click:newcat')">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
@@ -30,10 +30,11 @@ import moduleNames from "../store/modules/module-names";
 import { isAuthenticated } from "../store/getters/getter-types";
 import { mapGetters, mapActions } from "vuex";
 import { categories } from "../store/getters/category/getter-types";
+import { REFRESH_POSTS_BY_CATE } from "../store/actions/post/action-types";
 import {
-  REFRESH_POSTS_BY_CATE
-} from "../store/actions/post/action-types";
-import { REFRESH_SELECTED_CATEGORY } from '../store/actions/category/action-types';
+  GET_SELECTED_CATEGORY,
+  SET_SELECTED_CATE
+} from "../store/actions/category/action-types";
 export default {
   name: "CatePanel",
   props: {},
@@ -41,17 +42,20 @@ export default {
     ...mapGetters([isAuthenticated]),
     ...mapGetters(moduleNames.category, [categories])
   },
-  data: function name() {
+  data() {
     return {};
   },
   methods: {
     ...mapActions(moduleNames.post, [REFRESH_POSTS_BY_CATE]),
-    ...mapActions(moduleNames.category, [REFRESH_SELECTED_CATEGORY]),
-    onSelectCate(cate) {
-      console.log(cate);
-      this.REFRESH_SELECTED_CATEGORY(cate.id);
-      this.REFRESH_POSTS_BY_CATE(cate.id);
-      this.$router.push({ name: 'category', params: { cate: cate.cateName }});
+    ...mapActions(moduleNames.category, [
+      GET_SELECTED_CATEGORY,
+      SET_SELECTED_CATE
+    ]),
+    async onSelectCate(cate) {
+      await this.REFRESH_POSTS_BY_CATE(cate.id);
+      let cataData = await this.GET_SELECTED_CATEGORY(cate.id);
+      await this.SET_SELECTED_CATE(cataData);
+      this.$router.push({ name: "category", params: { cate: cate.cateName } });
     }
   }
 };
