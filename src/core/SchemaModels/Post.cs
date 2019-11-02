@@ -18,7 +18,7 @@ namespace CaveCore.SchemaModels
         public string Content { get; set; }
 
         [BsonElement("image")]
-        public BsonBinaryData Image { get; set; }
+        public byte[] Image { get; set; }
 
         [BsonElement("cate_id")]
         public string CateId { get; set; }
@@ -51,7 +51,7 @@ namespace CaveCore.SchemaModels
         string Id { get; set; }
         string Title { get; set; }
         string Content { get; set; }
-        BsonBinaryData Image { get; set; }
+        byte[] Image { get; set; }
         string CateId { get; set; }
         string CateName { get; set; }
         IEnumerable<Vote> Votes {get; set; }

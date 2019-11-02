@@ -1,8 +1,8 @@
 <template>
   <v-card v-if="post">
-    <v-card-title>{{ post.title }}</v-card-title>
-    <v-card-subtitle>{{ post.created }}</v-card-subtitle>
-    <v-card-text>{{ post.content }}</v-card-text>
+    <v-card-subtitle class="overline pb-2">Posted By {{ post.createdBy }} {{ post.createdDate }} </v-card-subtitle>
+    <v-card-title class="display-2 pt-0 font-weight-bold">{{ post.title }}</v-card-title>
+    <v-card-text class="black--text title">{{ post.content }}</v-card-text>
     <v-container>
       <v-row dense>
         <v-col>
@@ -59,7 +59,12 @@ export default {
   },
   data() {
     return {
-      post: null
+      post: {
+        title: "asdasdasd",
+        content: "2222222",
+        createdDate: "23/10/2019",
+        createdBy: "Hein"
+      }
     };
   },
   methods: {
