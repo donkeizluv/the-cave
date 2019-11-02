@@ -31,7 +31,7 @@
 
           <v-img v-if="post.imgData" v-bind:src="post.imgData" height="200px"></v-img>
 
-          <v-card-text>{{ post.content }}</v-card-text>
+          <v-card-text><span v-html="post.content"/></v-card-text>
 
           <v-card-actions>
             <v-btn text color="blue" @click="selectPost(post)">Read More</v-btn>
