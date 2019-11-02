@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
-using MongoDB.Bson;
 
 namespace CaveCore.DTO
 {
