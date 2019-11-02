@@ -16,7 +16,7 @@
           </v-row>
           <v-row>
             <v-col>
-              <span class="headline ma-4">{{ post.title }}</span>
+              <p class="headline ma-4">{{ post.title }}</p>
             </v-col>
           </v-row>
 

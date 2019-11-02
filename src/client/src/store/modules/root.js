@@ -8,13 +8,15 @@ import {
   REGISTER,
   LOGOUT,
   VALIDATE_USER,
-  REFRESH_LANDING
+  REFRESH_LANDING,
+  RELOAD_USER
 } from "../actions/action-types";
 import {
   isAuthenticated,
   isDev,
   isProd,
-  currentUser
+  currentUser,
+  token
 } from "../getters/getter-types";
 import axios from "axios";
 import apis from "../apis/apis";
@@ -24,13 +26,15 @@ const state = {
   currentUser: {
     userId: null,
     username: null
-  }
+  },
+  token: localStorage.getItem("token") || null
 };
 const getters = {
   [isAuthenticated]: s => s.isAuthenticated,
   [currentUser]: s => s.currentUser,
   [isDev]: () => process.env.VUE_APP_ENV === "dev",
-  [isProd]: () => process.env.VUE_APP_ENV === "prod"
+  [isProd]: () => process.env.VUE_APP_ENV === "prod",
+  [token]: s => s.token
 };
 const mutations = {
   [AUTHENTICATED]: (s, v) => {
@@ -46,8 +50,9 @@ const actions = {
     if (result.valid) {
       // set axios bearer
       axios.defaults.headers.common["Authorization"] = `Bearer ${result.token}`;
-      commit(AUTHENTICATED, true);
+      localStorage.setItem("token", `${result.token}`);
       commit(CURRENT_USER, p);
+      commit(AUTHENTICATED, true);
       return { valid: true, message: result.message };
     }
     return { valid: false, message: result.message };
@@ -72,11 +77,23 @@ const actions = {
   [LOGOUT]: async ({ commit }) => {
     commit(AUTHENTICATED, false);
     commit(CURRENT_USER, null);
+    localStorage.removeItem("token");
+    axios.defaults.headers.common["Authorization"] = null;
   },
   [REFRESH_LANDING]: async ({ commit }) => {
     let { data } = await axios.get(apis.get_landing);
     commit(`${moduleNames.post}/${SET_POSTS}`, data.trendingPosts);
     commit(`${moduleNames.category}/${SET_CATEGORIES}`, data.categories);
+  },
+  [RELOAD_USER]: async ({ commit }, payload) => {
+    console.log(apis.reload_user);
+    axios.defaults.headers.common["Authorization"] = `Bearer ${payload}`;
+    let { data } = await axios.get(apis.reload_user);
+    commit(CURRENT_USER, {
+      userId: data.result.userId,
+      username: data.result.username
+    });
+    commit(AUTHENTICATED, true);
   },
   ...utilityHelper.actions
 };

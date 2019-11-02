@@ -78,13 +78,6 @@ export default {
   computed: {
     canSubmit() {
       return this.formValid;
-    },
-    clear() {
-      if(!this.show) {
-        this.reg.username = null;
-        this.reg.pwd = null;
-        this.reg.email = null;
-      }
     }
   },
   data() {

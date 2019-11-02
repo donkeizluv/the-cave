@@ -48,7 +48,7 @@ namespace CaveServer.Controllers
         }
 
         [Authorize]
-        [HttpGet("Ping")]
+        [HttpGet("ping")]
         public IActionResult Ping()
         {
             return Ok( _service.Ping());

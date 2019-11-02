@@ -48,7 +48,7 @@ namespace CaveCore.Services.Impl
                                     .AnyAsync();
             if (exist)
             {
-                throw new BussinessException("User with same infomation already existed");
+                throw new BussinessException("User with same information already existed");
             }
             var userModel = _mapper.Map<User>(user);
             userModel.Roles = new List<UserRoles>() { UserRoles.User };
