@@ -59,6 +59,13 @@ export default {
   computed: {
     canLogin() {
       return this.cred.username && this.cred.pwd;
+    },
+    clear() {
+      if(!this.show) {
+        this.cred.username = null;
+        this.cred.pwd = null;
+        this.errorMessage = null;
+      }
     }
   },
   data: function name() {
@@ -90,8 +97,8 @@ export default {
       }
     },
     clearAll() {
-      this.username = null;
-      this.pwd = null;
+      this.cred.username = null;
+      this.cred.pwd = null;
       this.errorMessage = null;
     },
     hideModal() {
