@@ -90,9 +90,12 @@ namespace CaveCore.Services.Impl
         public async Task<IPost> GetPostById(string postId)
         {
             await AddPoint(postId, (int)PointEnum.View);
-            return await _collection
+            var result = await _collection
                 .Find(p => true && p.Id == postId)
                 .FirstOrDefaultAsync();
+            result.Comments = result.Comments.OrderByDescending(c => c.Created).ToList();
+
+            return result;
         }
         public async Task<string> DeletePost(string postId)
         {
