@@ -1,12 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoMapper;
-using CaveCore.DTO;
 using CaveCore.Exceptions;
 using CaveCore.SchemaModels;
-using CaveCore.Service.Impl;
 using CaveCore.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
