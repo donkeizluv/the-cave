@@ -6,13 +6,13 @@ Vue.use(Vuetify);
 export default new Vuetify({
   icons: {
     iconfont: 'mdi'
+  },
+  theme: {
+    themes: {
+      light: {
+        primary: '#00ACC1',
+        accent: '#FF3D00'
+      }
+    }
   }
-  // theme: {
-  //   dark: true,
-  //   themes: {
-  //     dark: {
-  //       primary: '#00ACC1'
-  //     }
-  //   }
-  // }
 });

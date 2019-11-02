@@ -1,7 +1,7 @@
 <template>
-  <v-container class="ma-0 pa-0">
+  <v-container fluid class="ma-0 pa-0">
     <v-row :justify="fullwidth ? 'center' : 'end'" dense>
-      <v-col cols="11">
+      <v-col class="ma-0 pa-0" cols="11">
         <v-row dense>
           <v-col>
             <div class>
@@ -23,7 +23,7 @@
           </v-col>
         </v-row>
         <v-row dense>
-          <v-col align="end">
+          <v-col class="ma-1 pa-0" align="end">
             <v-btn
               class="mr-4"
               v-if="!root"

@@ -2,23 +2,23 @@
   <v-card class="mx-auto" outlined>
     <v-container v-if="cate">
       <v-row dense>
-        <v-col class="text-center headline blue--text text--darken-1">
-          <div>{{ cate.cateName }}</div>
+        <v-col class="text-center headline cyan--text text--light-2">
+          <div>{{ currentCate.cateName }}</div>
         </v-col>
       </v-row>
       <v-row dense>
         <v-col class="ma-4">
           <v-row justify="center" class="grey--text text--light-2">Total post:</v-row>
-          <v-row justify="center">{{ cate.postCount }}</v-row>
+          <v-row justify="center">{{ currentCate.postCount }}</v-row>
         </v-col>
         <v-col class="ma-4">
           <v-row justify="center" class="grey--text text--light-2">Created:</v-row>
-          <v-row justify="center">{{ createdTimeAgo(cate.created) }}</v-row>
+          <v-row justify="center">{{ createdTimeAgo(currentCate.created) }}</v-row>
         </v-col>
       </v-row>
       <v-row dense>
         <v-col>
-          <div class="text-center ma-2">{{ cate.description }}</div>
+          <div class="text-center ma-2">{{ currentCate.description }}</div>
         </v-col>
       </v-row>
       <v-row dense>
@@ -26,9 +26,9 @@
           <v-btn
             class="mt-2"
             min-width="100%"
-            color="primary"
+            color="light-green accent-3"
             v-if="isAuthenticated"
-            @click="$router.push({ name: 'create_post', params: { cateID: cate.id } })"
+            @click="$router.push({ name: 'create_post', params: { cateID: currentCate.id } })"
           >Create Post</v-btn>
         </v-col>
       </v-row>
@@ -50,7 +50,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([isAuthenticated])
+    ...mapGetters([isAuthenticated]),
+    currentCate() {
+      return this.cate;
+    }
   },
   data: function name() {
     return {};

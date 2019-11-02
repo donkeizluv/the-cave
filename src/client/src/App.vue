@@ -63,7 +63,7 @@
                   <router-view :key="$route.path"></router-view>
                 </v-col>
                 <v-col class="pr-2 ma-0" cols="3">
-                  <div v-show="selectedCate" class="mb-4">
+                  <div v-show="selectedCate.id" class="mb-4">
                     <cate-info :cate="selectedCate" />
                   </div>
                   <div>

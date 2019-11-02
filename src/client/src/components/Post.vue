@@ -1,38 +1,48 @@
 <template>
   <v-card v-if="post">
-    <v-card-subtitle class="overline pb-2">Posted By {{ post.createdBy }} {{ createdTimeAgo }}</v-card-subtitle>
+    <v-card-subtitle
+      class="overline pb-2"
+    >Posted By {{ post.creatorName }} &nbsp;&middot;&nbsp; {{ createdTimeAgo }}</v-card-subtitle>
     <v-card-title class="headline pt-0">{{ post.title }}</v-card-title>
     <v-card-text class="black--text diaplay">
-      <span class="white--text" v-html="post.content" />
-      <img v-if="post.image" v-bind:src="'data:image/jpeg;base64,' + post.image" width="80%" align="center"/>
+      <span v-html="post.content" />
+      <img
+        v-if="post.image"
+        v-bind:src="'data:image/jpeg;base64,' + post.image"
+        width="80%"
+        align="center"
+      />
     </v-card-text>
     <v-container>
-      <v-row justify="end" dense>
-        <v-btn
-          @click="addVote(post.id, 1)"
-          icon
-          v-ripple="{ class: 'red--text' }"
-          :disabled="!isAuthenticated"
-        >
-          <v-icon color="red lighten-2">mdi-heart</v-icon>
-        </v-btn>
-        <span class="overline mt-2">{{post.upVotes}}</span>
-        <v-btn
-          @click="addVote(post.id, 2)"
-          icon
-          v-ripple="{ class: 'red--text' }"
-          :disabled="!isAuthenticated"
-        >
-          <v-icon color="red lighten-2">mdi-heart-broken</v-icon>
-        </v-btn>
-        <span class="overline mt-2">{{post.downVotes}}</span>
+      <v-row dense>
+        <v-col align="end">
+          <div class="mr-8">
+            <v-btn
+              @click="addVote(post.id, 1)"
+              icon
+              v-ripple="{ class: 'red--text' }"
+              :disabled="!isAuthenticated"
+            >
+              <v-icon color="red lighten-2">mdi-heart</v-icon>
+            </v-btn>
+            <span class="overline mt-2">{{post.upVotes}}</span>
+            <v-btn
+              @click="addVote(post.id, 2)"
+              icon
+              v-ripple="{ class: 'red--text' }"
+              :disabled="!isAuthenticated"
+            >
+              <v-icon color="red lighten-2">mdi-heart-broken</v-icon>
+            </v-btn>
+            <span class="overline mt-2">{{post.downVotes}}</span>
+          </div>
+        </v-col>
       </v-row>
       <v-row dense>
         <v-col>
           <new-comment-textbox @submit="submitCommentRoot" />
         </v-col>
       </v-row>
-
       <v-row dense>
         <v-col>
           <comment-tree
@@ -52,8 +62,8 @@
   font-size: 1em;
 }
 img {
-    display: block;
-    margin: 0 auto;
+  display: block;
+  margin: 0 auto;
 }
 </style>
 
