@@ -65,11 +65,13 @@ const actions = {
     return data;
   },
   [REGISTER]: async ({ commit }, p) => {
-    await axios.post(apis.create_user, {
+    let { data } = await axios.post(apis.create_user, {
       username: p.username,
       pwd: p.pwd,
       email: p.email
     });
+    axios.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+    localStorage.setItem("token", `${data.token}`);
     commit(AUTHENTICATED, true);
     commit(CURRENT_USER, p);
     return true;

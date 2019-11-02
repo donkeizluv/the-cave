@@ -98,7 +98,8 @@ export default {
         email: [
           value => validationRules.requiredValue(value),
           value => validationRules.maxCharacter(value, 36),
-          value => validationRules.email(value)
+          value => validationRules.email(value),
+          v => (v || '').includes("@kms-technology.com") || 'KMS Email Only'
         ]
       },
 

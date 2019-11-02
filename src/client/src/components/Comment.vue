@@ -74,7 +74,7 @@ export default {
     },
     shouldShowReply(){
       if(this.openreplyid !== null) {
-        return this.item.data.id === this.openreplyid && this.showReply
+        return this.item.data.id === this.openreplyid && this.showReply;
       }
       return this.showReply;
     }
