@@ -33,7 +33,6 @@ import { categories } from "../store/getters/category/getter-types";
 import {
   REFRESH_POSTS_BY_CATE
 } from "../store/actions/post/action-types";
-import router from "../router";
 export default {
   name: "CatePanel",
   props: {},
@@ -48,7 +47,7 @@ export default {
     ...mapActions(moduleNames.post, [REFRESH_POSTS_BY_CATE]),
     onSelectCate(cate) {
       this.REFRESH_POSTS_BY_CATE(cate.id);
-      router.push({ name: 'category', params: { cate: cate.cateName }});
+      this.$router.push({ name: 'category', params: { cate: cate.cateName }});
     }
   }
 };

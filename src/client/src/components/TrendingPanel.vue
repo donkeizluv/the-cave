@@ -35,10 +35,10 @@
             <v-btn text color="blue" @click="selectPost(post)">Read More</v-btn>
             <v-spacer></v-spacer>
             <v-btn icon>
-              <v-icon color="red lighten-2">mdi-heart</v-icon>
+              <v-icon :color="['{{ upvote }}'? 'red lighten-2' : '']"  @click="upvote=!upvote;">mdi-heart</v-icon>
             </v-btn>
             <v-btn icon>
-              <v-icon color="red lighten-2">mdi-heart-broken</v-icon>
+              <v-icon :color="['{{ downvote }}'? 'red lighten-2' : '']" @click="downvote=!downvote;">mdi-heart-broken</v-icon>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -70,7 +70,10 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      upvote: false,
+      downvote: false
+    };
   },
   methods: {
     createdTimeAgo(t) {

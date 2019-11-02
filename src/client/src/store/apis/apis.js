@@ -10,5 +10,6 @@ export default {
   get_landing: endpoint + "/api/landing",
   get_posts_by_cate: endpoint + "/api/post/cate",
   get_selected_post: endpoint + "/api/post",
-  add_comment: endpoint + "/api/post/addcomment"
+  add_comment: endpoint + "/api/post/addcomment",
+  refresh_selected_category: endpoint + "/api/cate"
 };
