@@ -39,7 +39,8 @@ namespace CaveServer.Controllers
             try
             {
                 await _service.Create(user);
-                return Ok();
+                var result = await _service.Validate(_mapper.Map<UserDto>(user));
+                return Ok(_mapper.Map<UserValidateResultDto>(result));
             }
             catch (BussinessException ex)
             {
