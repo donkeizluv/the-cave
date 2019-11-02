@@ -2,14 +2,15 @@
   <v-card class="mx-auto" width="auto">
     <v-card-title>Create Your Post</v-card-title>
     <v-card-text class="text--primary">
-      <v-text-field 
-      v-model="post.title" 
-      label="Title" 
-      class="input-group--focused"
-      maxlength="300"
-      single-line
-      outlined></v-text-field>
-      <vue-editor v-model="post.content" :editorToolbar="customToolbar" class="mb-6"></vue-editor> 
+      <v-text-field
+        v-model="post.title"
+        label="Title"
+        class="input-group--focused"
+        maxlength="300"
+        single-line
+        outlined
+      ></v-text-field>
+      <vue-editor v-model="post.content" :editorToolbar="customToolbar" class="mb-6"></vue-editor>
       <div
         class="image-input"
         :style="{ 'background-image': `url(${imageData})` }"
@@ -24,40 +25,11 @@
           @input="onSelectFile"
         />
       </div>
-      
     </v-card-text>
-    <v-card-actions>
-      <v-btn text color="deep-purple accent-4" @click="create">Create</v-btn>
-      <v-btn text color="deep-purple accent-4" @click.stop="confirm = true">Cancel</v-btn>
+    <v-card-actions class="justify-end">
+      <v-btn text color="primary" @click="create">Create</v-btn>
+      <v-btn text color="primary" @click.stop="$router.go(-1);">Cancel</v-btn>
     </v-card-actions>
-    <v-dialog
-      v-model="confirm"
-      max-width="290"
-    >
-      <v-card>
-        <v-card-title class="headline">You are creating post. Do you wish to exit?</v-card-title>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn
-            color="green darken-1"
-            text
-            @click="clearAll"
-          >
-            OK
-          </v-btn>
-
-          <v-btn
-            color="green darken-1"
-            text
-            @click="confirm = false"
-          >
-            Cancel
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
   </v-card>
 </template>
 <style scoped>
@@ -92,7 +64,6 @@
 * {
   border-radius: 4px important!;
 }
-
 </style>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -124,13 +95,9 @@ export default {
       },
       imageData: null,
       customToolbar: [
-        ["bold", "italic", "underline"], 
+        ["bold", "italic", "underline"],
         [{ list: "ordered" }, { list: "bullet" }]
-      ],
-      confirm: {
-        type: Boolean,
-        default: false
-      }
+      ]
     };
   },
   methods: {

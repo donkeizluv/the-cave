@@ -123,11 +123,11 @@ export default {
     ...mapGetters([isAuthenticated, currentUser]),
     ...mapGetters(moduleNames.category, [selectedCate])
   },
-  async mounted() {
+  async created() {
     await this.REFRESH_LANDING();
   },
   data: () => ({
-    appName: "KMS Cave",
+    appName: "KMS Caves",
     snackbar: {
       show: false,
       color: "success",
