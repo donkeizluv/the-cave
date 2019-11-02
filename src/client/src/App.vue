@@ -11,6 +11,9 @@
     <new-cate-modal :show.sync="cateModal" @click:outside="cateModal = false;" />
     <profile-modal :show.sync="profileModal" @click:outside="profileModal = false;" />
     <v-app-bar flat app clipped-left color="cyan darken-2">
+      <v-avatar tile>
+        <img src="/img/cave.png" alt="cave" />
+      </v-avatar>
       <v-toolbar-title>
         <v-btn
           link
