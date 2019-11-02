@@ -10,6 +10,7 @@ using CaveCore.Service.Impl;
 using CaveCore.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using MongoDB.Bson;
 using System.Linq;
 
 namespace CaveCore.Services.Impl
@@ -164,8 +165,6 @@ namespace CaveCore.Services.Impl
             await addPoint(comment.PostId, (int)PointEnum.Comment);
 
             var reqPosId = comment.PostId;
-            var post = await _collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
-            var comments = post.Comments != null ? post.Comments.ToList() : new List<Comment>();
 
             var newComment = new Comment
             {
@@ -175,8 +174,8 @@ namespace CaveCore.Services.Impl
                 Username = CurrentUsername,
                 Content = comment.Content
             };
-            comments.Add(newComment);
-            var update = Builders<Post>.Update.Set(p => p.Comments, comments);
+
+            var update = Builders<Post>.Update.Push(p => p.Comments, newComment);
             await _collection.UpdateOneAsync(p => p.Id == reqPosId, update);
 
             return newComment.Id;
@@ -184,8 +183,12 @@ namespace CaveCore.Services.Impl
 
         public async Task<string> UpdateComment(CommentDto comment)
         {
-            var update = Builders<Post>.Update.Set(p => p.Comments.Where(c => c.Id == comment.Id).First().Content, comment.Content);
-            await _collection.UpdateOneAsync(p => p.Id == comment.PostId, update);
+            var filter = Builders<Post>.Filter.
+                And(Builders<Post>.Filter.
+                Eq(p => p.Id, comment.PostId), Builders<Post>.Filter.
+                ElemMatch(p => p.Comments, p => p.Id == comment.Id));
+            var update = Builders<Post>.Update.Set(p => p.Comments.ElementAt(-1).Content, comment.Content);
+            await _collection.UpdateOneAsync(filter, update);
 
             return comment.Id;
         }
