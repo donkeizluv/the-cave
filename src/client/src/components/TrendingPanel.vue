@@ -3,13 +3,22 @@
     <v-col class="pa-0 ma-0">
       <v-row dense v-for="post in posts" v-bind:key="post.id">
         <v-card :width="'100%'" flat outlined class="overline mb-4">
-          <v-list-item>
-            <!-- <--<v-list-item-avatar color="grey"></v-list-item-avatar>-->
-            <v-list-item-content>
-              <v-list-item-title class="headline">{{ post.title }}</v-list-item-title>
-              <v-list-item-subtitle>{{post.creatorName}} - {{ createdTimeAgo(post.created) }}</v-list-item-subtitle>
-            </v-list-item-content>
-          </v-list-item>
+          <v-row>
+            <v-col>
+              <span class="font-weight-bold ma-4">cave/{{post.cateName}} &nbsp;&nbsp;&middot;</span>
+              <span>posted By {{post.creatorName}}</span>
+            </v-col>
+          </v-row>
+          <v-row dense>
+            <v-col>
+              <span class="ma-4">{{ createdTimeAgo(post.created) }}</span>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <span class="headline ma-4">{{ post.title }}</span>
+            </v-col>
+          </v-row>
 
           <img v-if="post.image" v-bind:src="'data:image/jpeg;base64,' + post.image" height="100px"/>
 
@@ -43,11 +52,13 @@
 <script>
 import { timeAgo } from "./shared/utils";
 import { posts } from "../store/getters/post/getter-types";
-import { ADD_VOTE } from "../store/actions/post/action-types";
+import {
+  ADD_VOTE,
+  REFRESH_POSTS_BY_CATE
+} from "../store/actions/post/action-types";
 import moduleNames from "../store/modules/module-names";
 import { isAuthenticated } from "../store/getters/getter-types";
 import { mapGetters, mapActions } from "vuex";
-
 export default {
   name: "TrendingPanel",
   props: {
@@ -59,7 +70,6 @@ export default {
   computed: {
     ...mapGetters([isAuthenticated]),
     ...mapGetters(moduleNames.post, [posts]),
-
     isDefault() {
       return this.$router.currentRoute.name === "default";
     }
@@ -68,7 +78,7 @@ export default {
     return {};
   },
   methods: {
-    ...mapActions(moduleNames.post, [ADD_VOTE]),
+    ...mapActions(moduleNames.post, [ADD_VOTE, REFRESH_POSTS_BY_CATE]),
     createdTimeAgo(t) {
       return timeAgo.format(new Date(t));
     },

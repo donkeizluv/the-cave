@@ -22,8 +22,8 @@ export default new Router({
       props: r => r.params
     },
     {
-      path: "/cate/:cate",
-      name: "category",
+      path: "/cave/:cate",
+      name: "cave",
       component: Trending,
       props: r => r.params
     }, 

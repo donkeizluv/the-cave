@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-auto" outlined>
-    <div class="overline ma-4">
-      Caves
+    <div class="cat-panel-name ma-4">
+      CAVES
       <v-btn class="mb-1" small icon :disabled="!isAuthenticated" @click="$emit('click:newcat')">
         <v-icon>mdi-plus</v-icon>
       </v-btn>
@@ -55,7 +55,7 @@ export default {
       await this.REFRESH_POSTS_BY_CATE(cate.id);
       let cataData = await this.GET_SELECTED_CATEGORY(cate.id);
       await this.SET_SELECTED_CATE(cataData);
-      this.$router.push({ name: "category", params: { cate: cate.cateName } });
+      this.$router.push({ name: "cave", params: { cate: cate.cateName } });
     }
   }
 };

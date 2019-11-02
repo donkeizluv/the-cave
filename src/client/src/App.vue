@@ -27,7 +27,14 @@
       <div class="ma-4 pt-4">
         <v-text-field color="white" small append-icon="mdi-magnify" @submit="onSubmit"></v-text-field>
       </div>
-
+      <v-btn
+        v-if="isAuthenticated"
+        class="ma-2"
+        :ripple="false"
+        text
+        color="white"
+        depressed
+      >{{currentUser.username.toUpperCase()}}</v-btn>
       <v-btn v-if="!isAuthenticated" @click="loginModal = true;" class="ma-2" depressed>Log in</v-btn>
       <v-btn v-if="!isAuthenticated" @click="regModal = true;" class="ma-2" depressed>Register</v-btn>
       <v-btn
@@ -36,26 +43,17 @@
         class="ma-2"
         depressed
       >Log out</v-btn>
-      <v-menu left bottom>
-        <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on">
-            <v-icon color="white">mdi-account-circle</v-icon>
-          </v-btn>
-        </template>
-        <v-list v-if="isAuthenticated">
-          <v-list-item @click="profileModal = true;">
-            <v-icon>mdi-account</v-icon>
-            <v-list-item-title>Your Profile</v-list-item-title>
-          </v-list-item>
-          <v-list-item>
-            <v-list-item-title>Option 2</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
     </v-app-bar>
 
     <v-content>
       <v-container fluid>
+        <v-row dense>
+          <v-col cols="2"></v-col>
+          <v-col cols="8" class="ma-0 pa-0">
+          </v-col>
+          <v-col cols="2">
+          </v-col>
+        </v-row>
         <v-row dense align="start" justify="start">
           <v-col cols="2"></v-col>
           <v-col cols="8" class="shrink">
@@ -105,7 +103,7 @@ import ProfileModal from "./components/ProfileModal";
 // import Post from "./components/Post";
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
-import { isAuthenticated } from "./store/getters/getter-types";
+import { isAuthenticated, currentUser } from "./store/getters/getter-types";
 import { LOGOUT, REFRESH_LANDING } from "./store/actions/action-types";
 import { SET_SELECTED_CATE } from "./store/actions/category/action-types";
 import { selectedCate } from "./store/getters/category/getter-types";
@@ -122,10 +120,10 @@ export default {
     CateInfo
   },
   computed: {
-    ...mapGetters([isAuthenticated]),
+    ...mapGetters([isAuthenticated, currentUser]),
     ...mapGetters(moduleNames.category, [selectedCate])
   },
-  async activated() {
+  async mounted() {
     await this.REFRESH_LANDING();
   },
   data: () => ({

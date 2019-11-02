@@ -1,4 +1,5 @@
 import { CREATE, GET_ALL, REFRESH_POSTS_BY_CATE, GET_SELECTED_POST, ADD_COMMENT, ADD_VOTE, REFRESH_POSTS_BY_SEARCH } from "../actions/post/action-types";
+import { REFRESH_LANDING } from "../actions/action-types";
 import {
   SET_POSTS,
   ADD_POST,
@@ -49,7 +50,11 @@ const actions = {
     return true;
   },
 
-  [REFRESH_POSTS_BY_CATE]: async ({ commit }, payload) => {
+  [REFRESH_POSTS_BY_CATE]: async ({ dispatch, commit }, payload) => {
+    if (!payload) {
+      await dispatch(REFRESH_LANDING, { root: true });
+      return;
+    }
     let { data } = await axios.get(`${apis.refresh_posts_by_cate}/${payload}`);
     commit(`${SET_POSTS}`, data);
   },
