@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto" flat>
+  <v-card flat>
     <v-treeview
       :items="commentTree"
       item-key="data.id"
@@ -9,7 +9,12 @@
       open-all
     >
       <template v-slot:prepend="{ item, open }">
-        <comment @submit="submit($event)" :item="item" />
+        <comment
+          :openreplyid="openReply"
+          @showreply="setOpenReply"
+          @submit="submit($event)"
+          :item="item"
+        />
       </template>
     </v-treeview>
   </v-card>
@@ -29,6 +34,11 @@ export default {
       required: true
     }
   },
+  data() {
+    return {
+      openReply: null
+    };
+  },
   computed: {
     commentTree() {
       return arrayToTree(this.comments);
@@ -38,6 +48,9 @@ export default {
     }
   },
   methods: {
+    setOpenReply(id) {
+      this.openReply = id;
+    },
     submit(content) {
       console.log(content);
       this.$emit("submit", content);

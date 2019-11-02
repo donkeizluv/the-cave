@@ -19,7 +19,7 @@ const state = {
 
 const getters = {
   [categories]: s => s.categories,
-  [selectedCate]: s => s.selectedCate
+  [selectedCate]: s => s.selectedCate || {}
 };
 
 const mutations = {
@@ -44,6 +44,7 @@ const actions = {
     let { data } = await axios.post(apis.create_categories, cate);
     cate.id = data;
     commit(ADD_CATEGORY, cate);
+    return data;
   },
 
   [GET_ALL]: async () => {

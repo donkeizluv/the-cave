@@ -1,6 +1,6 @@
 <template>
   <v-container class="ma-0 pa-0" fluid>
-    <v-col class="pa-0 ma-0">
+    <v-col v-if="hasPost" class="pa-0 ma-0">
       <v-row dense v-for="post in posts" v-bind:key="post.id">
         <v-card :width="'100%'" flat outlined class="overline mb-4">
           <v-row>
@@ -20,7 +20,12 @@
             </v-col>
           </v-row>
 
-          <img v-if="post.image" v-bind:src="'data:image/jpeg;base64,' + post.image" width="40%" align="center"/>
+          <img
+            v-if="post.image"
+            v-bind:src="'data:image/jpeg;base64,' + post.image"
+            width="40%"
+            align="center"
+          />
 
           <v-card-actions>
             <v-btn text color="primary" @click="selectPost(post)">Read More</v-btn>
@@ -47,12 +52,17 @@
         </v-card>
       </v-row>
     </v-col>
+    <v-col v-else>
+      <v-row justify="center">
+        <div class="headline grey--text text--darken-1 text-center">Be the first to post something!</div>
+      </v-row>
+    </v-col>
   </v-container>
 </template>
 <style scoped>
 img {
-    display: block;
-    margin: 0 auto;
+  display: block;
+  margin: 0 auto;
 }
 </style>
 <script>
@@ -67,15 +77,18 @@ import { isAuthenticated } from "../store/getters/getter-types";
 import { mapGetters, mapActions } from "vuex";
 export default {
   name: "TrendingPanel",
-  props: {
-    cate: {
-      type: String,
-      default: null
-    }
-  },
+  // props: {
+  //   cate: {
+  //     type: String,
+  //     default: null
+  //   }
+  // },
   computed: {
     ...mapGetters([isAuthenticated]),
     ...mapGetters(moduleNames.post, [posts]),
+    hasPost() {
+      return this.posts.length > 0;
+    },
     isDefault() {
       return this.$router.currentRoute.name === "default";
     }

@@ -12,7 +12,12 @@
       </v-card-title>
       <v-card-text>
         <v-form v-model="formValid">
-          <v-text-field v-model.trim="cate.cateName" maxlength="24" :rules="rules.name" label="Name"></v-text-field>
+          <v-text-field
+            v-model.trim="cate.cateName"
+            maxlength="24"
+            :rules="rules.name"
+            label="Name"
+          ></v-text-field>
           <v-text-field
             v-model.trim="cate.description"
             maxlength="64"
@@ -60,7 +65,7 @@ export default {
       return this.formValid;
     }
   },
-  data: function name() {
+  data() {
     return {
       cate: {
         cateName: null,
@@ -96,9 +101,12 @@ export default {
       if (!this.canSubmit) return;
       try {
         this.isLoading = true;
-        await this.CREATE(this.cate);
+        let newCateId = await this.CREATE(this.cate);
+        this.$router.push({
+          name: "cave",
+          params: { cate: this.cate.cateName }
+        });
         this.hideModal();
-        //NYI: go to this cat
       } catch (error) {
         this.isError = true;
         this.dialogMessage =
