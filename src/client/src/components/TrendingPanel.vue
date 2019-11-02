@@ -20,7 +20,7 @@
             </v-col>
           </v-row>
 
-          <img v-if="post.image" v-bind:src="'data:image/jpeg;base64,' + post.image" height="100px"/>
+          <img v-if="post.image" v-bind:src="'data:image/jpeg;base64,' + post.image" width="40%" align="center"/>
 
           <v-card-actions>
             <v-btn text color="primary" @click="selectPost(post)">Read More</v-btn>
@@ -49,6 +49,12 @@
     </v-col>
   </v-container>
 </template>
+<style scoped>
+img {
+    display: block;
+    margin: 0 auto;
+}
+</style>
 <script>
 import { timeAgo } from "./shared/utils";
 import { posts } from "../store/getters/post/getter-types";

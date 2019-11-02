@@ -234,3 +234,4 @@ _Pvt_Extensions
 
 #Private
 *.env
+src/client/package-lock.json

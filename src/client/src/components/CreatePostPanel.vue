@@ -108,7 +108,7 @@ export default {
   name: "CreatePostPanel",
   props: {
     cateID: {
-      default: "123123123123123123123125"
+      default: ""
     }
   },
   computed: {
@@ -154,8 +154,7 @@ export default {
     onSelectFile() {
       const input = this.$refs.fileInput;
       const files = input.files;
-      console.log(input);
-      if (files && files[0]) {
+      if (files && files[0] && files[0].size <= 120000) {
         const reader = new FileReader();
         reader.onload = e => {
           this.imageData = e.target.result;
@@ -163,6 +162,8 @@ export default {
         };
         reader.readAsDataURL(files[0]);
         this.$emit("input", files[0]);
+      } else if (files[0].size > 120000) {
+        alert("File too big");
       }
     }
   },
