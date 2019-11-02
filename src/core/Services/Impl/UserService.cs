@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 using AutoMapper;
 using CaveCore.DTO;
 using CaveCore.Exceptions;
@@ -13,10 +14,11 @@ using CaveCore.Settings;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
+using CaveCore.Service.Impl;
 
 namespace CaveCore.Services.Impl
 {
-    public class UserService : IUserService
+    public class UserService : ContextAwareService, IUserService
     {
         private readonly IMongoClient _client;
         private readonly IDbSettings _dbSettings;
@@ -24,7 +26,11 @@ namespace CaveCore.Services.Impl
         private readonly IMongoDatabase _db;
         private readonly IMapper _mapper;
 
-        public UserService(IOptions<DbSettings> dbOption, IOptions<AppSettings> appOption, IMapper mapper, IMongoClient dbClient)
+        public UserService(IOptions<DbSettings> dbOption,
+         IOptions<AppSettings> appOption, 
+        IMapper mapper, 
+        IMongoClient dbClient, 
+        ClaimsPrincipal claimsPrincipal) : base(claimsPrincipal)
         {
             _dbSettings = dbOption.Value;
             _appSettings = appOption.Value;
@@ -102,5 +108,13 @@ namespace CaveCore.Services.Impl
             return identity;
         }
 
+        public async Task<ValidateUserDto> Ping()
+        {
+             return await Task.FromResult(new ValidateUserDto(){
+                Username = CurrentUsername,
+                Id = CurrentId 
+            });
+           
+        }
     }
 }
