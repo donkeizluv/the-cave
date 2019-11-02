@@ -24,7 +24,6 @@ namespace CaveCore.Profiles
             CreateMap<IPost, PostDto>()
                 .ForMember(dto => dto.UpVotes, opt => opt.MapFrom(s => s.Votes.Where( i => i.VoteType == (int)VoteType.UpVote).Count()))
                 .ForMember(dto => dto.DownVotes, opt => opt.MapFrom(s => s.Votes.Where( i => i.VoteType == (int)VoteType.DownVote).Count()))
-				.ForMember(dto => dto.Point, opt => opt.AddTransform(s => s.GetType() == typeof(int) ? (int)Math.Round((double)s): s))
 				.ForMember(dto => dto.Comments, opt => opt.MapFrom(s => s.Comments));            
             CreateMap<IUserValidateResult, UserValidateResultDto>();
             CreateMap<ValidateUserDto, UserDto>();
