@@ -149,10 +149,9 @@ namespace CaveCore.Services.Impl
                     await _collection.UpdateOneAsync(p => p.Id == reqPosId, updateDef);
                 }else if(voteRequest.VoteType == foundVote.VoteType){
                     //remove
-                    votes.Remove(votes.Where(o => o.CreatorId == CurrentId).FirstOrDefault());
-                    post.Votes = votes;
-                    await _collection.UpdateOneAsync(p => p.Id == reqPosId, Builders<Post>.Update
-                                            .Set(p => p.Votes, votes));
+                    await _collection.FindOneAndUpdateAsync(p => p.Id == reqPosId, Builders<Post>.Update.PullFilter(p => p.Votes,
+                                                v => v.CreatorId == CurrentId));
+
                 }else {
                     //update
                      var filter = Builders<Post>.Filter.
@@ -161,24 +160,6 @@ namespace CaveCore.Services.Impl
                     ElemMatch(p => p.Votes, p => p.Id == foundVote.Id));
                     await _collection.UpdateOneAsync(filter, Builders<Post>.Update.Set(p => p.Votes.ElementAt(-1).VoteType, voteRequest.VoteType));
                 }
-
-                // if (foundVote != null && foundVote.VoteType == voteRequest.VoteType)
-                // {
-                //     votes.Remove(votes.Where(o => o.CreatorId == CurrentId).FirstOrDefault());
-                // }
-                // else
-                // {
-                //     var newVote = new Vote(){
-                //         PostId = reqPosId,
-                //         VoteType = reqVoteType,
-                //         CreatorId = CurrentId
-                //     };
-                //     votes.Add(newVote);
-                // }
-                // post.Votes = votes;
-                // var update = Builders<Post>.Update
-                //                             .Set(p => p.Votes, votes);
-                // await _collection.UpdateOneAsync(p => p.Id == reqPosId, update);
             }
             return await _collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
         }
