@@ -1,18 +1,20 @@
 <template>
-  <v-container>
-    <v-row dense>
-      <v-col cols="10">
+  <v-container class="ma-0 pa-0">
+    <v-row :justify="fullwidth ? 'center' : 'end'" dense>
+      <v-col cols="11">
         <v-row dense>
           <v-col>
-            <div class="ma-2 comment-text-area comment-textarea-border">
+            <div class>
               <v-textarea
                 v-model="newComment"
                 :label="to ? `Replying to ${to}` : ''"
                 clear-icon
                 dense
                 auto-grow
-                flat
-                solo
+                maxlength="1024"
+                counter
+                outlined
+                :clearable="true"
                 full-width
                 persistent-hint
               ></v-textarea>
@@ -21,8 +23,14 @@
         </v-row>
         <v-row dense>
           <v-col align="end">
-            <v-btn v-if="!root" small text @click="$emit('close')">Cancel</v-btn>
-            <v-btn small text color="primary" :disabled="!canSubmit" @click="submit">OK</v-btn>
+            <v-btn
+              class="mr-4"
+              v-if="!root"
+              small
+              text
+              @click="$emit('close'); newComment = null;"
+            >Cancel</v-btn>
+            <v-btn small color="primary" :disabled="!canSubmit" @click="submit">OK</v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -42,6 +50,10 @@ export default {
       default: false
     },
     clearOnSubmit: {
+      type: Boolean,
+      default: true
+    },
+    fullwidth: {
       type: Boolean,
       default: true
     }

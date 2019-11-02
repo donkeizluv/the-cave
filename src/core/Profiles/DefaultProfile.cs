@@ -20,6 +20,7 @@ namespace CaveCore.Profiles
             CreateMap<ICategory, CategoryDto>();
             CreateMap<PostDto, Post>()
                 .ForMember(dto => dto.Created, opt => opt.AddTransform(s => s == default(DateTime) ? DateTime.UtcNow : s));
+                
             CreateMap<IPost, PostDto>()
                 .ForMember(dto => dto.UpVotes, opt => opt.MapFrom(s => s.Votes.Where( i => i.VoteType == (int)VoteType.UpVote).Count()))
                 .ForMember(dto => dto.DownVotes, opt => opt.MapFrom(s => s.Votes.Where( i => i.VoteType == (int)VoteType.DownVote).Count()))

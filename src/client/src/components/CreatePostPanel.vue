@@ -91,7 +91,6 @@ export default {
         cateID: ""
       },
       imageData: null,
-      content: "<h1>Some initial content</h1>",
       customToolbar: [
         ["bold", "italic", "underline"], 
         [{ list: "ordered" }, { list: "bullet" }]

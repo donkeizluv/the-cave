@@ -1,8 +1,8 @@
 <template>
   <v-card v-if="post">
-    <v-card-subtitle class="overline pb-2">Posted By {{ post.createdBy }} {{ post.createdDate }} </v-card-subtitle>
-    <v-card-title class="display-2 pt-0 font-weight-bold">{{ post.title }}</v-card-title>
-    <v-card-text class="black--text title">{{ post.content }}</v-card-text>
+    <v-card-subtitle class="overline pb-2">Posted By {{ post.createdBy }} {{ createdTimeAgo }} </v-card-subtitle>
+    <v-card-title class="display-1 pt-0 font-weight-bold">{{ post.title }}</v-card-title>
+    <v-card-text class="black--text diaplay">{{ post.content }}</v-card-text>
     <v-container>
       <v-row dense>
         <v-col>
@@ -27,18 +27,22 @@
         <v-icon>mdi-heart-broken</v-icon>
     </v-btn>-->
   </v-card>
-  <v-card v-else>
-    <v-card-title>Unable to display post :(</v-card-title>
-  </v-card>
 </template>
 
+<style scoped>
+.post-content {
+  font-size: 1em;
+}
+</style>
+
 <script>
+import { timeAgo } from "./shared/utils";
 import NewCommentTextbox from "./NewCommentTextbox.vue";
 import {
   GET_SELECTED_POST,
   ADD_COMMENT
 } from "../store/actions/post/action-types";
-import { mapGetters, mapActions } from "vuex";
+import { mapActions } from "vuex";
 import moduleNames from "../store/modules/module-names";
 import CommentTree from "./CommentTree.vue";
 export default {
@@ -57,6 +61,12 @@ export default {
       required: true
     }
   },
+  computed: {
+    createdTimeAgo() {
+      return timeAgo.format(new Date(this.post.created));
+    }
+  },
+
   data() {
     return {
       post: {
@@ -89,7 +99,6 @@ export default {
       // let childCommentIndex = this.post.comments.findIndex(c => c.id === childComment.parentId);
       this.post.comments.push(comment);
     }
-  },
-  computed: {}
+  }
 };
 </script>

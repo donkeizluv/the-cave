@@ -1,4 +1,4 @@
-import { CREATE, GET_ALL, REFRESH_POSTS_BY_CATE, GET_SELECTED_POST, NEW_COMMENT, ADD_COMMENT } from "../actions/post/action-types";
+import { CREATE, GET_ALL, REFRESH_POSTS_BY_CATE, GET_SELECTED_POST, ADD_COMMENT } from "../actions/post/action-types";
 import {
   SET_POSTS,
   ADD_POST
@@ -29,12 +29,11 @@ const mutations = {
 
 const actions = {
   [CREATE]: async (_, p) => {
-    let imageBytes = new Buffer(p.imgData.split(',')[1] ,'base64'); 
     let post = {
-      Title: p.title,
-      Content: p.text,
-      CateID: p.cateID,
-      Image: p.imgData.split(',')[1]
+      title: p.title,
+      content: p.content,
+      cateId: '5dbc104dd9264400045aaafd',
+      image: !p.imgData ? null : p.imgData.split(',')[1]
     };
     console.log(post);
     let { data } = await axios.post(apis.create_post, post);
@@ -42,9 +41,6 @@ const actions = {
   },
 
   [GET_ALL]: async () => {
-    return true;
-  },
-  [NEW_COMMENT]: async (c, p) => {
     return true;
   },
 
@@ -61,7 +57,7 @@ const actions = {
   [ADD_COMMENT]: async (_, payload) => {
     let { data } = await axios.post(
       apis.add_comment, {
-        postId: payload.postId,
+      postId: payload.postId,
       content: payload.content,
       parentId: payload.parentId
     });
