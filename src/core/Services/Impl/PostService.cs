@@ -10,7 +10,6 @@ using CaveCore.Service.Impl;
 using CaveCore.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using MongoDB.Bson;
 using System.Linq;
 
 namespace CaveCore.Services.Impl
@@ -136,22 +135,48 @@ namespace CaveCore.Services.Impl
             {
                 var votes = post.Votes != null ? post.Votes.ToList() : new List<Vote>();
                 var foundVote = votes.Where(v => v.CreatorId == CurrentId).FirstOrDefault();
-                if (foundVote != null)
+                if (foundVote == null)
                 {
+                    //add new
+                    var newVote = new Vote(){
+                        PostId = reqPosId,
+                        VoteType = reqVoteType,
+                        CreatorId = CurrentId
+                    };
+                    var updateDef = Builders<Post>.Update.Push(p => p.Votes, newVote);
+                    await _collection.UpdateOneAsync(p => p.Id == reqPosId, updateDef);
+                }else if(voteRequest.VoteType == foundVote.VoteType){
+                    //remove
                     votes.Remove(votes.Where(o => o.CreatorId == CurrentId).FirstOrDefault());
+                    post.Votes = votes;
+                    await _collection.UpdateOneAsync(p => p.Id == reqPosId, Builders<Post>.Update
+                                            .Set(p => p.Votes, votes));
+                }else {
+                    //update
+                     var filter = Builders<Post>.Filter.
+                    And(Builders<Post>.Filter.
+                    Eq(p => p.Id, voteRequest.PostId), Builders<Post>.Filter.
+                    ElemMatch(p => p.Votes, p => p.Id == foundVote.Id));
+                    await _collection.UpdateOneAsync(filter, Builders<Post>.Update.Set(p => p.Votes.ElementAt(-1).VoteType, voteRequest.VoteType));
                 }
-                else
-                {
-                    var newVote = new Vote();
-                    newVote.PostId = reqPosId;
-                    newVote.VoteType = reqVoteType;
-                    newVote.CreatorId = CurrentId;
-                    votes.Add(newVote);
-                }
-                post.Votes = votes;
-                var update = Builders<Post>.Update
-                                            .Set(p => p.Votes, votes);
-                await _collection.UpdateOneAsync(p => p.Id == reqPosId, update);
+
+                // if (foundVote != null && foundVote.VoteType == voteRequest.VoteType)
+                // {
+                //     votes.Remove(votes.Where(o => o.CreatorId == CurrentId).FirstOrDefault());
+                // }
+                // else
+                // {
+                //     var newVote = new Vote(){
+                //         PostId = reqPosId,
+                //         VoteType = reqVoteType,
+                //         CreatorId = CurrentId
+                //     };
+                //     votes.Add(newVote);
+                // }
+                // post.Votes = votes;
+                // var update = Builders<Post>.Update
+                //                             .Set(p => p.Votes, votes);
+                // await _collection.UpdateOneAsync(p => p.Id == reqPosId, update);
             }
             return await _collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
         }
