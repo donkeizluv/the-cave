@@ -13,10 +13,7 @@ namespace CaveCore.Services.Impl
         private readonly IDbSettings _settings;
         private readonly IMongoDatabase _db;
         private readonly IMongoCollection<Post> _postCollection;
-        private readonly IMongoCollection<Category> _categoryCollection;
-
         private const double weigth = 0.12;
-
         private const double maxPointWeigth = 0.1;
 
         public TrendingService(IOptions<DbSettings> option,

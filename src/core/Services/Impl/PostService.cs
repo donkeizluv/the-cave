@@ -38,7 +38,7 @@ namespace CaveCore.Services.Impl
             _cateservice = service;
         }
 
-        public async Task addPoint(string postId, int point)
+        public async Task AddPoint(string postId, int point)
         {
             var update = Builders<Post>.Update.Inc(p => p.Point, point);
             await _collection.UpdateOneAsync(p => p.Id == postId, update);
@@ -46,14 +46,12 @@ namespace CaveCore.Services.Impl
         }
         public async Task<string> Create(PostDto post)
         {
-            
-            var postCollection = _db.GetCollection<Post>(_settings.PostCollectionName);
             var newPost = _mapper.Map<Post>(post);
-            ICategory cate = await _cateservice.GetCateById(post.CateId);
+            
             newPost.CreatorId = CurrentId;
             newPost.CreatorName = CurrentUsername;
-            newPost.CateName = cate.CateName;
-            await postCollection.InsertOneAsync(_mapper.Map<Post>(newPost));
+            newPost.CateName = (await _cateservice.GetCateNameById(post.CateId));
+            await _collection.InsertOneAsync(_mapper.Map<Post>(newPost));
             return newPost.Id;
         }
 
@@ -90,8 +88,8 @@ namespace CaveCore.Services.Impl
 
         public async Task<IPost> GetPostById(string postId)
         {
-            await addPoint(postId, (int)PointEnum.View);
-            return await _db.GetCollection<Post>(_settings.PostCollectionName)
+            await AddPoint(postId, (int)PointEnum.View);
+            return await _collection
                 .Find(p => true && p.Id == postId)
                 .FirstOrDefaultAsync();
         }
@@ -128,14 +126,12 @@ namespace CaveCore.Services.Impl
         }
         public async Task<IPost> AddVote(VoteRequestDto voteRequest)
         {
-            await addPoint(voteRequest.PostId, (int)PointEnum.UpVote);
+            await AddPoint(voteRequest.PostId, (int)PointEnum.UpVote);
 
             var reqPosId = voteRequest.PostId;
             var reqVoteType = voteRequest.VoteType;
 
-            var collection = _db.GetCollection<Post>(_settings.PostCollectionName);
-
-            var post = await collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
+            var post = await _collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
             if (post != null)
             {
                 var votes = post.Votes != null ? post.Votes.ToList() : new List<Vote>();
@@ -155,14 +151,14 @@ namespace CaveCore.Services.Impl
                 post.Votes = votes;
                 var update = Builders<Post>.Update
                                             .Set(p => p.Votes, votes);
-                await collection.UpdateOneAsync(p => p.Id == reqPosId, update);
+                await _collection.UpdateOneAsync(p => p.Id == reqPosId, update);
             }
-            return await collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
+            return await _collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
         }
 
         public async Task<string> AddComment(CommentDto comment)
         {
-            await addPoint(comment.PostId, (int)PointEnum.Comment);
+            await AddPoint(comment.PostId, (int)PointEnum.Comment);
 
             var reqPosId = comment.PostId;
 
@@ -177,7 +173,6 @@ namespace CaveCore.Services.Impl
 
             var update = Builders<Post>.Update.Push(p => p.Comments, newComment);
             await _collection.UpdateOneAsync(p => p.Id == reqPosId, update);
-
             return newComment.Id;
         }
 
@@ -189,8 +184,13 @@ namespace CaveCore.Services.Impl
                 ElemMatch(p => p.Comments, p => p.Id == comment.Id));
             var update = Builders<Post>.Update.Set(p => p.Comments.ElementAt(-1).Content, comment.Content);
             await _collection.UpdateOneAsync(filter, update);
-
             return comment.Id;
+        }
+
+        public async Task<int> CountPostByCate(string cateId)
+        {
+            var cate = (await _collection.Find(p => p.CateId == cateId).ToListAsync());
+            return (cate != null ? cate.Count(): 0);
         }
     }
 }

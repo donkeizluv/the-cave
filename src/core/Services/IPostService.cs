@@ -13,7 +13,7 @@ namespace CaveCore.Services
         Task<IEnumerable<IPost>> GetPostsByCateId(string cateId, int? order);
 
         Task<IEnumerable<IPost>> GetAllPosts(int? order);
-        
+    
         Task<IPost> GetPostById(string postId);
 
         Task<string> DeletePost(string postId);
@@ -25,6 +25,7 @@ namespace CaveCore.Services
 
         Task<string> AddComment(CommentDto comment);
         Task<string> UpdateComment(CommentDto comment);
+        Task<int> CountPostByCate(string cateId);
 
     }
 }
