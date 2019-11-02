@@ -27,7 +27,7 @@
             class="mt-2"
             min-width="100%"
             color="primary"
-            :disable="isAuthenticated"
+            v-if="isAuthenticated"
             @click="$router.push({ name: 'create_post', params: { cateID: cate.id } })"
           >Create Post</v-btn>
         </v-col>
