@@ -25,6 +25,7 @@ namespace CaveCore.SchemaModels
         public Vote()
         {
             Created = DateTime.UtcNow;
+            Id = ObjectId.GenerateNewId().ToString();
         }
     }
 

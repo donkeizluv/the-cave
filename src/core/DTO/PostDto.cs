@@ -32,5 +32,10 @@ namespace CaveCore.DTO
         public string CreatorId { get; set; }
         public string CreatorName { get; set; }
 
+        public int Point {get; set;}
+
+        public int MaxPoint {get;set;}
+
+
     }
 }

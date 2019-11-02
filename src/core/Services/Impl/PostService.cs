@@ -37,8 +37,15 @@ namespace CaveCore.Services.Impl
             _cateservice = service;
         }
 
+        public async Task addPoint(string postId, int point)
+        {
+            var update = Builders<Post>.Update.Inc(p => p.Point, point);
+            await _collection.UpdateOneAsync(p => p.Id == postId, update);
+            return;
+        }
         public async Task<string> Create(PostDto post)
         {
+            
             var postCollection = _db.GetCollection<Post>(_settings.PostCollectionName);
             var newPost = _mapper.Map<Post>(post);
             ICategory cate = await _cateservice.GetCateById(post.CateId);
@@ -63,7 +70,7 @@ namespace CaveCore.Services.Impl
                 1 => await _collection.Find(p => p.CateId == cateId).SortBy(p => p.Created).ToListAsync(),
                 2 => await _collection.Find(p => p.CateId == cateId).SortByDescending(p => p.Created).ToListAsync(),
                 3 => await _collection.Find(p => p.CateId == cateId).SortBy(p => p.Title).ToListAsync(),
-                _ => await _collection.Find(p => p.CateId == cateId).ToListAsync()
+                _ => await _collection.Find(p => p.CateId == cateId).SortByDescending(p => p.Point).SortByDescending(p => p.MaxPoint).ToListAsync()
 
             };
         }
@@ -75,13 +82,14 @@ namespace CaveCore.Services.Impl
                 1 => await _collection.Find(p => true).SortBy(p => p.Created).ToListAsync(),
                 2 => await _collection.Find(p => true).SortByDescending(p => p.Created).ToListAsync(),
                 3 => await _collection.Find(p => true).SortBy(p => p.Title).ToListAsync(),
-                _ => await _collection.Find(p => true).ToListAsync()
+                _ => await _collection.Find(p => true).SortByDescending(p => p.Point).SortByDescending(p => p.MaxPoint).ToListAsync()
 
             };
         }
 
         public async Task<IPost> GetPostById(string postId)
         {
+            await addPoint(postId, (int)PointEnum.View);
             return await _db.GetCollection<Post>(_settings.PostCollectionName)
                 .Find(p => true && p.Id == postId)
                 .FirstOrDefaultAsync();
@@ -119,6 +127,7 @@ namespace CaveCore.Services.Impl
         }
         public async Task<IPost> AddVote(VoteRequestDto voteRequest)
         {
+            await addPoint(voteRequest.PostId, (int)PointEnum.UpVote);
 
             var reqPosId = voteRequest.PostId;
             var reqVoteType = voteRequest.VoteType;
@@ -152,6 +161,8 @@ namespace CaveCore.Services.Impl
 
         public async Task<string> AddComment(CommentDto comment)
         {
+            await addPoint(comment.PostId, (int)PointEnum.Comment);
+
             var reqPosId = comment.PostId;
             var post = await _collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
             var comments = post.Comments != null ? post.Comments.ToList() : new List<Comment>();

@@ -17,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using CaveServer.Services;
 
 namespace CaveServer
 {
@@ -88,6 +89,8 @@ namespace CaveServer
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IPostService, PostService>();
+            services.AddScoped<ITrendingService, TrendingService>();
+            services.AddHostedService<TrendingRefreshService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
