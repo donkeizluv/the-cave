@@ -57,8 +57,8 @@ namespace CaveServer.Controllers
             }
         }
 
-        [HttpGet("cate")]
-        public async Task<IActionResult> GetCateById([FromQuery]string cateId)
+        [HttpGet("cate/{cateId}")]
+        public async Task<IActionResult> GetCateById(string cateId)
         {
             try
             {

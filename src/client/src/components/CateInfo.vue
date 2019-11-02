@@ -1,19 +1,19 @@
 <template>
-  <v-card class="mx-auto" outlined v-if="selectedCate">
-    <v-container>
+  <v-card class="mx-auto" outlined >
+    <v-container v-if="selectedCate">
       <v-row dense>
         <v-col class="text-center blue--text text--darken-1">
-          <div>{{ selectedCate.name }}</div>
+          <div>{{ selectedCate.cateName }}</div>
         </v-col>
       </v-row>
       <v-row dense>
         <v-col class="ma-4">
           <v-row class="grey--text text--light-2">Total post:</v-row>
-          <v-row>{{ selectedCate.noOfPost }}</v-row>
+          <v-row>{{ selectedCate.postCount }}</v-row>
         </v-col>
         <v-col class="ma-4">
           <v-row class="grey--text text--light-2">Created:</v-row>
-          <v-row>{{ selectedCate.createdDate }}</v-row>
+          <v-row>{{ createdTimeAgo(selectedCate.created) }}</v-row>
         </v-col>
       </v-row>
       <v-row dense>
@@ -27,16 +27,20 @@
             class="mt-2"
             min-width="100%"
             color="primary"
-            :disabled="isAuthenticated"
+            :disable="isAuthenticated"
             @click="$router.push({ name: 'create_post', params: { cateID: selectedCate.id } })"
           >Create Post</v-btn>
         </v-col>
       </v-row>
     </v-container>
+    <v-container v-else>
+
+    </v-container>
   </v-card>
 </template>
 
 <script>
+import { timeAgo } from "./shared/utils";
 import { selectedCate } from '../store/getters/category/getter-types';
 import { mapGetters } from "vuex";
 import { isAuthenticated } from "../store/getters/getter-types";
@@ -52,6 +56,10 @@ export default {
   data: function name() {
     return {};
   },
-  methods: {}
+  methods: {
+    createdTimeAgo(t) {
+      return timeAgo.format(new Date(t));
+    },
+  }
 };
 </script>

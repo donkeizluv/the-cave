@@ -25,7 +25,7 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <div class="ma-4 pt-4">
-        <v-text-field color="white" small append-icon="mdi-magnify"></v-text-field>
+        <v-text-field color="white" small append-icon="mdi-magnify" @submit="onSubmit"></v-text-field>
       </div>
 
       <v-btn v-if="!isAuthenticated" @click="loginModal = true;" class="ma-2" depressed>Log in</v-btn>
@@ -42,10 +42,10 @@
             <v-icon color="white">mdi-account-circle</v-icon>
           </v-btn>
         </template>
-        <v-list>
-          <v-list-item @click="profileModal = true;">
+        <v-list v-if="isAuthenticated">
+          <v-list-item @click="profileModal = true;" >
             <v-icon>mdi-account</v-icon>
-            <v-list-item-title>Your Profile</v-list-item-title>
+            <v-list-item-title>Your Profile</v-list-item-title >
           </v-list-item>
           <v-list-item>
             <v-list-item-title>Option 2</v-list-item-title>
@@ -131,12 +131,7 @@ export default {
       color: "success",
       text: null
     },
-    categories: [
-      { id: 1, name: "catA" },
-      { id: 2, name: "catB" },
-      { id: 3, name: "catC" },
-      { id: 4, name: "catD" }
-    ],
+    categories: [],
     loginModal: false,
     regModal: false,
     cateModal: false,
@@ -160,6 +155,9 @@ export default {
     },
     showCaveModal() {
       this.caveModal = true;
+    },
+    onSubmit() {
+
     }
   }
 };

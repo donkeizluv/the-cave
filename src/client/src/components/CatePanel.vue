@@ -33,6 +33,7 @@ import { categories } from "../store/getters/category/getter-types";
 import {
   REFRESH_POSTS_BY_CATE
 } from "../store/actions/post/action-types";
+import { REFRESH_SELECTED_CATEGORY } from '../store/actions/category/action-types';
 export default {
   name: "CatePanel",
   props: {},
@@ -45,8 +46,13 @@ export default {
   },
   methods: {
     ...mapActions(moduleNames.post, [REFRESH_POSTS_BY_CATE]),
+    ...mapActions(moduleNames.category, [REFRESH_SELECTED_CATEGORY]),
     onSelectCate(cate) {
       console.log(cate);
+<<<<<<< Updated upstream
+=======
+      this.REFRESH_SELECTED_CATEGORY(cate.id);
+>>>>>>> Stashed changes
       this.REFRESH_POSTS_BY_CATE(cate.id);
       this.$router.push({ name: 'category', params: { cate: cate.cateName }});
     }

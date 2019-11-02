@@ -1,4 +1,4 @@
-import { CREATE, GET_ALL, REFRESH_POSTS_BY_CATE, GET_SELECTED_POST, ADD_COMMENT, ADD_VOTE } from "../actions/post/action-types";
+import { CREATE, GET_ALL, REFRESH_POSTS_BY_CATE, GET_SELECTED_POST, ADD_COMMENT, ADD_VOTE, REFRESH_POSTS_BY_SEARCH } from "../actions/post/action-types";
 import {
   SET_POSTS,
   ADD_POST,
@@ -58,6 +58,7 @@ const actions = {
     let { data } = await axios.get(`${apis.get_selected_post}/${payload}`);
     return data;
   },
+
   [ADD_COMMENT]: async (_, payload) => {
     let { data } = await axios.post(
       apis.add_comment, {
@@ -79,6 +80,10 @@ const actions = {
       downVotes: data.downVotes
     });
     return data;
+  },
+  [REFRESH_POSTS_BY_SEARCH]: async ({ commit }, payload) => {
+    let data = await axios.get(`${apis.get_posts_by_search}/${payload.cateID}?query=${payload.query}`);
+    commit(`${SET_POSTS}`, data);
   }
 };
 

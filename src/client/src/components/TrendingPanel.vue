@@ -55,10 +55,7 @@ export default {
     }
   },
   data() {
-    return {
-      upvote: false,
-      downvote: false
-    };
+    return {};
   },
   methods: {
     ...mapActions(moduleNames.post, [ADD_VOTE]),
