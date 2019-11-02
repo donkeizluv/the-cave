@@ -109,6 +109,10 @@ export default {
     },
     ...mapActions(moduleNames.post, [CREATE]),
     async create() {
+      if(this.post.content.length > 700) {
+        alert("Content can not exceed 700 words");
+        return false;
+      } 
       this.post.cateID = this.cateID;
       this.post.imgData = this.imageData;
       let postId = await this.CREATE(this.post);

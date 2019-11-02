@@ -78,6 +78,13 @@ export default {
   computed: {
     canSubmit() {
       return this.formValid;
+    },
+    clear() {
+      if(!this.show) {
+        this.reg.username = null;
+        this.reg.pwd = null;
+        this.reg.email = null;
+      }
     }
   },
   data() {
@@ -92,7 +99,8 @@ export default {
         passwords: [
           value => validationRules.requiredValue(value),
           value => validationRules.minCharacter(value, 6),
-          value => validationRules.maxCharacter(value, 24)
+          value => validationRules.maxCharacter(value, 24),
+          v => (v || '').indexOf(' ') < 0 || 'No spaces are allowed'
         ],
         email: [
           value => validationRules.requiredValue(value),
@@ -117,11 +125,10 @@ export default {
   methods: {
     ...mapActions([REGISTER]),
     clearAll() {
-      this.cred = {
+      this.reg = {
         username: null,
         email: null,
-        pwd: null,
-        rPwd: null
+        pwd: null
       };
       this.isError = false;
       this.dialogMessage = null;
@@ -133,6 +140,7 @@ export default {
     async createUser() {
       try {
         if (!this.canSubmit) return;
+        if(this.reg.pwd == "") return;
         this.isLoading = true;
         await this.REGISTER(this.reg);
         this.isError = false;
