@@ -13,6 +13,6 @@ namespace CaveCore
         UpVote = 2,
         DownVote = 2,
         Comment = 3,
-        View = 1000
+        View = 1
     }
 }
