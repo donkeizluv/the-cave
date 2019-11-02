@@ -31,6 +31,7 @@ namespace CaveServer.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCates()
         {
             try
@@ -58,6 +59,7 @@ namespace CaveServer.Controllers
         }
 
         [HttpGet("cate/{cateId}")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetCateById(string cateId)
         {
             try

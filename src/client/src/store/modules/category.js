@@ -54,11 +54,7 @@ const actions = {
   },
   [GET_SELECTED_CATEGORY]: async (_, payload) => {
     let { data } = await axios.get(`${apis.refresh_selected_category}/${payload}`);
-<<<<<<< HEAD
     commit(SET_SELECTED_CATE, data);
-=======
-    return data;
->>>>>>> 9bfd15f7c82eb915e7d83eb04288825e88a104c9
   }
 };
 
