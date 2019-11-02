@@ -71,8 +71,7 @@ namespace CaveCore.Services.Impl
                 1 => await _collection.Find(p => p.CateId == cateId).SortBy(p => p.Created).ToListAsync(),
                 2 => await _collection.Find(p => p.CateId == cateId).SortByDescending(p => p.Created).ToListAsync(),
                 3 => await _collection.Find(p => p.CateId == cateId).SortBy(p => p.Title).ToListAsync(),
-                _ => await _collection.Find(p => p.CateId == cateId).SortByDescending(p => p.Point).SortByDescending(p => p.MaxPoint).ToListAsync()
-
+                _ => await _collection.Find(p => p.CateId == cateId).SortByDescending(p => p.Point).ThenByDescending(p => p.MaxPoint).ToListAsync()
             };
         }
 
@@ -83,8 +82,7 @@ namespace CaveCore.Services.Impl
                 1 => await _collection.Find(p => true).SortBy(p => p.Created).ToListAsync(),
                 2 => await _collection.Find(p => true).SortByDescending(p => p.Created).ToListAsync(),
                 3 => await _collection.Find(p => true).SortBy(p => p.Title).ToListAsync(),
-                _ => await _collection.Find(p => true).SortByDescending(p => p.Point).SortByDescending(p => p.MaxPoint).ToListAsync()
-
+                _ => await _collection.Find(p => true).SortByDescending(p => p.Point).ThenByDescending(p => p.MaxPoint).ToListAsync()
             };
         }
 
