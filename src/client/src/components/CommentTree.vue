@@ -1,11 +1,12 @@
 <template>
-  <v-card class="mx-auto" outlined>
+  <v-card class="mx-auto" flat>
     <v-treeview
       :items="commentTree"
       item-key="data.id"
       expand-icon="mdi-chevron-down"
       dense
-      :open-all="openall"
+      :open="open"
+      open-all
     >
       <template v-slot:prepend="{ item, open }">
         <comment @submit="submit($event)" :item="item" />
@@ -14,10 +15,6 @@
   </v-card>
 </template>
 <script>
-// import { REGISTER } from "../store/actions/action-types";
-//import { posts } from "../store/getters/post/getter-types";
-import moduleNames from "../store/modules/module-names";
-import { mapGetters } from "vuex";
 import { arrayToTree } from "performant-array-to-tree";
 import Comment from "./Comment.vue";
 
@@ -30,15 +27,14 @@ export default {
     comments: {
       type: Array,
       required: true
-    },
-    openall: {
-      type: Boolean,
-      default: true
     }
   },
   computed: {
     commentTree() {
       return arrayToTree(this.comments);
+    },
+    open() {
+      return this.comments.map(c => c.id);
     }
   },
   methods: {

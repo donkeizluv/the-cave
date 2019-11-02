@@ -34,12 +34,14 @@ namespace CaveCore.SchemaModels
 
         [BsonElement("creator_id")]
         public string CreatorId { get; set; }
-
-        [BsonElement("creator_name")]
+        [BsonElement("point")]
+        public int Point {get;set;}
+        [BsonElement("max_point")]
+        public int MaxPoint {get;set;}
+		[BsonElement("creator_name")]
         public string CreatorName { get; set; }
 
-        [BsonElement("comments")]
-        public IEnumerable<Comment> Comments { get; set; }
+        [BsonElement("comments")]        public IEnumerable<Comment> Comments { get; set; }
         public Post()
         {
             Created = DateTime.UtcNow;
@@ -58,8 +60,10 @@ namespace CaveCore.SchemaModels
         IEnumerable<Comment> Comments { get; set; }
         DateTime Created { get; set; }
         string CreatorId { get; set; }
-        string CreatorName { get; set; }
+		string CreatorName { get; set; }
+  
+        int Point {get;set;}
 
-
+        int MaxPoint {get;set;}
     }
 }

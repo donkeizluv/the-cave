@@ -28,9 +28,9 @@ namespace CaveServer.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("cate/{cateId}")]
+        [HttpGet("{cateId}")]
         [AllowAnonymous]
-        public async Task<IEnumerable<PostDto>> GetPostsByCateId(string cateId, int? order)
+        public async Task<IEnumerable<PostDto>> GetPostsByCateId([FromQuery]string cateId, int? order)
         {
             var posts = await _service.GetPostsByCateId(cateId, order);
             return _mapper.Map<IEnumerable<PostDto>>(posts);
@@ -47,7 +47,7 @@ namespace CaveServer.Controllers
 
         [HttpGet("{postId}")]
         [AllowAnonymous]
-        public async Task<PostDto> GetPostById(string postId)
+        public async Task<PostDto> GetPostById([FromQuery]string postId)
         {
             var post = await _service.GetPostById(postId);
             return _mapper.Map<PostDto>(post);
@@ -80,7 +80,7 @@ namespace CaveServer.Controllers
         }
 
         [HttpDelete("{postId}")]
-        public async Task<IActionResult> Delete(string postId)
+        public async Task<IActionResult> Delete([FromQuery]string postId)
         {
             try
             {

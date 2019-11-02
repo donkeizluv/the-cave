@@ -33,7 +33,7 @@ namespace CaveServer.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<LandingDto> GetTrending([FromQuery]int? order)
+        public async Task<LandingDto> GetLanding([FromQuery]int? order)
         {
             var posts = await _postService.GetAllPosts(order);
             var cates = await _cateService.GetAllCates();
