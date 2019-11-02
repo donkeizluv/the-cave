@@ -2,7 +2,15 @@
   <v-card class="mx-auto" width="auto">
     <v-card-title>Create Your Post</v-card-title>
     <v-card-text class="text--primary">
-      <v-text-field v-model="post.title" label="Title" class="input-group--focused mb-4"></v-text-field>
+      <v-text-field 
+      v-model="post.title" 
+      label="Title" 
+      class="input-group--focused mb-4"
+      counter
+      maxlength="50"
+      single-line
+      outlined></v-text-field>
+      <vue-editor v-model="post.content" :editorToolbar="customToolbar" class="mb-4"></vue-editor> 
       <div
         class="image-input"
         :style="{ 'background-image': `url(${imageData})` }"
@@ -17,7 +25,7 @@
           @input="onSelectFile"
         />
       </div>
-      <v-textarea autocomplete label="Post" v-model="post.text"></v-textarea>
+      
     </v-card-text>
     <v-card-actions>
       <v-btn text color="deep-purple accent-4" @click="create">Create</v-btn>
@@ -59,8 +67,12 @@ import { mapActions, mapGetters } from "vuex";
 import { isAuthenticated } from "../store/getters/getter-types";
 import moduleNames from "../store/modules/module-names";
 import { CREATE } from "../store/actions/post/action-types";
+import { VueEditor } from "vue2-editor";
 
 export default {
+  components: {
+    VueEditor
+  },
   name: "CreatePostPanel",
   props: {
     cateID: {
@@ -74,11 +86,16 @@ export default {
     return {
       post: {
         title: "",
-        text: "",
+        content: "",
         imgData: "",
         cateID: ""
       },
-      imageData: null
+      imageData: null,
+      content: "<h1>Some initial content</h1>",
+      customToolbar: [
+        ["bold", "italic", "underline"], 
+        [{ list: "ordered" }, { list: "bullet" }]
+      ]
     };
   },
   methods: {
@@ -88,7 +105,7 @@ export default {
     ...mapActions(moduleNames.post, [CREATE]),
     async create() {
       this.post.cateID = this.cateID;
-      console.log(this.post);
+      this.post.imgData = this.imageData;
       let postId = await this.CREATE(this.post);
       this.$router.push({ name: "post", params: { postId: postId } });
     },
@@ -99,6 +116,7 @@ export default {
     onSelectFile() {
       const input = this.$refs.fileInput;
       const files = input.files;
+      console.log(input);
       if (files && files[0]) {
         const reader = new FileReader();
         reader.onload = e => {

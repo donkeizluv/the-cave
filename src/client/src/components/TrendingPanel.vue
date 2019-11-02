@@ -14,7 +14,7 @@
       </v-col>
     </v-row>
 
-    <v-card outlined class="overline mb-8" v-for="post in posts" v-bind:key="post.ID">
+    <v-card outlined class="overline mb-8" v-if="posts.length > 0" v-for="post in posts" v-bind:key="post.ID">
       <v-list-item>
         <!-- <--<v-list-item-avatar color="grey"></v-list-item-avatar>-->
         <v-list-item-content>
@@ -23,7 +23,7 @@
         </v-list-item-content>
       </v-list-item>
 
-      <v-img src="https://cdn.vuetifyjs.com/images/cards/mountain.jpg" height="200px"></v-img>
+      <v-img v-if="post.imgData" v-bind:src="post.imgData" height="200px"></v-img>
 
       <v-card-text>{{ post.content }}</v-card-text>
 

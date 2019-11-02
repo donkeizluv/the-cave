@@ -16,7 +16,7 @@
             text
             color="primary"
             small
-            @click="$router.push({ name: 'category', params: { cate: cate.cateName }})"
+            @click="onSelectCate(cate)"
           >{{cate.cateName}}</v-btn>
         </v-list-item-content>
       </v-list-item>
@@ -28,8 +28,12 @@
 <script>
 import moduleNames from "../store/modules/module-names";
 import { isAuthenticated } from "../store/getters/getter-types";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { categories } from "../store/getters/category/getter-types";
+import {
+  REFRESH_POSTS_BY_CATE
+} from "../store/actions/post/action-types";
+import router from "../router";
 export default {
   name: "CatePanel",
   props: {},
@@ -41,7 +45,11 @@ export default {
     return {};
   },
   methods: {
-    // ...mapActions(moduleNames.category, [CREATE])
+    ...mapActions(moduleNames.post, [REFRESH_POSTS_BY_CATE]),
+    onSelectCate(cate) {
+      this.REFRESH_POSTS_BY_CATE(cate.id);
+      router.push({ name: 'category', params: { cate: cate.cateName }});
+    }
   }
 };
 </script>
