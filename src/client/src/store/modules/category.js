@@ -1,4 +1,4 @@
-import { CREATE, GET_ALL } from "../actions/category/action-types";
+import { CREATE, GET_ALL, REFRESH_SELECTED_CATEGORY } from "../actions/category/action-types";
 import {
   SET_CATEGORIES,
   ADD_CATEGORY,
@@ -44,6 +44,13 @@ const actions = {
 
   [GET_ALL]: async () => {
     return true;
+  },
+
+  [REFRESH_SELECTED_CATEGORY]: async ({ commit }, payload) => {
+    console.log(apis.refresh_selected_category);
+    let { data } = await axios.get(`${apis.refresh_selected_category}/${payload}`);
+    console.log(data);
+    commit(SET_SELECTED_CATE, data);
   }
 };
 

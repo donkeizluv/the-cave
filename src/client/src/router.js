@@ -16,9 +16,10 @@ export default new Router({
       component: Trending
     },
     {
-      path: "/post/create",
+      path: "/post/create/:cateID",
       name: "create_post",
-      component: CreatePost
+      component: CreatePost,
+      props: r => r.params
     },
     {
       path: "/cate/:cate",

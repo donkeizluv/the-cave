@@ -1,7 +1,7 @@
 using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
-using System.Collections.Generic; 
+using System.Collections.Generic;
 
 namespace CaveCore.SchemaModels
 {
@@ -10,7 +10,7 @@ namespace CaveCore.SchemaModels
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
-        
+
         [BsonElement("title")]
         public string Title { get; set; }
 
@@ -27,7 +27,7 @@ namespace CaveCore.SchemaModels
         public string CateName { get; set; }
 
         [BsonElement("votes")]
-        public IEnumerable<Vote> Votes {get; set;}
+        public IEnumerable<Vote> Votes { get; set; }
 
         [BsonElement("created")]
         public DateTime Created { get; set; }
@@ -35,13 +35,13 @@ namespace CaveCore.SchemaModels
         [BsonElement("creator_id")]
         public string CreatorId { get; set; }
         [BsonElement("point")]
-        public int Point {get;set;}
+        public int Point { get; set; }
         [BsonElement("max_point")]
-        public int MaxPoint {get;set;}
-		[BsonElement("creator_name")]
+        public int MaxPoint { get; set; }
+        [BsonElement("creator_name")]
         public string CreatorName { get; set; }
 
-        [BsonElement("comments")]        public IEnumerable<Comment> Comments { get; set; }
+        [BsonElement("comments")] public IEnumerable<Comment> Comments { get; set; }
         public Post()
         {
             Created = DateTime.UtcNow;
@@ -56,14 +56,14 @@ namespace CaveCore.SchemaModels
         byte[] Image { get; set; }
         string CateId { get; set; }
         string CateName { get; set; }
-        IEnumerable<Vote> Votes {get; set; }
+        IEnumerable<Vote> Votes { get; set; }
         IEnumerable<Comment> Comments { get; set; }
         DateTime Created { get; set; }
         string CreatorId { get; set; }
-		string CreatorName { get; set; }
-  
-        int Point {get;set;}
+        string CreatorName { get; set; }
 
-        int MaxPoint {get;set;}
+        int Point { get; set; }
+
+        int MaxPoint { get; set; }
     }
 }

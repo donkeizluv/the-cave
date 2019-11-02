@@ -28,26 +28,26 @@ namespace CaveServer.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{cateId}")]
+        [HttpGet("cate/{cateId}")]
         [AllowAnonymous]
-        public async Task<IEnumerable<PostDto>> GetPostsByCateId([FromQuery]string cateId, int? order)
+        public async Task<IEnumerable<PostListDto>> GetPostsByCateId(string cateId, [FromQuery] int? order)
         {
             var posts = await _service.GetPostsByCateId(cateId, order);
-            return _mapper.Map<IEnumerable<PostDto>>(posts);
+            return _mapper.Map<IEnumerable<PostListDto>>(posts);
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IEnumerable<PostDto>> GetAllPost(int? order)
+        public async Task<IEnumerable<PostListDto>> GetAllPost(int? order)
         {
 
             var posts = await _service.GetAllPosts(order);
-            return _mapper.Map<IEnumerable<PostDto>>(posts);
+            return _mapper.Map<IEnumerable<PostListDto>>(posts);
         }
 
-        [HttpGet("{postId}")]
+        [HttpGet("id/{postId}")]
         [AllowAnonymous]
-        public async Task<PostDto> GetPostById([FromQuery]string postId)
+        public async Task<PostDto> GetPostById(string postId)
         {
             var post = await _service.GetPostById(postId);
             return _mapper.Map<PostDto>(post);
@@ -95,10 +95,10 @@ namespace CaveServer.Controllers
 
         [HttpGet("search")]
         [AllowAnonymous]
-        public async Task<IEnumerable<PostDto>> GetPostsByTilte([FromQuery]string cateId, [FromQuery]string searchText)
+        public async Task<IEnumerable<PostListDto>> GetPostsByTilte([FromQuery]string cateId, [FromQuery]string searchText)
         {
             var posts = await _service.SearchPostWithCateId(cateId, searchText);
-            return _mapper.Map<IEnumerable<PostDto>>(posts);
+            return _mapper.Map<IEnumerable<PostListDto>>(posts);
         }
         [HttpPost("addvote")]
         public async Task<IActionResult> AddVote([FromBody]VoteRequestDto voteReq)
@@ -106,7 +106,7 @@ namespace CaveServer.Controllers
             try
             {
                 var post = await _service.AddVote(voteReq);
-                return Ok(_mapper.Map<PostDto>(post));
+                return Ok(_mapper.Map<VoteResultDto>(post));
             }
             catch (BussinessException ex)
             {

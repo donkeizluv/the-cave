@@ -1,6 +1,5 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using CaveCore.SchemaModels;
 
 namespace CaveCore.DTO
 {
@@ -17,5 +16,7 @@ namespace CaveCore.DTO
         public DateTime Created { get; set; }
 
         public string CreatorId { get; set; }
+
+        public int PostCount { get;set; }
     }
 }

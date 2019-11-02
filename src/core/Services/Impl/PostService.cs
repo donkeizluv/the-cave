@@ -37,7 +37,7 @@ namespace CaveCore.Services.Impl
             _cateservice = service;
         }
 
-        public async Task addPoint(string postId, int point)
+        public async Task AddPoint(string postId, int point)
         {
             var update = Builders<Post>.Update.Inc(p => p.Point, point);
             await _collection.UpdateOneAsync(p => p.Id == postId, update);
@@ -45,14 +45,15 @@ namespace CaveCore.Services.Impl
         }
         public async Task<string> Create(PostDto post)
         {
-            
-            var postCollection = _db.GetCollection<Post>(_settings.PostCollectionName);
             var newPost = _mapper.Map<Post>(post);
-            ICategory cate = await _cateservice.GetCateById(post.CateId);
+            var postCollection = _db.GetCollection<Post>(_settings.PostCollectionName);
+            var cate = await _cateservice.GetCateById(post.CateId);
+            if (cate == null) throw new BussinessException("Invalid category");
             newPost.CreatorId = CurrentId;
             newPost.CreatorName = CurrentUsername;
-            newPost.CateName = cate.CateName;
-            await postCollection.InsertOneAsync(_mapper.Map<Post>(newPost));
+            newPost.CateName = (await _cateservice.GetCateNameById(post.CateId));
+            newPost.Votes = new List<Vote>();
+            await _collection.InsertOneAsync(_mapper.Map<Post>(newPost));
             return newPost.Id;
         }
 
@@ -89,8 +90,8 @@ namespace CaveCore.Services.Impl
 
         public async Task<IPost> GetPostById(string postId)
         {
-            await addPoint(postId, (int)PointEnum.View);
-            return await _db.GetCollection<Post>(_settings.PostCollectionName)
+            await AddPoint(postId, (int)PointEnum.View);
+            return await _collection
                 .Find(p => true && p.Id == postId)
                 .FirstOrDefaultAsync();
         }
@@ -127,45 +128,48 @@ namespace CaveCore.Services.Impl
         }
         public async Task<IPost> AddVote(VoteRequestDto voteRequest)
         {
-            await addPoint(voteRequest.PostId, (int)PointEnum.UpVote);
+            await AddPoint(voteRequest.PostId, (int)PointEnum.UpVote);
 
             var reqPosId = voteRequest.PostId;
             var reqVoteType = voteRequest.VoteType;
 
-            var collection = _db.GetCollection<Post>(_settings.PostCollectionName);
-
-            var post = await collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
+            var post = await _collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
             if (post != null)
             {
                 var votes = post.Votes != null ? post.Votes.ToList() : new List<Vote>();
                 var foundVote = votes.Where(v => v.CreatorId == CurrentId).FirstOrDefault();
-                if (foundVote != null)
+                if (foundVote == null)
                 {
-                    votes.Remove(votes.Where(o => o.CreatorId == CurrentId).FirstOrDefault());
+                    //add new
+                    var newVote = new Vote(){
+                        PostId = reqPosId,
+                        VoteType = reqVoteType,
+                        CreatorId = CurrentId
+                    };
+                    var updateDef = Builders<Post>.Update.Push(p => p.Votes, newVote);
+                    await _collection.UpdateOneAsync(p => p.Id == reqPosId, updateDef);
+                }else if(voteRequest.VoteType == foundVote.VoteType){
+                    //remove
+                    await _collection.FindOneAndUpdateAsync(p => p.Id == reqPosId, Builders<Post>.Update.PullFilter(p => p.Votes,
+                                                v => v.CreatorId == CurrentId));
+
+                }else {
+                    //update
+                     var filter = Builders<Post>.Filter.
+                    And(Builders<Post>.Filter.
+                    Eq(p => p.Id, voteRequest.PostId), Builders<Post>.Filter.
+                    ElemMatch(p => p.Votes, p => p.Id == foundVote.Id));
+                    await _collection.UpdateOneAsync(filter, Builders<Post>.Update.Set(p => p.Votes.ElementAt(-1).VoteType, voteRequest.VoteType));
                 }
-                else
-                {
-                    var newVote = new Vote();
-                    newVote.PostId = reqPosId;
-                    newVote.VoteType = reqVoteType;
-                    newVote.CreatorId = CurrentId;
-                    votes.Add(newVote);
-                }
-                post.Votes = votes;
-                var update = Builders<Post>.Update
-                                            .Set(p => p.Votes, votes);
-                await collection.UpdateOneAsync(p => p.Id == reqPosId, update);
             }
-            return await collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
+            return await _collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
         }
 
         public async Task<string> AddComment(CommentDto comment)
         {
-            await addPoint(comment.PostId, (int)PointEnum.Comment);
+            await AddPoint(comment.PostId, (int)PointEnum.Comment);
 
             var reqPosId = comment.PostId;
-            var post = await _collection.Find(p => p.Id == reqPosId).FirstOrDefaultAsync();
-            var comments = post.Comments != null ? post.Comments.ToList() : new List<Comment>();
 
             var newComment = new Comment
             {
@@ -175,19 +179,27 @@ namespace CaveCore.Services.Impl
                 Username = CurrentUsername,
                 Content = comment.Content
             };
-            comments.Add(newComment);
-            var update = Builders<Post>.Update.Set(p => p.Comments, comments);
-            await _collection.UpdateOneAsync(p => p.Id == reqPosId, update);
 
+            var update = Builders<Post>.Update.Push(p => p.Comments, newComment);
+            await _collection.UpdateOneAsync(p => p.Id == reqPosId, update);
             return newComment.Id;
         }
 
         public async Task<string> UpdateComment(CommentDto comment)
         {
-            var update = Builders<Post>.Update.Set(p => p.Comments.Where(c => c.Id == comment.Id).First().Content, comment.Content);
-            await _collection.UpdateOneAsync(p => p.Id == comment.PostId, update);
-
+            var filter = Builders<Post>.Filter.
+                And(Builders<Post>.Filter.
+                Eq(p => p.Id, comment.PostId), Builders<Post>.Filter.
+                ElemMatch(p => p.Comments, p => p.Id == comment.Id));
+            var update = Builders<Post>.Update.Set(p => p.Comments.ElementAt(-1).Content, comment.Content);
+            await _collection.UpdateOneAsync(filter, update);
             return comment.Id;
+        }
+
+        public async Task<int> CountPostByCate(string cateId)
+        {
+            var cate = (await _collection.Find(p => p.CateId == cateId).ToListAsync());
+            return (cate != null ? cate.Count(): 0);
         }
     }
 }

@@ -5,12 +5,11 @@
       <v-text-field 
       v-model="post.title" 
       label="Title" 
-      class="input-group--focused mb-4"
-      counter
-      maxlength="50"
+      class="input-group--focused"
+      maxlength="300"
       single-line
       outlined></v-text-field>
-      <vue-editor v-model="post.content" :editorToolbar="customToolbar" class="mb-4"></vue-editor> 
+      <vue-editor v-model="post.content" :editorToolbar="customToolbar" class="mb-6"></vue-editor> 
       <div
         class="image-input"
         :style="{ 'background-image': `url(${imageData})` }"
@@ -29,8 +28,36 @@
     </v-card-text>
     <v-card-actions>
       <v-btn text color="deep-purple accent-4" @click="create">Create</v-btn>
-      <v-btn text color="deep-purple accent-4" @click="clearAll">Cancel</v-btn>
+      <v-btn text color="deep-purple accent-4" @click.stop="confirm = true">Cancel</v-btn>
     </v-card-actions>
+    <v-dialog
+      v-model="confirm"
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="headline">You are creating post. Do you wish to exit?</v-card-title>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="clearAll"
+          >
+            OK
+          </v-btn>
+
+          <v-btn
+            color="green darken-1"
+            text
+            @click="confirm = false"
+          >
+            Cancel
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 <style scoped>
@@ -61,6 +88,11 @@
 .file-input {
   display: none;
 }
+
+* {
+  border-radius: 4px important!;
+}
+
 </style>
 <script>
 import { mapActions, mapGetters } from "vuex";
@@ -76,7 +108,7 @@ export default {
   name: "CreatePostPanel",
   props: {
     cateID: {
-      default: "123123123123123123123125"
+      default: ""
     }
   },
   computed: {
@@ -94,12 +126,19 @@ export default {
       customToolbar: [
         ["bold", "italic", "underline"], 
         [{ list: "ordered" }, { list: "bullet" }]
-      ]
+      ],
+      confirm: {
+        type: Boolean,
+        default: false
+      }
     };
   },
   methods: {
     clearAll() {
-      this.post.text = null;
+      this.post.title = null;
+      this.post.content = null;
+      this.imageData = null;
+      this.confirm = false;
     },
     ...mapActions(moduleNames.post, [CREATE]),
     async create() {
@@ -126,6 +165,9 @@ export default {
         this.$emit("input", files[0]);
       }
     }
+  },
+  mounted() {
+    this.confirm = false;
   }
 };
 </script>
