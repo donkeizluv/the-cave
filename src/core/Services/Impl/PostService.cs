@@ -52,6 +52,7 @@ namespace CaveCore.Services.Impl
             newPost.CreatorId = CurrentId;
             newPost.CreatorName = CurrentUsername;
             newPost.CateName = (await _cateservice.GetCateNameById(post.CateId));
+            newPost.Votes = new List<Vote>();
             await _collection.InsertOneAsync(_mapper.Map<Post>(newPost));
             return newPost.Id;
         }
