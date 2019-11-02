@@ -14,13 +14,23 @@
           <v-img v-if="post.imgData" v-bind:src="post.imgData" height="200px"></v-img>
 
           <v-card-actions>
-            <v-btn text color="blue" @click="selectPost(post)">Read More</v-btn>
+            <v-btn text color="primary" @click="selectPost(post)">Read More</v-btn>
             <v-spacer></v-spacer>
-            <v-btn @click="addVote(post.id, 1)" icon v-ripple="{ class: 'red--text' }">
+            <v-btn
+              @click="addVote(post.id, 1)"
+              icon
+              v-ripple="{ class: 'red--text' } "
+              :disabled="!isAuthenticated"
+            >
               <v-icon color="red lighten-2">mdi-heart</v-icon>
             </v-btn>
             <span class="overline">{{post.upVotes}}</span>
-            <v-btn @click="addVote(post.id, 2)" icon v-ripple="{ class: 'red--text' }">
+            <v-btn
+              @click="addVote(post.id, 2)"
+              icon
+              v-ripple="{ class: 'red--text' }"
+              :disabled="!isAuthenticated"
+            >
               <v-icon color="red lighten-2">mdi-heart-broken</v-icon>
             </v-btn>
             <span class="overline">{{post.downVotes}}</span>

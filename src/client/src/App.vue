@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app dark>
     <v-snackbar
       top
       v-model="snackbar.show"
@@ -10,7 +10,7 @@
     <register-modal :show.sync="regModal" @click:outside="regModal = false;" />
     <new-cate-modal :show.sync="cateModal" @click:outside="cateModal = false;" />
     <profile-modal :show.sync="profileModal" @click:outside="profileModal = false;" />
-    <v-app-bar flat app clipped-left color="primary">
+    <v-app-bar flat app clipped-left color="cyan darken-2">
       <v-toolbar-title>
         <v-btn
           link
@@ -20,7 +20,7 @@
           :ripple="false"
           color="white"
           class="app-name"
-          @click="$router.push({ name: 'default'})"
+          @click="homeClick"
         >{{appName}}</v-btn>
       </v-toolbar-title>
       <v-spacer></v-spacer>
@@ -43,9 +43,9 @@
           </v-btn>
         </template>
         <v-list v-if="isAuthenticated">
-          <v-list-item @click="profileModal = true;" >
+          <v-list-item @click="profileModal = true;">
             <v-icon>mdi-account</v-icon>
-            <v-list-item-title>Your Profile</v-list-item-title >
+            <v-list-item-title>Your Profile</v-list-item-title>
           </v-list-item>
           <v-list-item>
             <v-list-item-title>Option 2</v-list-item-title>
@@ -65,8 +65,8 @@
                   <router-view :key="$route.path"></router-view>
                 </v-col>
                 <v-col class="pr-2 ma-0" cols="3">
-                  <div class="mb-4">
-                    <cate-info />
+                  <div v-show="selectedCate" class="mb-4">
+                    <cate-info :cate="selectedCate" />
                   </div>
                   <div>
                     <cate-panel :categories="categories" @click:newcat="cateModal = true;" />
@@ -107,6 +107,9 @@ import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
 import { isAuthenticated } from "./store/getters/getter-types";
 import { LOGOUT, REFRESH_LANDING } from "./store/actions/action-types";
+import { SET_SELECTED_CATE } from "./store/actions/category/action-types";
+import { selectedCate } from "./store/getters/category/getter-types";
+import moduleNames from "./store/modules/module-names";
 
 export default {
   name: "App",
@@ -119,9 +122,10 @@ export default {
     CateInfo
   },
   computed: {
-    ...mapGetters([isAuthenticated])
+    ...mapGetters([isAuthenticated]),
+    ...mapGetters(moduleNames.category, [selectedCate])
   },
-  async mounted() {
+  async activated() {
     await this.REFRESH_LANDING();
   },
   data: () => ({
@@ -139,8 +143,14 @@ export default {
   }),
   methods: {
     ...mapActions([LOGOUT, REFRESH_LANDING]),
+    ...mapActions(moduleNames.category, [SET_SELECTED_CATE]),
     showLoginModal() {
       this.loginModal = true;
+    },
+    async homeClick() {
+      this.$router.push({ name: "default" });
+      await this.SET_SELECTED_CATE(null);
+      await this.REFRESH_LANDING();
     },
     showCatModal() {
       this.catModal = true;
@@ -156,9 +166,7 @@ export default {
     showCaveModal() {
       this.caveModal = true;
     },
-    onSubmit() {
-
-    }
+    onSubmit() {}
   }
 };
 </script>

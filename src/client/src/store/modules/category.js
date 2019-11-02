@@ -1,8 +1,12 @@
-import { CREATE, GET_ALL, REFRESH_SELECTED_CATEGORY } from "../actions/category/action-types";
+import {
+  CREATE, GET_ALL,
+  GET_SELECTED_CATEGORY,
+  SET_SELECTED_CATE
+} from "../actions/category/action-types";
 import {
   SET_CATEGORIES,
   ADD_CATEGORY,
-  SET_SELECTED_CATE
+  SELECTED_CATE
 } from "../mutations/category/mutation-types";
 import { categories, selectedCate } from "../getters/category/getter-types";
 import axios from "axios";
@@ -25,7 +29,7 @@ const mutations = {
   [ADD_CATEGORY]: (s, v) => {
     s.categories.push(v);
   },
-  [SET_SELECTED_CATE]: (s, v) => {
+  [SELECTED_CATE]: (s, v) => {
     s.selectedCate = v;
   }
 };
@@ -45,12 +49,12 @@ const actions = {
   [GET_ALL]: async () => {
     return true;
   },
-
-  [REFRESH_SELECTED_CATEGORY]: async ({ commit }, payload) => {
-    console.log(apis.refresh_selected_category);
+  [SET_SELECTED_CATE]: async ({ commit }, payload) => {
+    commit(SELECTED_CATE, payload);
+  },
+  [GET_SELECTED_CATEGORY]: async (_, payload) => {
     let { data } = await axios.get(`${apis.refresh_selected_category}/${payload}`);
-    console.log(data);
-    commit(SET_SELECTED_CATE, data);
+    return data;
   }
 };
 
