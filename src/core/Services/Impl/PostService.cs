@@ -10,6 +10,7 @@ using CaveCore.Service.Impl;
 using CaveCore.Settings;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using MongoDB.Bson;
 using System.Linq;
 
 namespace CaveCore.Services.Impl
@@ -71,8 +72,7 @@ namespace CaveCore.Services.Impl
                 1 => await _collection.Find(p => p.CateId == cateId).SortBy(p => p.Created).ToListAsync(),
                 2 => await _collection.Find(p => p.CateId == cateId).SortByDescending(p => p.Created).ToListAsync(),
                 3 => await _collection.Find(p => p.CateId == cateId).SortBy(p => p.Title).ToListAsync(),
-                _ => await _collection.Find(p => p.CateId == cateId).SortByDescending(p => p.Point).SortByDescending(p => p.MaxPoint).ToListAsync()
-
+                _ => await _collection.Find(p => p.CateId == cateId).SortByDescending(p => p.Point).ThenByDescending(p => p.MaxPoint).ToListAsync()
             };
         }
 
@@ -83,8 +83,7 @@ namespace CaveCore.Services.Impl
                 1 => await _collection.Find(p => true).SortBy(p => p.Created).ToListAsync(),
                 2 => await _collection.Find(p => true).SortByDescending(p => p.Created).ToListAsync(),
                 3 => await _collection.Find(p => true).SortBy(p => p.Title).ToListAsync(),
-                _ => await _collection.Find(p => true).SortByDescending(p => p.Point).SortByDescending(p => p.MaxPoint).ToListAsync()
-
+                _ => await _collection.Find(p => true).SortByDescending(p => p.Point).ThenByDescending(p => p.MaxPoint).ToListAsync()
             };
         }
 
@@ -113,7 +112,8 @@ namespace CaveCore.Services.Impl
         public async Task<IEnumerable<IPost>> SearchPostWithCateId(string cateId, string searchText)
         {
             var builder = Builders<Post>.Filter;
-            var filter = builder.Regex(p => p.Title, searchText);
+            var filter = (builder.Regex(p => p.Title, new BsonRegularExpression(searchText, "i")) 
+                | builder.Regex(p => p.Content, new BsonRegularExpression(searchText, "i")));
             if (cateId != null) filter &= builder.Eq(p => p.CateId, cateId);
             return await _collection.Find(filter).ToListAsync();
         }

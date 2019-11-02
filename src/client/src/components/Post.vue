@@ -4,6 +4,7 @@
     <v-card-title class="headline pt-0">{{ post.title }}</v-card-title>
     <v-card-text class="black--text diaplay">
       <span class="white--text" v-html="post.content" />
+      <img v-if="post.image" v-bind:src="'data:image/jpeg;base64,' + post.image" width="80%" align="center"/>
     </v-card-text>
     <v-container>
       <v-row justify="end" dense>
@@ -50,6 +51,10 @@
 .post-content {
   font-size: 1em;
 }
+img {
+    display: block;
+    margin: 0 auto;
+}
 </style>
 
 <script>
@@ -60,7 +65,7 @@ import {
   ADD_COMMENT,
   ADD_VOTE
 } from "../store/actions/post/action-types";
-import { isAuthenticated } from "../store/getters/getter-types";
+import { isAuthenticated, currentUser } from "../store/getters/getter-types";
 import { mapActions, mapGetters } from "vuex";
 import moduleNames from "../store/modules/module-names";
 import CommentTree from "./CommentTree.vue";
@@ -81,7 +86,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters([isAuthenticated]),
+    ...mapGetters([isAuthenticated, currentUser]),
     createdTimeAgo() {
       return timeAgo.format(new Date(this.post.created));
     }
@@ -98,9 +103,12 @@ export default {
       let comment = {
         postId: this.postId,
         content: content,
-        parentId: null
+        parentId: null,
+        username: this.currentUser.username,
+        created: new Date()
       };
       comment.id = await this.ADD_COMMENT(comment);
+
       this.post.comments.push(comment);
     },
     async addVote(postId, type) {
@@ -112,11 +120,11 @@ export default {
       let comment = {
         postId: this.postId,
         content: childComment.content,
-        parentId: childComment.parentId
+        parentId: childComment.parentId,
+        username: this.currentUser.username,
+        created: new Date()
       };
-      console.log(comment);
       comment.id = await this.ADD_COMMENT(comment);
-      // let childCommentIndex = this.post.comments.findIndex(c => c.id === childComment.parentId);
       this.post.comments.push(comment);
     }
   }
