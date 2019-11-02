@@ -11,7 +11,7 @@
             </v-list-item-content>
           </v-list-item>
 
-          <v-img v-if="post.imgData" v-bind:src="post.imgData" height="200px"></v-img>
+          <img v-if="post.image" v-bind:src="'data:image/jpeg;base64,' + post.image" height="100px"/>
 
           <v-card-actions>
             <v-btn text color="blue" @click="selectPost(post)">Read More</v-btn>

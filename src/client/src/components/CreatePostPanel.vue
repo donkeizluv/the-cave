@@ -108,7 +108,7 @@ export default {
   name: "CreatePostPanel",
   props: {
     cateID: {
-      default: ""
+      default: "123123123123123123123125"
     }
   },
   computed: {

@@ -49,7 +49,6 @@ const actions = {
   [REFRESH_SELECTED_CATEGORY]: async ({ commit }, payload) => {
     console.log(apis.refresh_selected_category);
     let { data } = await axios.get(`${apis.refresh_selected_category}/${payload}`);
-    console.log(data);
     commit(SET_SELECTED_CATE, data);
   }
 };

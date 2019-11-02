@@ -48,7 +48,6 @@ export default {
     ...mapActions(moduleNames.post, [REFRESH_POSTS_BY_CATE]),
     ...mapActions(moduleNames.category, [REFRESH_SELECTED_CATEGORY]),
     onSelectCate(cate) {
-      console.log(cate);
       this.REFRESH_SELECTED_CATEGORY(cate.id);
       this.REFRESH_POSTS_BY_CATE(cate.id);
       this.$router.push({ name: 'category', params: { cate: cate.cateName }});

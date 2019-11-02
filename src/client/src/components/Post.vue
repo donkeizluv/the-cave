@@ -4,6 +4,7 @@
     <v-card-title class="display-1 pt-0 font-weight-bold">{{ post.title }}</v-card-title>
     <v-card-text class="black--text diaplay">
       <span v-html="post.content" />
+      <img v-if="post.image" v-bind:src="'data:image/jpeg;base64,' + post.image" width="80%"/>
     </v-card-text>
     <v-container>
       <v-row justify="end" dense>
