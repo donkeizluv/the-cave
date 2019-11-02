@@ -13,5 +13,6 @@ export default {
   add_comment: endpoint + "/api/post/addcomment",
   add_vote: endpoint + "/api/post/addvote",
   refresh_posts_by_cate: endpoint + "/api/post/cate",
-  refresh_selected_category: endpoint + "/api/category/cate"
+  refresh_selected_category: endpoint + "/api/category/cate",
+  reload_user: endpoint + "/api/user/ping"
 };

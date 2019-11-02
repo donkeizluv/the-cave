@@ -4,8 +4,10 @@ using CaveCore.DTO;
 using CaveCore.Exceptions;
 using CaveCore.Models;
 using CaveCore.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CaveServer.Controllers
 {
@@ -43,6 +45,13 @@ namespace CaveServer.Controllers
             {
                 return BadRequest(ex.Message);
             }
+        }
+
+        [Authorize]
+        [HttpGet("ping")]
+        public IActionResult Ping()
+        {
+            return Ok( _service.Ping());
         }
     }
 }

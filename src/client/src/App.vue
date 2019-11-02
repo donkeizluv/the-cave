@@ -34,7 +34,7 @@
         text
         color="white"
         depressed
-      >{{currentUser.username.toUpperCase()}}</v-btn>
+      >{{currentUser ? currentUser.username.toUpperCase() : "" }}</v-btn>
       <v-btn v-if="!isAuthenticated" @click="loginModal = true;" class="ma-2" depressed>Log in</v-btn>
       <v-btn v-if="!isAuthenticated" @click="regModal = true;" class="ma-2" depressed>Register</v-btn>
       <v-btn
@@ -49,10 +49,8 @@
       <v-container fluid>
         <v-row dense>
           <v-col cols="2"></v-col>
-          <v-col cols="8" class="ma-0 pa-0">
-          </v-col>
-          <v-col cols="2">
-          </v-col>
+          <v-col cols="8" class="ma-0 pa-0"></v-col>
+          <v-col cols="2"></v-col>
         </v-row>
         <v-row dense align="start" justify="start">
           <v-col cols="2"></v-col>
@@ -103,8 +101,16 @@ import ProfileModal from "./components/ProfileModal";
 // import Post from "./components/Post";
 import { mapActions } from "vuex";
 import { mapGetters } from "vuex";
-import { isAuthenticated, currentUser } from "./store/getters/getter-types";
-import { LOGOUT, REFRESH_LANDING } from "./store/actions/action-types";
+import {
+  isAuthenticated,
+  currentUser,
+  token
+} from "./store/getters/getter-types";
+import {
+  LOGOUT,
+  REFRESH_LANDING,
+  RELOAD_USER
+} from "./store/actions/action-types";
 import { SET_SELECTED_CATE } from "./store/actions/category/action-types";
 import { selectedCate } from "./store/getters/category/getter-types";
 import moduleNames from "./store/modules/module-names";
@@ -120,10 +126,13 @@ export default {
     CateInfo
   },
   computed: {
-    ...mapGetters([isAuthenticated, currentUser]),
+    ...mapGetters([isAuthenticated, currentUser, token]),
     ...mapGetters(moduleNames.category, [selectedCate])
   },
   async created() {
+    if (this.token) {
+      await this.RELOAD_USER(this.token);
+    }
     await this.REFRESH_LANDING();
   },
   data: () => ({
@@ -140,7 +149,7 @@ export default {
     profileModal: false
   }),
   methods: {
-    ...mapActions([LOGOUT, REFRESH_LANDING]),
+    ...mapActions([LOGOUT, REFRESH_LANDING, RELOAD_USER]),
     ...mapActions(moduleNames.category, [SET_SELECTED_CATE]),
     showLoginModal() {
       this.loginModal = true;

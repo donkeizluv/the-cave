@@ -59,13 +59,6 @@ export default {
   computed: {
     canLogin() {
       return this.cred.username && this.cred.pwd;
-    },
-    clear() {
-      if(!this.show) {
-        this.cred.username = null;
-        this.cred.pwd = null;
-        this.errorMessage = null;
-      }
     }
   },
   data: function name() {
@@ -84,7 +77,12 @@ export default {
       if (!this.canLogin) return;
       try {
         this.isLoading = true;
-        let result = await this.LOGIN(this.cred);
+        
+        let result = await this.LOGIN({
+          username : this.cred.username,
+          pwd : this.cred.pwd
+        });
+        
         if (!result.valid) {
           this.errorMessage = result.message;
           return;
