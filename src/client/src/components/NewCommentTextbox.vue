@@ -17,6 +17,7 @@
                 :clearable="true"
                 full-width
                 persistent-hint
+                :disabled="!isAuthenticated"
               ></v-textarea>
             </div>
           </v-col>
@@ -30,7 +31,7 @@
               text
               @click="$emit('close'); newComment = null;"
             >Cancel</v-btn>
-            <v-btn small color="primary" :disabled="!canSubmit" @click="submit">OK</v-btn>
+            <v-btn small color="primary" :disabled="!canSubmit || !isAuthenticated"  @click="submit">OK</v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -38,6 +39,8 @@
   </v-container>
 </template>
 <script>
+import { isAuthenticated } from "../store/getters/getter-types";
+import { mapGetters } from "vuex";
 export default {
   name: "Comment",
   props: {
@@ -59,6 +62,7 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([isAuthenticated]),
     canSubmit() {
       return !!this.newComment;
     }

@@ -1,7 +1,8 @@
-import { CREATE, GET_ALL, REFRESH_POSTS_BY_CATE, GET_SELECTED_POST, ADD_COMMENT } from "../actions/post/action-types";
+import { CREATE, GET_ALL, REFRESH_POSTS_BY_CATE, GET_SELECTED_POST, ADD_COMMENT, ADD_VOTE } from "../actions/post/action-types";
 import {
   SET_POSTS,
-  ADD_POST
+  ADD_POST,
+  SET_POST_VOTES
 } from "../mutations/post/mutation-types";
 import { posts } from "../getters/post/getter-types";
 import axios from "axios";
@@ -21,10 +22,14 @@ const mutations = {
   },
   [ADD_POST]: (s, v) => {
     s.posts.push(v);
+  },
+  [SET_POST_VOTES]: (s, v) => {
+    let idx = s.posts.findIndex(p => p.id === v.postId);
+    console.log(v);
+    if (idx < 0) return;
+    s.posts[idx].upVotes = v.upVotes;
+    s.posts[idx].downVotes = v.downVotes;
   }
-  // [SET_SELECTED_POST]: (s, v) => {
-  //   s.selectedPost = v;
-  // }
 };
 
 const actions = {
@@ -32,7 +37,7 @@ const actions = {
     let post = {
       title: p.title,
       content: p.content,
-      cateId: '5dbc104dd9264400045aaafd',
+      cateId: '5dbba8f82f5db91bf8cfd010',
       image: !p.imgData ? null : p.imgData.split(',')[1]
     };
     console.log(post);
@@ -45,8 +50,7 @@ const actions = {
   },
 
   [REFRESH_POSTS_BY_CATE]: async ({ commit }, payload) => {
-    let data = await axios.get(`${apis.get_posts_by_cate}/${payload}`);
-    console.log(data);
+    let { data } = await axios.get(`${apis.get_posts_by_cate}/${payload}`);
     commit(`${SET_POSTS}`, data);
   },
 
@@ -60,6 +64,19 @@ const actions = {
       postId: payload.postId,
       content: payload.content,
       parentId: payload.parentId
+    });
+    return data;
+  },
+  [ADD_VOTE]: async ({ commit }, payload) => {
+    let { data } = await axios.post(
+      apis.add_vote, {
+      postId: payload.postId,
+      voteType: payload.voteType
+    });
+    commit(SET_POST_VOTES, {
+      postId: data.id,
+      upVotes: data.upVotes,
+      downVotes: data.downVotes
     });
     return data;
   }

@@ -1,31 +1,13 @@
 <template>
   <v-container class="ma-0 pa-0" fluid>
-    <!-- <v-col>
-      <v-row justify="end" dense>
-        <v-col class="ml-auto">
-          <div class="overline ma-4">{{isDefault ? 'Trending' : `Trending of ${cate}`}}</div>
-        </v-col>
-        <v-col cols="auto">
-          <v-btn
-            text
-            color="blue"
-            :disabled="!isAuthenticated"
-            @click="$router.push({ name: 'create_post'})"
-          >New Post</v-btn>
-        </v-col>
-        <div>
-          <v-text-field small append-icon="mdi-magnify"></v-text-field>
-        </div>
-      </v-row>
-    </v-col>-->
     <v-col class="pa-0 ma-0">
-      <v-row dense v-for="post in posts" v-bind:key="post.ID">
+      <v-row dense v-for="post in posts" v-bind:key="post.id">
         <v-card :width="'100%'" flat outlined class="overline mb-4">
           <v-list-item>
             <!-- <--<v-list-item-avatar color="grey"></v-list-item-avatar>-->
             <v-list-item-content>
               <v-list-item-title class="headline">{{ post.title }}</v-list-item-title>
-              <v-list-item-subtitle>{{post.username}} - {{ createdTimeAgo(post.created) }}</v-list-item-subtitle>
+              <v-list-item-subtitle>{{post.creatorName}} - {{ createdTimeAgo(post.created) }}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
 
@@ -34,12 +16,14 @@
           <v-card-actions>
             <v-btn text color="blue" @click="selectPost(post)">Read More</v-btn>
             <v-spacer></v-spacer>
-            <v-btn icon>
-              <v-icon :color="['{{ upvote }}'? 'red lighten-2' : '']"  @click="upvote=!upvote;">mdi-heart</v-icon>
+            <v-btn @click="addVote(post.id, 1)" icon v-ripple="{ class: 'red--text' }">
+              <v-icon color="red lighten-2">mdi-heart</v-icon>
             </v-btn>
-            <v-btn icon>
-              <v-icon :color="['{{ downvote }}'? 'red lighten-2' : '']" @click="downvote=!downvote;">mdi-heart-broken</v-icon>
+            <span class="overline">{{post.upVotes}}</span>
+            <v-btn @click="addVote(post.id, 2)" icon v-ripple="{ class: 'red--text' }">
+              <v-icon color="red lighten-2">mdi-heart-broken</v-icon>
             </v-btn>
+            <span class="overline">{{post.downVotes}}</span>
           </v-card-actions>
         </v-card>
       </v-row>
@@ -49,10 +33,11 @@
 <script>
 import { timeAgo } from "./shared/utils";
 import { posts } from "../store/getters/post/getter-types";
+import { ADD_VOTE } from "../store/actions/post/action-types";
 import moduleNames from "../store/modules/module-names";
 import { isAuthenticated } from "../store/getters/getter-types";
-import { mapGetters } from "vuex";
-import router from "../router";
+import { mapGetters, mapActions } from "vuex";
+
 export default {
   name: "TrendingPanel",
   props: {
@@ -76,11 +61,15 @@ export default {
     };
   },
   methods: {
+    ...mapActions(moduleNames.post, [ADD_VOTE]),
     createdTimeAgo(t) {
       return timeAgo.format(new Date(t));
     },
+    async addVote(postId, type) {
+      await this.ADD_VOTE({ postId: postId, voteType: type });
+    },
     selectPost(post) {
-      router.push({ name: "post", params: { postId: post.id } });
+      this.$router.push({ name: "post", params: { postId: post.id } });
     }
   }
 };

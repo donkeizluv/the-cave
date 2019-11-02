@@ -1,14 +1,27 @@
 <template>
   <v-card v-if="post">
-    <v-card-subtitle class="overline pb-2">Posted By {{ post.createdBy }} {{ createdTimeAgo }} </v-card-subtitle>
+    <v-card-subtitle class="overline pb-2">Posted By {{ post.createdBy }} {{ createdTimeAgo }}</v-card-subtitle>
     <v-card-title class="display-1 pt-0 font-weight-bold">{{ post.title }}</v-card-title>
-    <v-card-text class="black--text diaplay"><span v-html = "post.content" /></v-card-text>
+    <v-card-text class="black--text diaplay">
+      <span v-html="post.content" />
+    </v-card-text>
     <v-container>
+      <v-row justify="end" dense>
+        <v-btn @click="addVote(post.id, 1)" icon v-ripple="{ class: 'red--text' }">
+          <v-icon color="red lighten-2">mdi-heart</v-icon>
+        </v-btn>
+        <span class="overline mt-2">{{post.upVotes}}</span>
+        <v-btn @click="addVote(post.id, 2)" icon v-ripple="{ class: 'red--text' }">
+          <v-icon color="red lighten-2">mdi-heart-broken</v-icon>
+        </v-btn>
+        <span class="overline mt-2">{{post.downVotes}}</span>
+      </v-row>
       <v-row dense>
         <v-col>
           <new-comment-textbox @submit="submitCommentRoot" />
         </v-col>
       </v-row>
+
       <v-row dense>
         <v-col>
           <comment-tree
@@ -20,12 +33,6 @@
         </v-col>
       </v-row>
     </v-container>
-    <!-- <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-      <v-btn icon>
-        <v-icon>mdi-heart-broken</v-icon>
-    </v-btn>-->
   </v-card>
 </template>
 
@@ -40,7 +47,8 @@ import { timeAgo } from "./shared/utils";
 import NewCommentTextbox from "./NewCommentTextbox.vue";
 import {
   GET_SELECTED_POST,
-  ADD_COMMENT
+  ADD_COMMENT,
+  ADD_VOTE
 } from "../store/actions/post/action-types";
 import { mapActions } from "vuex";
 import moduleNames from "../store/modules/module-names";
@@ -69,16 +77,11 @@ export default {
 
   data() {
     return {
-      post: {
-        title: "asdasdasd",
-        content: "2222222",
-        createdDate: "23/10/2019",
-        createdBy: "Hein"
-      }
+      post: null
     };
   },
   methods: {
-    ...mapActions(moduleNames.post, [GET_SELECTED_POST, ADD_COMMENT]),
+    ...mapActions(moduleNames.post, [GET_SELECTED_POST, ADD_COMMENT, ADD_VOTE]),
     async submitCommentRoot(content) {
       let comment = {
         postId: this.postId,
@@ -87,6 +90,11 @@ export default {
       };
       comment.id = await this.ADD_COMMENT(comment);
       this.post.comments.push(comment);
+    },
+    async addVote(postId, type) {
+      let votes = await this.ADD_VOTE({ postId: postId, voteType: type });
+      this.post.upVotes = votes.upVotes;
+      this.post.downVotes = votes.downVotes;
     },
     async submitCommentChild(childComment) {
       let comment = {

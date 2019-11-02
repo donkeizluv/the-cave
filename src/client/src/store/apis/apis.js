@@ -9,7 +9,8 @@ export default {
   create_post: endpoint + "/api/post/create",
   get_landing: endpoint + "/api/landing",
   get_posts_by_cate: endpoint + "/api/post/cate",
-  get_selected_post: endpoint + "/api/post",
+  refresh_selected_category: endpoint + "/api/cate",
+  get_selected_post: endpoint + "/api/post/id",
   add_comment: endpoint + "/api/post/addcomment",
-  refresh_selected_category: endpoint + "/api/cate"
+  add_vote: endpoint + "/api/post/addvote"
 };

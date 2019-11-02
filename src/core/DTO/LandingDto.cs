@@ -9,7 +9,7 @@ namespace CaveCore.DTO
 
         public IEnumerable<CategoryDto> Categories { get; set; }
 
-        public IEnumerable<PostDto> TrendingPosts { get; set; }
+        public IEnumerable<PostListDto> TrendingPosts { get; set; }
 
     }
 }

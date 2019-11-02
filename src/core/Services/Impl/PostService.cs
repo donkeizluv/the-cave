@@ -47,7 +47,9 @@ namespace CaveCore.Services.Impl
         public async Task<string> Create(PostDto post)
         {
             var newPost = _mapper.Map<Post>(post);
-            
+            var postCollection = _db.GetCollection<Post>(_settings.PostCollectionName);
+            var cate = await _cateservice.GetCateById(post.CateId);
+            if (cate == null) throw new BussinessException("Invalid category");
             newPost.CreatorId = CurrentId;
             newPost.CreatorName = CurrentUsername;
             newPost.CateName = (await _cateservice.GetCateNameById(post.CateId));
