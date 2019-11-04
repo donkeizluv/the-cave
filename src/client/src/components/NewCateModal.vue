@@ -101,6 +101,7 @@ export default {
       if (!this.canSubmit) return;
       try {
         this.isLoading = true;
+        await this.CREATE(this.cate);
         this.$router.push({
           name: "cave",
           params: { cate: this.cate.cateName }
