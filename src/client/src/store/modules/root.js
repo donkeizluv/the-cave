@@ -87,15 +87,20 @@ const actions = {
     commit(`${moduleNames.post}/${SET_POSTS}`, data.trendingPosts);
     commit(`${moduleNames.category}/${SET_CATEGORIES}`, data.categories);
   },
-  [RELOAD_USER]: async ({ commit }, payload) => {
-    console.log(apis.reload_user);
-    axios.defaults.headers.common["Authorization"] = `Bearer ${payload}`;
-    let { data } = await axios.get(apis.reload_user);
-    commit(CURRENT_USER, {
-      userId: data.result.userId,
-      username: data.result.username
-    });
-    commit(AUTHENTICATED, true);
+  [RELOAD_USER]: async ({ dispatch, commit }, payload) => {
+    try {
+      axios.defaults.headers.common["Authorization"] = `Bearer ${payload}`;
+      let { data } = await axios.get(apis.reload_user);
+      commit(CURRENT_USER, {
+        userId: data.result.userId,
+        username: data.result.username
+      });
+      commit(AUTHENTICATED, true);
+    }
+    catch (ex) {
+      await dispatch(LOGOUT);
+    }
+
   },
   ...utilityHelper.actions
 };
